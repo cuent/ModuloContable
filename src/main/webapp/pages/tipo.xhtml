@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="../WEB-INF/templates/plantila.xhtml">
+        <ui:define name="content">
+            <h:form id="form">
+                <p:commandButton id="submit" value="#{msj['tipoNuevo']}" update="display" icon="ui-icon-document-b" oncomplete="PF('dlg').show()" />
+                <p:dialog id="dialog" header="Nuevo Tipo" modal="true" resizable="false" showEffect="fade" widgetVar="dlg" >
+                    <h:panelGrid columns="2" id="display" >
+                        <h:outputLabel   for="nombreTipo" value="Nombre"/>
+                        <h:inputText id="nombreTipo" value="#{beanTipo.nombre}" required="true"/>
+                    </h:panelGrid>
+                    <p:commandButton actionListener="#{tipoHelper.crearTipo}" id="idGuardar" value="Guardar" 
+                                     icon="fa-save" title="Guardar" update=":form:msgs,dttipos"
+                                     oncomplete="handleSubmit(args,'dlg');"
+                                     onclick="PF('dlg').hide()"/>
+                </p:dialog>
+                <p:growl id="msgs" life="2000" showDetail="false"/>
+                <br/>
+                <br/>
+                <div>
+                    <p:dataTable id="dttipos" var="tipo" value="#{tipoHelper.tipos}" editable="true" style="margin-bottom:20px;width: 300px"
+                                 paginator="true" 
+                                 rowKey="#{tipo.idtipo}"
+                                 rows="5" paginatorPosition="top"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 selectionMode="single">
+                        <f:facet name="header">
+                            #{msj['tipo']}
+                        </f:facet>
+
+                        <p:ajax event="rowEdit" listener="#{tipoHelper.onRowEdit}" update=":form:msgs,:form:idGuardar" />
+                        <p:ajax event="rowEditCancel" listener="#{tipoHelper.onRowCancel}" update=":form:msgs,:form:idGuardar"/>
+
+                        <p:column id="colNombre" headerText="#{msj['tipoNombre']}" style="width: 80%">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{tipo.nombretipo}"/></f:facet>
+                                <f:facet name="input"><p:inputText id="modelInput" value="#{tipo.nombretipo}" style="width:100%" label="Year"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column>
+                            <p:rowEditor/>
+                            <p:commandButton actionListener="#{tipoHelper.onRowDelete(tipo)}" id="iconOnly" 
+                                             update=":form:msgs,dttipos" icon="ui-icon-trash" title="Borrar"/>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>
+

@@ -1,0 +1,137 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="../WEB-INF/templates/plantila.xhtml">
+        <ui:define name="content">
+            <h:form id="formCuentas">
+
+                <p:growl id="mensajes" life="2000" showDetail="false"/>
+
+
+
+                <p:commandButton id="btnNuevaCuenta" value="#{msj['cuentaNueva']}" update="display" icon="ui-icon-document-b" oncomplete="PF('dlg').show()" />
+                <p:dialog id="dlNuevaCuenta" header="#{msg['cuentaNueva']}" modal="true" resizable="false" showEffect="fade" widgetVar="dlg" >
+                    <h:panelGrid columns="2" id="display" >
+                        <h:outputLabel for="numeroCuenta" value="Numero"/>
+                        <h:inputText id="numeroCuenta" value="#{beanCuenta.numCuenta}" required="true"/>
+
+                        <h:outputLabel for="cuentaDescripcion" value="Descripcion"/>
+                        <h:inputText id="cuentaDescripcion" value="#{beanCuenta.descCuenta}" required="true"/>
+
+                        <h:outputLabel for="cboCategorias" value="Categoria"/>
+                        <h:selectOneMenu id="cboCategorias" value="#{beanCuenta.categoriaCuenta}" style="width:100%">
+                            <f:selectItems value="#{cuentaHelper.categorias}" var="categoria" itemLabel="#{categoria}" itemValue="#{categoria}" />
+                        </h:selectOneMenu>
+
+                        <h:outputLabel for="cboTipos" value="Tipo"/>
+                        <h:selectOneMenu id="cboTipos" value="#{beanCuenta.tipo}" style="width:100%" converter="#{tipoConverter}">
+                            <f:selectItems value="#{cuentaHelper.tipos}" var="tipo" itemLabel="#{tipo.nombretipo}" itemValue="#{tipo}" />
+                        </h:selectOneMenu>
+
+                        <h:outputLabel for="cuentaSaldoInicial" value="Saldo Inicial"/>
+                        <h:inputText id="cuentaSaldoInicial" value="#{beanCuenta.saldoInicial}" required="false"/>
+                        
+                        <h:outputLabel for="cuentaSaldoFinal" value="Saldo Final"/>
+                        <h:inputText id="cuentaSaldoFinal" value="#{beanCuenta.saldoFinal}" required="false"/>
+                        
+                        <h:outputText value="Pertenece a grupo (checked/si-unchecked/no): " />
+                        <p:selectBooleanCheckbox value="#{cuentaHelper.isGroup}">
+                            <p:ajax update="mensajes" listener="#{cuentaHelper.addMessage}" />
+                        </p:selectBooleanCheckbox>
+
+                        <h:outputLabel for="cboGrupo" value="Grupo"/>
+                        <h:selectOneMenu id="cboGrupo" value="#{beanCuenta.cuentaPadre}" style="width:100%" converter="#{cuentaConverter}">
+                            <f:selectItems value="#{cuentaHelper.cuentasDetalle}" var="cuenta" itemLabel="#{cuenta.descripcion}" itemValue="#{cuenta}" />
+                        </h:selectOneMenu>
+
+                    </h:panelGrid>
+                    <p:commandButton actionListener="#{cuentaHelper.createCuenta}" id="idGuardarCuenta" value="#{msj['cuentaGuardar']}" 
+                                     icon="fa-save" title="Guardar" update=":formCuentas:mensajes,dtcuentas"
+                                     onclick="PF('dlg').hide()"/>
+                </p:dialog>
+
+                <p:dataTable id="dtcuentas" var="cuenta" value="#{cuentaHelper.cuentas}" editable="true" style="margin-bottom:20px;width: 900px"
+                             paginator="true" 
+                             rowKey="#{cuenta.idcodcuenta}"
+                             rows="10" paginatorPosition="bottom"
+                             rowsPerPageTemplate="10,20,30,40,50"
+                             selectionMode="single">
+
+                    <f:facet name="header">
+                        #{msj['cuentas']}
+                    </f:facet>
+
+                    <p:ajax event="rowEdit" listener="#{cuentaHelper.onRowEdit}" update=":formCuentas:mensajes" />
+                    <p:ajax event="rowEditCancel" listener="#{cuentaHelper.onRowCancel}" update=":formCuentas:mensajes"/>
+
+                    <p:column id="colNumCuenta" headerText="#{msj['cuentaNumeroCuenta']} " style="width: 15%">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{cuenta.numcuenta}"/></f:facet>
+                            <f:facet name="input"><p:inputText id="modelInput" value="#{cuenta.numcuenta}" 
+                                                               style="width:100%" label="#{msj['cuentaNumeroCuenta']}"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column id="colCuentaDescripcion" headerText="#{msj['cuentaDescripcion']}" style="width: 25%">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{cuenta.descripcion}"/></f:facet>
+                            <f:facet name="input"><p:inputText value="#{cuenta.descripcion}" 
+                                                               style="width:100%" label="#{msj['cuentaDescripcion']}"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+
+                    <p:column id="colTipo" headerText="#{msj['cuentaTipo']}" style="width: 17%">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{cuenta.idtipo.nombretipo}" /></f:facet>
+                            <f:facet name="input">
+                                <h:selectOneMenu value="#{cuenta.idtipo}" style="width:100%" converter="#{tipoConverter}">
+                                    <f:selectItems value="#{cuentaHelper.tipos}" var="tipo" itemLabel="#{tipo.nombretipo}" itemValue="#{tipo}" />
+                                </h:selectOneMenu>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column id="colCategoria" headerText="#{msj['cuentaCategoria']}" style="width: 17%">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{cuenta.categoria}" /></f:facet>
+                            <f:facet name="input">
+                                <h:selectOneMenu value="#{cuenta.categoria}" style="width:100%">
+                                    <f:selectItems value="#{cuentaHelper.categorias}" var="categoria" itemLabel="#{categoria}" itemValue="#{categoria}" />
+                                </h:selectOneMenu>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column id="colSaldoInicial" headerText="#{msj['cuentaSaldoInicial']}">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{cuenta.saldoinicial}"/></f:facet>
+                            <f:facet name="input"><p:inputText value="#{cuenta.saldoinicial}" 
+                                                               style="width:100%" label="#{msj['cuentaSaldoInicial']}"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column id="colSaldoFinal" headerText="#{msj['cuentaSaldoFinal']}">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{cuenta.saldofinal}"/></f:facet>
+                            <f:facet name="input"><p:inputText value="#{cuenta.saldofinal}" 
+                                                               style="width:100%" label="#{msj['cuentaSaldoFinal']}"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column>
+                        <p:rowEditor/>
+                        <p:commandButton actionListener="#{cuentaHelper.onRowDelete(cuenta)}" id="iconOnly" 
+                                         update=":formCuentas:mensajes,dtcuentas,@this" icon="ui-icon-trash" title="Borrar"/>
+                    </p:column>
+                </p:dataTable>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>
+

@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="../WEB-INF/templates/plantila.xhtml">
+        <ui:define name="content">
+            <h:form id="AsientoCreateForm">
+                <p:growl id="msgs" showDetail="true"/>
+                <h:panelGrid columns="4" id="display">
+                    <h:outputLabel for="numDiario" value="#{msj['asientoNumDiario']}"/>
+                    <h:inputText id="numDiario" value="#{beanAsiento.numDiario  }" required="true"/>
+
+                    <h:outputLabel for="periodo" value="#{msj['asientoPeriodo']}"/>
+                    <h:inputText id="periodo" value="#{beanAsiento.periodo  }" required="true"/>
+
+                    <h:outputLabel for="fecha" value="#{msj['asientoFecha']}"/>
+                    <p:calendar id="fecha" value="#{beanAsiento.fecha}" locale="es" navigator="true"  pattern="yyyy-MMM-dd" required="true"/>
+
+                    <h:outputLabel for="concepto" value="#{msj['asientoConcepto']}"/>
+                    <h:inputText id="concepto" value="#{beanAsiento.concepto  }" required="true"/>
+
+                    <h:outputLabel for="documento" value="#{msj['asientoDocumento']}"/>
+                    <h:inputText id="documento" value="#{beanAsiento.documento  }" required="true"/>
+                </h:panelGrid>
+
+                <p:contextMenu for="dtAsientos" widgetVar="cMenu">   
+                    <p:menuitem value="Edit Cell" icon="ui-icon-search" onclick="PF('celltrans').showCellEditor();
+                            return false;"/>  
+                    <p:menuitem value="Hide Menu" icon="ui-icon-close" onclick="PF('cMenu').hide()"/>  
+                </p:contextMenu> 
+
+                <p:dataTable id="dtAsientos" var="transaccion" value="#{beanAsiento.transacciones}" editable="true" editMode="cell" widgetVar="celltrans"
+                             paginator="true"
+                             rows="10" paginatorPosition="top"
+                             >
+                    <f:facet name="header">
+                        Transacciones
+                    </f:facet>
+
+                    <p:ajax event="cellEdit" listener="#{asientoHelper.onCellEdit}" update=":AsientoCreateForm:msgs" />
+
+                    <p:column headerText="Cuenta">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{transaccion.idcodcuenta.descripcion}" /></f:facet>
+                            <f:facet name="input">
+                                <h:selectOneMenu value="#{transaccion.idcodcuenta}" style="width:100%" converter="#{cuentaConverter}">
+                                    <f:selectItems value="#{asientoHelper.cuentas}" var="cuenta" itemLabel="#{cuenta.descripcion}" itemValue="#{cuenta}" />
+                                </h:selectOneMenu>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Debe">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{transaccion.debe}" >
+                                    <f:convertNumber type="currency" currencySymbol="$" />
+                                </h:outputText>
+                            </f:facet>
+                            <f:facet name="input">
+                                <p:inputText value="#{transaccion.debe}" style="width:96%" label="Debe"
+                                             immediate="true" onchange="this.form.submit()"
+                                             valueChangeListener="#{asientoHelper.debeListener}"/>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Haber">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{transaccion.haber}">
+                                    <f:convertNumber type="currency" currencySymbol="$" />
+                                </h:outputText>
+                            </f:facet>
+                            <f:facet name="input">
+                                <p:inputText value="#{transaccion.haber}" style="width:96%" label="Haber"
+                                             immediate="true" onchange="this.form.submit()"
+                                             valueChangeListener="#{asientoHelper.haberListener}"/>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Referencia">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{transaccion.referencia}" /></f:facet>
+                            <f:facet name="input"><p:inputText value="#{transaccion.referencia}" style="width:96%" label="Referencia"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:columnGroup type="footer">
+                        <p:row>
+                            <p:column footerText="Totales: " style="text-align:right"/>
+                            <p:column id="debefooter" footerText="$#{asientoHelper.totalDebe}" >
+                            </p:column>
+                            <p:column id="haberfooter" footerText="$#{asientoHelper.totalHaber}" />
+                        </p:row>
+                    </p:columnGroup>
+                </p:dataTable>
+
+                <p:commandButton value="Aceptar cambios" id="withIcon" actionListener="#{asientoHelper.verificar}" update="msgs" icon="ui-icon-disk" />
+                <p:button outcome="asiento" value="Finalizar" icon="ui-icon-star"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>
+
