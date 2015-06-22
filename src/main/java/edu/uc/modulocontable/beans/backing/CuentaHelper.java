@@ -189,7 +189,7 @@ public class CuentaHelper {
 
         Cuenta cuenta = new Cuenta();
 
-        String numCuenta = getBeanCuenta().getNumCuenta();
+        String numCuenta = "";//= getBeanCuenta().getNumCuenta();
         String descCuenta = getBeanCuenta().getDescCuenta();
         String categoriaCuenta = getBeanCuenta().getCategoriaCuenta();
         Tipo tipo = getBeanCuenta().getTipo();
@@ -199,6 +199,23 @@ public class CuentaHelper {
         if (isGroup) {
             Cuenta cuentaPadre = getBeanCuenta().getCuentaPadre();
             cuenta.setIdcodcuentapadre(cuentaPadre);
+
+            Integer num = cuentaFacade.countCuentasPadreByID(cuentaPadre.getIdcodcuenta()).intValue() + 1;
+            switch (categoriaCuenta) {
+                case "GRUPO":
+                    numCuenta = cuentaPadre.getNumcuenta() + num + ".";
+                    break;
+                case "DETALLE":
+                    if (num <= 9) {
+                        numCuenta = cuentaPadre.getNumcuenta() + "0" + num + ".";
+                    } else {
+                        numCuenta = cuentaPadre.getNumcuenta() + num + ".";
+                    }
+                    break;
+            }
+        } else {
+            Integer num = cuentaFacade.countCuentasPadreByID().intValue() + 1;
+            numCuenta = num + ".";
         }
 
         cuenta.setNumcuenta(numCuenta);

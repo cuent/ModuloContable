@@ -16,9 +16,6 @@
                 <p:commandButton id="btnNuevaCuenta" value="#{msj['cuentaNueva']}" update="display" icon="ui-icon-document-b" oncomplete="PF('dlg').show()" />
                 <p:dialog id="dlNuevaCuenta" header="#{msg['cuentaNueva']}" modal="true" resizable="false" showEffect="fade" widgetVar="dlg" >
                     <h:panelGrid columns="2" id="display" >
-                        <h:outputLabel for="numeroCuenta" value="Numero"/>
-                        <h:inputText id="numeroCuenta" value="#{beanCuenta.numCuenta}" required="true"/>
-
                         <h:outputLabel for="cuentaDescripcion" value="Descripcion"/>
                         <h:inputText id="cuentaDescripcion" value="#{beanCuenta.descCuenta}" required="true"/>
 
