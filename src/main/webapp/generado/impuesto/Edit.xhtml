@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+        <p:dialog id="ImpuestoEditDlg" widgetVar="ImpuestoEditDialog" modal="true" resizable="false"  appendTo="@(body)" header="#{myBundle.EditImpuestoTitle}" closeOnEscape="true">
+
+            <h:form id="ImpuestoEditForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid  columns="2" columnClasses="column" rendered="#{impuestoController.selected != null}">
+
+
+                        <h:outputLabel value="#{myBundle.EditImpuestoLabel_codigoImpuesto}" for="codigoImpuesto" />
+                        <h:outputText id="codigoImpuesto" value="#{impuestoController.selected.codigoImpuesto}" />
+
+                        <p:outputLabel value="#{myBundle.EditImpuestoLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{impuestoController.selected.descripcion}" title="#{myBundle.EditImpuestoTitle_descripcion}" required="true" requiredMessage="#{myBundle.EditImpuestoRequiredMessage_descripcion}" size="100" maxlength="100"/>
+
+                        <p:outputLabel value="#{myBundle.EditImpuestoLabel_valor}" for="valor" />
+                        <p:inputText id="valor" value="#{impuestoController.selected.valor}" title="#{myBundle.EditImpuestoTitle_valor}" required="true" requiredMessage="#{myBundle.EditImpuestoRequiredMessage_valor}"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{impuestoController.save}" value="#{myBundle.Save}" update="display,:ImpuestoListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,PF('ImpuestoEditDialog'));">
+                        <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmEditMessage}" icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    <p:commandButton value="#{myBundle.Cancel}" onclick="PF('ImpuestoEditDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

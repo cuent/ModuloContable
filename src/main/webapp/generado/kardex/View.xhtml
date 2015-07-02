@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="KardexViewDlg" widgetVar="KardexViewDialog" modal="true" resizable="false"  appendTo="@(body)" header="#{myBundle.ViewKardexTitle}" closeOnEscape="true">
+
+            <h:form id="KardexViewForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="column" rendered="#{kardexController.selected != null}">
+
+                        <h:outputText value="#{myBundle.ViewKardexLabel_codigoKardex}"/>
+                        <h:outputText value="#{kardexController.selected.codigoKardex}" title="#{myBundle.ViewKardexTitle_codigoKardex}"/>
+
+                        <h:outputText value="#{myBundle.ViewKardexLabel_fecha}"/>
+                        <h:outputText value="#{kardexController.selected.fecha}" title="#{myBundle.ViewKardexTitle_fecha}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+
+                        <h:outputText value="#{myBundle.ViewKardexLabel_tipo}"/>
+                        <h:outputText value="#{kardexController.selected.tipo}" title="#{myBundle.ViewKardexTitle_tipo}"/>
+
+                        <h:outputText value="#{myBundle.ViewKardexLabel_detalle}"/>
+                        <h:outputText value="#{kardexController.selected.detalle}" title="#{myBundle.ViewKardexTitle_detalle}"/>
+
+                        <h:outputText value="#{myBundle.ViewKardexLabel_cantidad}"/>
+                        <h:outputText value="#{kardexController.selected.cantidad}" title="#{myBundle.ViewKardexTitle_cantidad}"/>
+
+                        <h:outputText value="#{myBundle.ViewKardexLabel_costo}"/>
+                        <h:outputText value="#{kardexController.selected.costo}" title="#{myBundle.ViewKardexTitle_costo}"/>
+
+                        <h:outputText value="#{myBundle.ViewKardexLabel_subtotal}"/>
+                        <h:outputText value="#{kardexController.selected.subtotal}" title="#{myBundle.ViewKardexTitle_subtotal}"/>
+
+                        <h:outputText value="#{myBundle.ViewKardexLabel_totalCantidad}"/>
+                        <h:outputText value="#{kardexController.selected.totalCantidad}" title="#{myBundle.ViewKardexTitle_totalCantidad}"/>
+
+                        <h:outputText value="#{myBundle.ViewKardexLabel_totalCosto}"/>
+                        <h:outputText value="#{kardexController.selected.totalCosto}" title="#{myBundle.ViewKardexTitle_totalCosto}"/>
+
+                        <h:outputText value="#{myBundle.ViewKardexLabel_totalSubtotal}"/>
+                        <h:outputText value="#{kardexController.selected.totalSubtotal}" title="#{myBundle.ViewKardexTitle_totalSubtotal}"/>
+
+                        <h:outputText value="#{myBundle.ViewKardexLabel_codigoFacturac}"/>
+                        <h:outputText value="#{kardexController.selected.codigoFacturac.codigoFactura}"/>
+
+                        <h:outputText value="#{myBundle.ViewKardexLabel_codigoProducto}"/>
+                        <h:outputText value="#{kardexController.selected.codigoProducto.codigoProducto}"/>
+
+                        <h:outputText value="#{myBundle.ViewKardexLabel_codigoFacturav}"/>
+                        <h:outputText value="#{kardexController.selected.codigoFacturav.codigoFactura}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{myBundle.Close}" onclick="PF('KardexViewDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

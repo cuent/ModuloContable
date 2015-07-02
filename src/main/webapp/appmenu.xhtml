@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+        <h:form id="menuForm">
+            <p:menubar>
+                <p:menuitem value="#{myBundle.Home}" outcome="/index" icon="ui-icon-home"/>
+                <p:submenu label="#{myBundle.Maintenance}">
+                    <p:menuitem value="#{myBundle.AutorizacionesHeading}..." outcome="/generado/autorizaciones/index" />
+                    <p:menuitem value="#{myBundle.CabeceraFacturacHeading}..." outcome="/generado/cabeceraFacturac/index" />
+                    <p:menuitem value="#{myBundle.CabeceraFacturavHeading}..." outcome="/generado/cabeceraFacturav/index" />
+                    <p:menuitem value="#{myBundle.ClienteHeading}..." outcome="/generado/cliente/index" />
+                    <p:menuitem value="#{myBundle.DetalleFacturacHeading}..." outcome="/generado/detalleFacturac/index" />
+                    <p:menuitem value="#{myBundle.DetalleFacturavHeading}..." outcome="/generado/detalleFacturav/index" />
+                    <p:menuitem value="#{myBundle.DocumentoHeading}..." outcome="/generado/documento/index" />
+                    <p:menuitem value="#{myBundle.FormasPagoHeading}..." outcome="/generado/formasPago/index" />
+                    <p:menuitem value="#{myBundle.ImpuestoHeading}..." outcome="/generado/impuesto/index" />
+                    <p:menuitem value="#{myBundle.KardexHeading}..." outcome="/generado/kardex/index" />
+                    <p:menuitem value="#{myBundle.ProductoHeading}..." outcome="/generado/producto/index" />
+                    <p:menuitem value="#{myBundle.ProveedoresHeading}..." outcome="/generado/proveedores/index" />
+                </p:submenu>
+            </p:menubar>
+        </h:form>
+    </ui:composition>
+
+</html>

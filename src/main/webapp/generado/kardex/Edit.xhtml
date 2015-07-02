@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+        <p:dialog id="KardexEditDlg" widgetVar="KardexEditDialog" modal="true" resizable="false"  appendTo="@(body)" header="#{myBundle.EditKardexTitle}" closeOnEscape="true">
+
+            <h:form id="KardexEditForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid  columns="2" columnClasses="column" rendered="#{kardexController.selected != null}">
+
+
+                        <h:outputLabel value="#{myBundle.EditKardexLabel_codigoKardex}" for="codigoKardex" />
+                        <h:outputText id="codigoKardex" value="#{kardexController.selected.codigoKardex}" />
+
+                        <p:outputLabel value="#{myBundle.EditKardexLabel_fecha}" for="fecha" />
+                        <p:calendar id="fecha" pattern="MM/dd/yyyy HH:mm:ss" value="#{kardexController.selected.fecha}" title="#{myBundle.EditKardexTitle_fecha}" required="true" requiredMessage="#{myBundle.EditKardexRequiredMessage_fecha}" showOn="button"/>
+
+                        <p:outputLabel value="#{myBundle.EditKardexLabel_tipo}" for="tipo" />
+                        <p:inputText id="tipo" value="#{kardexController.selected.tipo}" title="#{myBundle.EditKardexTitle_tipo}" required="true" requiredMessage="#{myBundle.EditKardexRequiredMessage_tipo}" size="45" maxlength="45"/>
+
+                        <p:outputLabel value="#{myBundle.EditKardexLabel_detalle}" for="detalle" />
+                        <p:inputText id="detalle" value="#{kardexController.selected.detalle}" title="#{myBundle.EditKardexTitle_detalle}" size="100" maxlength="100"/>
+
+                        <p:outputLabel value="#{myBundle.EditKardexLabel_cantidad}" for="cantidad" />
+                        <p:inputText id="cantidad" value="#{kardexController.selected.cantidad}" title="#{myBundle.EditKardexTitle_cantidad}" required="true" requiredMessage="#{myBundle.EditKardexRequiredMessage_cantidad}"/>
+
+                        <p:outputLabel value="#{myBundle.EditKardexLabel_costo}" for="costo" />
+                        <p:inputText id="costo" value="#{kardexController.selected.costo}" title="#{myBundle.EditKardexTitle_costo}" required="true" requiredMessage="#{myBundle.EditKardexRequiredMessage_costo}"/>
+
+                        <p:outputLabel value="#{myBundle.EditKardexLabel_subtotal}" for="subtotal" />
+                        <p:inputText id="subtotal" value="#{kardexController.selected.subtotal}" title="#{myBundle.EditKardexTitle_subtotal}" required="true" requiredMessage="#{myBundle.EditKardexRequiredMessage_subtotal}"/>
+
+                        <p:outputLabel value="#{myBundle.EditKardexLabel_totalCantidad}" for="totalCantidad" />
+                        <p:inputText id="totalCantidad" value="#{kardexController.selected.totalCantidad}" title="#{myBundle.EditKardexTitle_totalCantidad}" required="true" requiredMessage="#{myBundle.EditKardexRequiredMessage_totalCantidad}"/>
+
+                        <p:outputLabel value="#{myBundle.EditKardexLabel_totalCosto}" for="totalCosto" />
+                        <p:inputText id="totalCosto" value="#{kardexController.selected.totalCosto}" title="#{myBundle.EditKardexTitle_totalCosto}" required="true" requiredMessage="#{myBundle.EditKardexRequiredMessage_totalCosto}"/>
+
+                        <p:outputLabel value="#{myBundle.EditKardexLabel_totalSubtotal}" for="totalSubtotal" />
+                        <p:inputText id="totalSubtotal" value="#{kardexController.selected.totalSubtotal}" title="#{myBundle.EditKardexTitle_totalSubtotal}" required="true" requiredMessage="#{myBundle.EditKardexRequiredMessage_totalSubtotal}"/>
+
+                        <p:outputLabel value="#{myBundle.EditKardexLabel_codigoFacturac}" for="codigoFacturac" />
+                        <p:selectOneMenu id="codigoFacturac" value="#{kardexController.selected.codigoFacturac}"  converter="cabeceraFacturacConverter">
+                            <f:selectItem itemLabel="#{myBundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{cabeceraFacturacController.items}"
+                                           var="codigoFacturacItem"
+                                           itemValue="#{codigoFacturacItem}"
+                                           itemLabel="#{codigoFacturacItem.codigoFactura.toString()}"
+                                           />
+
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="#{myBundle.EditKardexLabel_codigoProducto}" for="codigoProducto" />
+                        <p:selectOneMenu id="codigoProducto" value="#{kardexController.selected.codigoProducto}" required="true" requiredMessage="#{myBundle.EditKardexRequiredMessage_codigoProducto}" converter="productoConverter">
+                            <f:selectItem itemLabel="#{myBundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{productoController.items}"
+                                           var="codigoProductoItem"
+                                           itemValue="#{codigoProductoItem}"
+                                           itemLabel="#{codigoProductoItem.codigoProducto.toString()}"
+                                           />
+
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="#{myBundle.EditKardexLabel_codigoFacturav}" for="codigoFacturav" />
+                        <p:selectOneMenu id="codigoFacturav" value="#{kardexController.selected.codigoFacturav}"  converter="cabeceraFacturavConverter">
+                            <f:selectItem itemLabel="#{myBundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{cabeceraFacturavController.items}"
+                                           var="codigoFacturavItem"
+                                           itemValue="#{codigoFacturavItem}"
+                                           itemLabel="#{codigoFacturavItem.codigoFactura.toString()}"
+                                           />
+
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{kardexController.save}" value="#{myBundle.Save}" update="display,:KardexListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,PF('KardexEditDialog'));">
+                        <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmEditMessage}" icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    <p:commandButton value="#{myBundle.Cancel}" onclick="PF('KardexEditDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

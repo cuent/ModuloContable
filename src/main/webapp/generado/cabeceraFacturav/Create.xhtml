@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="CabeceraFacturavCreateDlg" widgetVar="CabeceraFacturavCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{myBundle.CreateCabeceraFacturavTitle}" closeOnEscape="true">
+
+            <h:form id="CabeceraFacturavCreateForm">
+
+                <h:panelGroup id="display" rendered="#{cabeceraFacturavController.selected != null}">
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="#{myBundle.CreateCabeceraFacturavLabel_numeroFactura}" for="numeroFactura" />
+                        <p:inputText id="numeroFactura" value="#{cabeceraFacturavController.selected.numeroFactura}" title="#{myBundle.CreateCabeceraFacturavTitle_numeroFactura}" required="true" requiredMessage="#{myBundle.CreateCabeceraFacturavRequiredMessage_numeroFactura}"/>
+
+                        <p:outputLabel value="#{myBundle.CreateCabeceraFacturavLabel_fecha}" for="fecha" />
+                        <p:calendar id="fecha" pattern="MM/dd/yyyy HH:mm:ss" value="#{cabeceraFacturavController.selected.fecha}" title="#{myBundle.CreateCabeceraFacturavTitle_fecha}" required="true" requiredMessage="#{myBundle.CreateCabeceraFacturavRequiredMessage_fecha}" showOn="button"/>
+
+                        <p:outputLabel value="#{myBundle.CreateCabeceraFacturavLabel_autorizacionSri}" for="autorizacionSri" />
+                        <p:inputText id="autorizacionSri" value="#{cabeceraFacturavController.selected.autorizacionSri}" title="#{myBundle.CreateCabeceraFacturavTitle_autorizacionSri}" required="true" requiredMessage="#{myBundle.CreateCabeceraFacturavRequiredMessage_autorizacionSri}" size="150" maxlength="150"/>
+
+                        <p:outputLabel value="#{myBundle.CreateCabeceraFacturavLabel_establecimiento}" for="establecimiento" />
+                        <p:inputText id="establecimiento" value="#{cabeceraFacturavController.selected.establecimiento}" title="#{myBundle.CreateCabeceraFacturavTitle_establecimiento}" required="true" requiredMessage="#{myBundle.CreateCabeceraFacturavRequiredMessage_establecimiento}" size="45" maxlength="45"/>
+
+                        <p:outputLabel value="#{myBundle.CreateCabeceraFacturavLabel_ptoEmision}" for="ptoEmision" />
+                        <p:inputText id="ptoEmision" value="#{cabeceraFacturavController.selected.ptoEmision}" title="#{myBundle.CreateCabeceraFacturavTitle_ptoEmision}" required="true" requiredMessage="#{myBundle.CreateCabeceraFacturavRequiredMessage_ptoEmision}" size="45" maxlength="45"/>
+
+                        <p:outputLabel value="#{myBundle.CreateCabeceraFacturavLabel_subtotal}" for="subtotal" />
+                        <p:inputText id="subtotal" value="#{cabeceraFacturavController.selected.subtotal}" title="#{myBundle.CreateCabeceraFacturavTitle_subtotal}" required="true" requiredMessage="#{myBundle.CreateCabeceraFacturavRequiredMessage_subtotal}"/>
+
+                        <p:outputLabel value="#{myBundle.CreateCabeceraFacturavLabel_subtotalBase0}" for="subtotalBase0" />
+                        <p:inputText id="subtotalBase0" value="#{cabeceraFacturavController.selected.subtotalBase0}" title="#{myBundle.CreateCabeceraFacturavTitle_subtotalBase0}" required="true" requiredMessage="#{myBundle.CreateCabeceraFacturavRequiredMessage_subtotalBase0}"/>
+
+                        <p:outputLabel value="#{myBundle.CreateCabeceraFacturavLabel_subtotalBaseIva}" for="subtotalBaseIva" />
+                        <p:inputText id="subtotalBaseIva" value="#{cabeceraFacturavController.selected.subtotalBaseIva}" title="#{myBundle.CreateCabeceraFacturavTitle_subtotalBaseIva}" required="true" requiredMessage="#{myBundle.CreateCabeceraFacturavRequiredMessage_subtotalBaseIva}"/>
+
+                        <p:outputLabel value="#{myBundle.CreateCabeceraFacturavLabel_descuento}" for="descuento" />
+                        <p:inputText id="descuento" value="#{cabeceraFacturavController.selected.descuento}" title="#{myBundle.CreateCabeceraFacturavTitle_descuento}"/>
+
+                        <p:outputLabel value="#{myBundle.CreateCabeceraFacturavLabel_iva}" for="iva" />
+                        <p:inputText id="iva" value="#{cabeceraFacturavController.selected.iva}" title="#{myBundle.CreateCabeceraFacturavTitle_iva}" required="true" requiredMessage="#{myBundle.CreateCabeceraFacturavRequiredMessage_iva}"/>
+
+                        <p:outputLabel value="#{myBundle.CreateCabeceraFacturavLabel_total}" for="total" />
+                        <p:inputText id="total" value="#{cabeceraFacturavController.selected.total}" title="#{myBundle.CreateCabeceraFacturavTitle_total}" required="true" requiredMessage="#{myBundle.CreateCabeceraFacturavRequiredMessage_total}"/>
+
+                        <p:outputLabel value="#{myBundle.CreateCabeceraFacturavLabel_codigoCliente}" for="codigoCliente" />
+                        <p:selectOneMenu id="codigoCliente" value="#{cabeceraFacturavController.selected.codigoCliente}" required="true" requiredMessage="#{myBundle.CreateCabeceraFacturavRequiredMessage_codigoCliente}" converter="clienteConverter">
+                            <f:selectItem itemLabel="#{myBundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{clienteController.items}"
+                                           var="codigoClienteItem"
+                                           itemValue="#{codigoClienteItem}"
+                                           itemLabel="#{codigoClienteItem.codigoCliente.toString()}"
+                                           />
+
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="#{myBundle.CreateCabeceraFacturavLabel_formaPago}" for="formaPago" />
+                        <p:selectOneMenu id="formaPago" value="#{cabeceraFacturavController.selected.formaPago}" required="true" requiredMessage="#{myBundle.CreateCabeceraFacturavRequiredMessage_formaPago}" converter="formasPagoConverter">
+                            <f:selectItem itemLabel="#{myBundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{formasPagoController.items}"
+                                           var="formaPagoItem"
+                                           itemValue="#{formaPagoItem}"
+                                           itemLabel="#{formaPagoItem.descripcion.toString()}"
+                                           />
+
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{cabeceraFacturavController.saveNew}" value="#{myBundle.Save}" update="display,:CabeceraFacturavListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,PF('CabeceraFacturavCreateDialog'));">
+                        <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmCreateMessage}" icon="ui-icon-alert"/>
+                    </p:commandButton>
+
+                    <p:commandButton value="#{myBundle.Cancel}" onclick="PF('CabeceraFacturavCreateDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

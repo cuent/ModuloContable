@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ProveedoresViewDlg" widgetVar="ProveedoresViewDialog" modal="true" resizable="false"  appendTo="@(body)" header="#{myBundle.ViewProveedoresTitle}" closeOnEscape="true">
+
+            <h:form id="ProveedoresViewForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="column" rendered="#{proveedoresController.selected != null}">
+
+                        <h:outputText value="#{myBundle.ViewProveedoresLabel_codigoProveedores}"/>
+                        <h:outputText value="#{proveedoresController.selected.codigoProveedores}" title="#{myBundle.ViewProveedoresTitle_codigoProveedores}"/>
+
+                        <h:outputText value="#{myBundle.ViewProveedoresLabel_tipoIdentificacion}"/>
+                        <h:outputText value="#{proveedoresController.selected.tipoIdentificacion}" title="#{myBundle.ViewProveedoresTitle_tipoIdentificacion}"/>
+
+                        <h:outputText value="#{myBundle.ViewProveedoresLabel_identificacion}"/>
+                        <h:outputText value="#{proveedoresController.selected.identificacion}" title="#{myBundle.ViewProveedoresTitle_identificacion}"/>
+
+                        <h:outputText value="#{myBundle.ViewProveedoresLabel_nombre}"/>
+                        <h:outputText value="#{proveedoresController.selected.nombre}" title="#{myBundle.ViewProveedoresTitle_nombre}"/>
+
+                        <h:outputText value="#{myBundle.ViewProveedoresLabel_direccion}"/>
+                        <h:outputText value="#{proveedoresController.selected.direccion}" title="#{myBundle.ViewProveedoresTitle_direccion}"/>
+
+                        <h:outputText value="#{myBundle.ViewProveedoresLabel_telefono}"/>
+                        <h:outputText value="#{proveedoresController.selected.telefono}" title="#{myBundle.ViewProveedoresTitle_telefono}"/>
+
+                        <h:outputText value="#{myBundle.ViewProveedoresLabel_autorizacion}"/>
+                        <h:outputText value="#{proveedoresController.selected.autorizacion}" title="#{myBundle.ViewProveedoresTitle_autorizacion}"/>
+
+                        <h:outputText value="#{myBundle.ViewProveedoresLabel_fechaCaducidadAutorizacion}"/>
+                        <h:outputText value="#{proveedoresController.selected.fechaCaducidadAutorizacion}" title="#{myBundle.ViewProveedoresTitle_fechaCaducidadAutorizacion}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{myBundle.Close}" onclick="PF('ProveedoresViewDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

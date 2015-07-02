@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ImpuestoCreateDlg" widgetVar="ImpuestoCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{myBundle.CreateImpuestoTitle}" closeOnEscape="true">
+
+            <h:form id="ImpuestoCreateForm">
+
+                <h:panelGroup id="display" rendered="#{impuestoController.selected != null}">
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="#{myBundle.CreateImpuestoLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{impuestoController.selected.descripcion}" title="#{myBundle.CreateImpuestoTitle_descripcion}" required="true" requiredMessage="#{myBundle.CreateImpuestoRequiredMessage_descripcion}" size="100" maxlength="100"/>
+
+                        <p:outputLabel value="#{myBundle.CreateImpuestoLabel_valor}" for="valor" />
+                        <p:inputText id="valor" value="#{impuestoController.selected.valor}" title="#{myBundle.CreateImpuestoTitle_valor}" required="true" requiredMessage="#{myBundle.CreateImpuestoRequiredMessage_valor}"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{impuestoController.saveNew}" value="#{myBundle.Save}" update="display,:ImpuestoListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,PF('ImpuestoCreateDialog'));">
+                        <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmCreateMessage}" icon="ui-icon-alert"/>
+                    </p:commandButton>
+
+                    <p:commandButton value="#{myBundle.Cancel}" onclick="PF('ImpuestoCreateDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="ProductoListForm">
+
+        <p:panel header="#{myBundle.ListProductoTitle}">
+            <p:contextMenu id="ProductoDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{myBundle.Create}" onclick="document.getElementById('ProductoListForm:createButton').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="#{myBundle.View}" onclick="document.getElementById('ProductoListForm:viewButton').click();" icon="ui-icon-search"/>
+                <p:menuitem value="#{myBundle.Edit}" onclick="document.getElementById('ProductoListForm:editButton').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{myBundle.Delete}" onclick="document.getElementById('ProductoListForm:deleteButton').click();" icon="ui-icon-trash"/>
+                <p:separator/>
+                <p:menuitem value="#{myBundle.ProductoMenuItem_detalleFacturacList}" icon="ui-icon-search"  action="#{productoController.navigateDetalleFacturacList}" disabled="#{empty productoController.selected.detalleFacturacList}" ajax="false"/>  
+                <p:menuitem value="#{myBundle.ProductoMenuItem_kardexList}" icon="ui-icon-search"  action="#{productoController.navigateKardexList}" disabled="#{empty productoController.selected.kardexList}" ajax="false"/>  
+                <p:menuitem value="#{myBundle.ProductoMenuItem_impuesto}" icon="ui-icon-search"  actionListener="#{productoController.prepareImpuesto}" update=":ImpuestoViewForm" oncomplete="PF('ImpuestoViewDialog').show()" disabled="#{empty productoController.selected.impuesto}"/>  
+                <p:menuitem value="#{myBundle.ProductoMenuItem_detalleFacturavList}" icon="ui-icon-search"  action="#{productoController.navigateDetalleFacturavList}" disabled="#{empty productoController.selected.detalleFacturavList}" ajax="false"/>  
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{productoController.items}"
+                         var="item"
+                         rowKey="#{item.codigoProducto}"
+                         paginator="true"
+                         rows="10"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{productoController.selected}">
+
+                <p:ajax event="rowSelect"   update=":ProductoListForm:createButton :ProductoListForm:viewButton :ProductoListForm:editButton :ProductoListForm:deleteButton :ProductoListForm:ProductoDataTableContextMenu" listener="#{productoController.resetParents}"/>
+                <p:ajax event="rowUnselect" update=":ProductoListForm:createButton :ProductoListForm:viewButton :ProductoListForm:editButton :ProductoListForm:deleteButton :ProductoListForm:ProductoDataTableContextMenu" listener="#{productoController.resetParents}"/>
+                <p:ajax event="contextMenu" update=" :ProductoListForm:createButton :ProductoListForm:viewButton :ProductoListForm:editButton :ProductoListForm:deleteButton" listener="#{productoController.resetParents}"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('ProductoListForm:viewButton').click();"/>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListProductoTitle_codigoProducto}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.codigoProducto}"/>
+                </p:column>
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListProductoTitle_nombre}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.nombre}"/>
+                </p:column>
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListProductoTitle_costo}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.costo}"/>
+                </p:column>
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListProductoTitle_precio}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.precio}"/>
+                </p:column>
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListProductoTitle_stock}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.stock}"/>
+                </p:column>
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListProductoTitle_impuesto}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.impuesto.descripcion}"/>
+                </p:column>
+
+
+            </p:dataTable>
+
+            <p:commandButton id="createButton"                             icon="ui-icon-plus"   value="#{myBundle.Create}" actionListener="#{productoController.prepareCreate}" update=":ProductoCreateForm" oncomplete="PF('ProductoCreateDialog').show()"/>
+            <p:commandButton id="viewButton"   style="visibility: hidden;" icon="ui-icon-search" value="#{myBundle.View}" update=":ProductoViewForm" oncomplete="PF('ProductoViewDialog').show()" disabled="#{empty productoController.selected}"/>
+            <p:commandButton id="editButton"   style="visibility: hidden;" icon="ui-icon-pencil" value="#{myBundle.Edit}" update=":ProductoEditForm" oncomplete="PF('ProductoEditDialog').show()" disabled="#{empty productoController.selected}"/>
+            <p:commandButton id="deleteButton" style="visibility: hidden;" icon="ui-icon-trash"  value="#{myBundle.Delete}" actionListener="#{productoController.delete}" update=":growl,datalist" disabled="#{empty productoController.selected}">
+                <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmDeleteMessage}" icon="ui-icon-alert"/>
+            </p:commandButton>
+
+        </p:panel>
+        <ui:include src="/confirmation.xhtml"/>
+    </h:form>
+
+</ui:composition>

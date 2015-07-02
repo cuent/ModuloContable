@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="CabeceraFacturavListForm">
+
+        <p:panel header="#{myBundle.ListCabeceraFacturavTitle}">
+            <p:contextMenu id="CabeceraFacturavDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{myBundle.Create}" onclick="document.getElementById('CabeceraFacturavListForm:createButton').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="#{myBundle.View}" onclick="document.getElementById('CabeceraFacturavListForm:viewButton').click();" icon="ui-icon-search"/>
+                <p:menuitem value="#{myBundle.Edit}" onclick="document.getElementById('CabeceraFacturavListForm:editButton').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{myBundle.Delete}" onclick="document.getElementById('CabeceraFacturavListForm:deleteButton').click();" icon="ui-icon-trash"/>
+                <p:separator/>
+                <p:menuitem value="#{myBundle.CabeceraFacturavMenuItem_kardexList}" icon="ui-icon-search"  action="#{cabeceraFacturavController.navigateKardexList}" disabled="#{empty cabeceraFacturavController.selected.kardexList}" ajax="false"/>  
+                <p:menuitem value="#{myBundle.CabeceraFacturavMenuItem_detalleFacturavList}" icon="ui-icon-search"  action="#{cabeceraFacturavController.navigateDetalleFacturavList}" disabled="#{empty cabeceraFacturavController.selected.detalleFacturavList}" ajax="false"/>  
+                <p:menuitem value="#{myBundle.CabeceraFacturavMenuItem_codigoCliente}" icon="ui-icon-search"  actionListener="#{cabeceraFacturavController.prepareCodigoCliente}" update=":ClienteViewForm" oncomplete="PF('ClienteViewDialog').show()" disabled="#{empty cabeceraFacturavController.selected.codigoCliente}"/>  
+                <p:menuitem value="#{myBundle.CabeceraFacturavMenuItem_formaPago}" icon="ui-icon-search"  actionListener="#{cabeceraFacturavController.prepareFormaPago}" update=":FormasPagoViewForm" oncomplete="PF('FormasPagoViewDialog').show()" disabled="#{empty cabeceraFacturavController.selected.formaPago}"/>  
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{cabeceraFacturavController.items}"
+                         var="item"
+                         rowKey="#{item.codigoFactura}"
+                         paginator="true"
+                         rows="10"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{cabeceraFacturavController.selected}">
+
+                <p:ajax event="rowSelect"   update=":CabeceraFacturavListForm:createButton :CabeceraFacturavListForm:viewButton :CabeceraFacturavListForm:editButton :CabeceraFacturavListForm:deleteButton :CabeceraFacturavListForm:CabeceraFacturavDataTableContextMenu" listener="#{cabeceraFacturavController.resetParents}"/>
+                <p:ajax event="rowUnselect" update=":CabeceraFacturavListForm:createButton :CabeceraFacturavListForm:viewButton :CabeceraFacturavListForm:editButton :CabeceraFacturavListForm:deleteButton :CabeceraFacturavListForm:CabeceraFacturavDataTableContextMenu" listener="#{cabeceraFacturavController.resetParents}"/>
+                <p:ajax event="contextMenu" update=" :CabeceraFacturavListForm:createButton :CabeceraFacturavListForm:viewButton :CabeceraFacturavListForm:editButton :CabeceraFacturavListForm:deleteButton" listener="#{cabeceraFacturavController.resetParents}"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('CabeceraFacturavListForm:viewButton').click();"/>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListCabeceraFacturavTitle_codigoFactura}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.codigoFactura}"/>
+                </p:column>
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListCabeceraFacturavTitle_numeroFactura}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.numeroFactura}"/>
+                </p:column>
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListCabeceraFacturavTitle_fecha}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.fecha}">
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:outputText>
+                </p:column>
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListCabeceraFacturavTitle_autorizacionSri}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.autorizacionSri}"/>
+                </p:column>
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListCabeceraFacturavTitle_establecimiento}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.establecimiento}"/>
+                </p:column>
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListCabeceraFacturavTitle_ptoEmision}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.ptoEmision}"/>
+                </p:column>
+
+                <!--
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{myBundle.ListCabeceraFacturavTitle_subtotal}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.subtotal}"/>
+                                    </p:column>
+                -->
+                <!--
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{myBundle.ListCabeceraFacturavTitle_subtotalBase0}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.subtotalBase0}"/>
+                                    </p:column>
+                -->
+                <!--
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{myBundle.ListCabeceraFacturavTitle_subtotalBaseIva}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.subtotalBaseIva}"/>
+                                    </p:column>
+                -->
+                <!--
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{myBundle.ListCabeceraFacturavTitle_descuento}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.descuento}"/>
+                                    </p:column>
+                -->
+                <!--
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{myBundle.ListCabeceraFacturavTitle_iva}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.iva}"/>
+                                    </p:column>
+                -->
+                <!--
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{myBundle.ListCabeceraFacturavTitle_total}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.total}"/>
+                                    </p:column>
+                -->
+                <!--
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{myBundle.ListCabeceraFacturavTitle_codigoCliente}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.codigoCliente.codigoCliente}"/>
+                                    </p:column>
+                -->
+                <!--
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{myBundle.ListCabeceraFacturavTitle_formaPago}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.formaPago.descripcion}"/>
+                                    </p:column>
+                -->
+
+            </p:dataTable>
+
+            <p:commandButton id="createButton"                             icon="ui-icon-plus"   value="#{myBundle.Create}" actionListener="#{cabeceraFacturavController.prepareCreate}" update=":CabeceraFacturavCreateForm" oncomplete="PF('CabeceraFacturavCreateDialog').show()"/>
+            <p:commandButton id="viewButton"   style="visibility: hidden;" icon="ui-icon-search" value="#{myBundle.View}" update=":CabeceraFacturavViewForm" oncomplete="PF('CabeceraFacturavViewDialog').show()" disabled="#{empty cabeceraFacturavController.selected}"/>
+            <p:commandButton id="editButton"   style="visibility: hidden;" icon="ui-icon-pencil" value="#{myBundle.Edit}" update=":CabeceraFacturavEditForm" oncomplete="PF('CabeceraFacturavEditDialog').show()" disabled="#{empty cabeceraFacturavController.selected}"/>
+            <p:commandButton id="deleteButton" style="visibility: hidden;" icon="ui-icon-trash"  value="#{myBundle.Delete}" actionListener="#{cabeceraFacturavController.delete}" update=":growl,datalist" disabled="#{empty cabeceraFacturavController.selected}">
+                <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmDeleteMessage}" icon="ui-icon-alert"/>
+            </p:commandButton>
+
+        </p:panel>
+        <ui:include src="/confirmation.xhtml"/>
+    </h:form>
+
+</ui:composition>

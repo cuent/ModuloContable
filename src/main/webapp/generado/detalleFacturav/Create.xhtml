@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="DetalleFacturavCreateDlg" widgetVar="DetalleFacturavCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{myBundle.CreateDetalleFacturavTitle}" closeOnEscape="true">
+
+            <h:form id="DetalleFacturavCreateForm">
+
+                <h:panelGroup id="display" rendered="#{detalleFacturavController.selected != null}">
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="#{myBundle.CreateDetalleFacturavLabel_cantidad}" for="cantidad" />
+                        <p:inputText id="cantidad" value="#{detalleFacturavController.selected.cantidad}" title="#{myBundle.CreateDetalleFacturavTitle_cantidad}" required="true" requiredMessage="#{myBundle.CreateDetalleFacturavRequiredMessage_cantidad}"/>
+
+                        <p:outputLabel value="#{myBundle.CreateDetalleFacturavLabel_precioUnitario}" for="precioUnitario" />
+                        <p:inputText id="precioUnitario" value="#{detalleFacturavController.selected.precioUnitario}" title="#{myBundle.CreateDetalleFacturavTitle_precioUnitario}" required="true" requiredMessage="#{myBundle.CreateDetalleFacturavRequiredMessage_precioUnitario}"/>
+
+                        <p:outputLabel value="#{myBundle.CreateDetalleFacturavLabel_total}" for="total" />
+                        <p:inputText id="total" value="#{detalleFacturavController.selected.total}" title="#{myBundle.CreateDetalleFacturavTitle_total}" required="true" requiredMessage="#{myBundle.CreateDetalleFacturavRequiredMessage_total}"/>
+
+                        <p:outputLabel value="#{myBundle.CreateDetalleFacturavLabel_cabeceraFacturav}" for="cabeceraFacturav" />
+                        <p:selectOneMenu id="cabeceraFacturav" value="#{detalleFacturavController.selected.cabeceraFacturav}" required="true" requiredMessage="#{myBundle.CreateDetalleFacturavRequiredMessage_cabeceraFacturav}" converter="cabeceraFacturavConverter">
+                            <f:selectItem itemLabel="#{myBundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{cabeceraFacturavController.items}"
+                                           var="cabeceraFacturavItem"
+                                           itemValue="#{cabeceraFacturavItem}"
+                                           itemLabel="#{cabeceraFacturavItem.codigoFactura.toString()}"
+                                           />
+
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="#{myBundle.CreateDetalleFacturavLabel_producto}" for="producto" />
+                        <p:selectOneMenu id="producto" value="#{detalleFacturavController.selected.producto}" required="true" requiredMessage="#{myBundle.CreateDetalleFacturavRequiredMessage_producto}" converter="productoConverter">
+                            <f:selectItem itemLabel="#{myBundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{productoController.items}"
+                                           var="productoItem"
+                                           itemValue="#{productoItem}"
+                                           itemLabel="#{productoItem.codigoProducto.toString()}"
+                                           />
+
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{detalleFacturavController.saveNew}" value="#{myBundle.Save}" update="display,:DetalleFacturavListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,PF('DetalleFacturavCreateDialog'));">
+                        <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmCreateMessage}" icon="ui-icon-alert"/>
+                    </p:commandButton>
+
+                    <p:commandButton value="#{myBundle.Cancel}" onclick="PF('DetalleFacturavCreateDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

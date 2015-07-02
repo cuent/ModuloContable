@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="DetalleFacturavViewDlg" widgetVar="DetalleFacturavViewDialog" modal="true" resizable="false"  appendTo="@(body)" header="#{myBundle.ViewDetalleFacturavTitle}" closeOnEscape="true">
+
+            <h:form id="DetalleFacturavViewForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="column" rendered="#{detalleFacturavController.selected != null}">
+
+                        <h:outputText value="#{myBundle.ViewDetalleFacturavLabel_cantidad}"/>
+                        <h:outputText value="#{detalleFacturavController.selected.cantidad}" title="#{myBundle.ViewDetalleFacturavTitle_cantidad}"/>
+
+                        <h:outputText value="#{myBundle.ViewDetalleFacturavLabel_precioUnitario}"/>
+                        <h:outputText value="#{detalleFacturavController.selected.precioUnitario}" title="#{myBundle.ViewDetalleFacturavTitle_precioUnitario}"/>
+
+                        <h:outputText value="#{myBundle.ViewDetalleFacturavLabel_total}"/>
+                        <h:outputText value="#{detalleFacturavController.selected.total}" title="#{myBundle.ViewDetalleFacturavTitle_total}"/>
+
+                        <h:outputText value="#{myBundle.ViewDetalleFacturavLabel_cabeceraFacturav}"/>
+                        <h:outputText value="#{detalleFacturavController.selected.cabeceraFacturav.codigoFactura}"/>
+
+                        <h:outputText value="#{myBundle.ViewDetalleFacturavLabel_producto}"/>
+                        <h:outputText value="#{detalleFacturavController.selected.producto.codigoProducto}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{myBundle.Close}" onclick="PF('DetalleFacturavViewDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

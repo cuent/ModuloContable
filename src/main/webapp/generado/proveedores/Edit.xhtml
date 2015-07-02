@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+        <p:dialog id="ProveedoresEditDlg" widgetVar="ProveedoresEditDialog" modal="true" resizable="false"  appendTo="@(body)" header="#{myBundle.EditProveedoresTitle}" closeOnEscape="true">
+
+            <h:form id="ProveedoresEditForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid  columns="2" columnClasses="column" rendered="#{proveedoresController.selected != null}">
+
+
+                        <h:outputLabel value="#{myBundle.EditProveedoresLabel_codigoProveedores}" for="codigoProveedores" />
+                        <h:outputText id="codigoProveedores" value="#{proveedoresController.selected.codigoProveedores}" />
+
+                        <p:outputLabel value="#{myBundle.EditProveedoresLabel_tipoIdentificacion}" for="tipoIdentificacion" />
+                        <p:inputText id="tipoIdentificacion" value="#{proveedoresController.selected.tipoIdentificacion}" title="#{myBundle.EditProveedoresTitle_tipoIdentificacion}" required="true" requiredMessage="#{myBundle.EditProveedoresRequiredMessage_tipoIdentificacion}" size="100" maxlength="100"/>
+
+                        <p:outputLabel value="#{myBundle.EditProveedoresLabel_identificacion}" for="identificacion" />
+                        <p:inputText id="identificacion" value="#{proveedoresController.selected.identificacion}" title="#{myBundle.EditProveedoresTitle_identificacion}" size="100" maxlength="100"/>
+
+                        <p:outputLabel value="#{myBundle.EditProveedoresLabel_nombre}" for="nombre" />
+                        <p:inputText id="nombre" value="#{proveedoresController.selected.nombre}" title="#{myBundle.EditProveedoresTitle_nombre}" size="80" maxlength="80"/>
+
+                        <p:outputLabel value="#{myBundle.EditProveedoresLabel_direccion}" for="direccion" />
+                        <p:inputText id="direccion" value="#{proveedoresController.selected.direccion}" title="#{myBundle.EditProveedoresTitle_direccion}" size="100" maxlength="100"/>
+
+                        <p:outputLabel value="#{myBundle.EditProveedoresLabel_telefono}" for="telefono" />
+                        <p:inputText id="telefono" value="#{proveedoresController.selected.telefono}" title="#{myBundle.EditProveedoresTitle_telefono}" size="45" maxlength="45"/>
+
+                        <p:outputLabel value="#{myBundle.EditProveedoresLabel_autorizacion}" for="autorizacion" />
+                        <p:inputText id="autorizacion" value="#{proveedoresController.selected.autorizacion}" title="#{myBundle.EditProveedoresTitle_autorizacion}" size="120" maxlength="120"/>
+
+                        <p:outputLabel value="#{myBundle.EditProveedoresLabel_fechaCaducidadAutorizacion}" for="fechaCaducidadAutorizacion" />
+                        <p:calendar id="fechaCaducidadAutorizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{proveedoresController.selected.fechaCaducidadAutorizacion}" title="#{myBundle.EditProveedoresTitle_fechaCaducidadAutorizacion}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{proveedoresController.save}" value="#{myBundle.Save}" update="display,:ProveedoresListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,PF('ProveedoresEditDialog'));">
+                        <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmEditMessage}" icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    <p:commandButton value="#{myBundle.Cancel}" onclick="PF('ProveedoresEditDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

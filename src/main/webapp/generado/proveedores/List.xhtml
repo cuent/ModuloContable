@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="ProveedoresListForm">
+
+        <p:panel header="#{myBundle.ListProveedoresTitle}">
+            <p:contextMenu id="ProveedoresDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{myBundle.Create}" onclick="document.getElementById('ProveedoresListForm:createButton').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="#{myBundle.View}" onclick="document.getElementById('ProveedoresListForm:viewButton').click();" icon="ui-icon-search"/>
+                <p:menuitem value="#{myBundle.Edit}" onclick="document.getElementById('ProveedoresListForm:editButton').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{myBundle.Delete}" onclick="document.getElementById('ProveedoresListForm:deleteButton').click();" icon="ui-icon-trash"/>
+                <p:separator/>
+                <p:menuitem value="#{myBundle.ProveedoresMenuItem_cabeceraFacturacList}" icon="ui-icon-search"  action="#{proveedoresController.navigateCabeceraFacturacList}" disabled="#{empty proveedoresController.selected.cabeceraFacturacList}" ajax="false"/>  
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{proveedoresController.items}"
+                         var="item"
+                         rowKey="#{item.codigoProveedores}"
+                         paginator="true"
+                         rows="10"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{proveedoresController.selected}">
+
+                <p:ajax event="rowSelect"   update=":ProveedoresListForm:createButton :ProveedoresListForm:viewButton :ProveedoresListForm:editButton :ProveedoresListForm:deleteButton :ProveedoresListForm:ProveedoresDataTableContextMenu" listener="#{proveedoresController.resetParents}"/>
+                <p:ajax event="rowUnselect" update=":ProveedoresListForm:createButton :ProveedoresListForm:viewButton :ProveedoresListForm:editButton :ProveedoresListForm:deleteButton :ProveedoresListForm:ProveedoresDataTableContextMenu" listener="#{proveedoresController.resetParents}"/>
+                <p:ajax event="contextMenu" update=" :ProveedoresListForm:createButton :ProveedoresListForm:viewButton :ProveedoresListForm:editButton :ProveedoresListForm:deleteButton" listener="#{proveedoresController.resetParents}"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('ProveedoresListForm:viewButton').click();"/>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListProveedoresTitle_codigoProveedores}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.codigoProveedores}"/>
+                </p:column>
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListProveedoresTitle_tipoIdentificacion}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.tipoIdentificacion}"/>
+                </p:column>
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListProveedoresTitle_identificacion}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.identificacion}"/>
+                </p:column>
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListProveedoresTitle_nombre}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.nombre}"/>
+                </p:column>
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListProveedoresTitle_direccion}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.direccion}"/>
+                </p:column>
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListProveedoresTitle_telefono}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.telefono}"/>
+                </p:column>
+
+                <!--
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{myBundle.ListProveedoresTitle_autorizacion}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.autorizacion}"/>
+                                    </p:column>
+                -->
+                <!--
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{myBundle.ListProveedoresTitle_fechaCaducidadAutorizacion}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.fechaCaducidadAutorizacion}">
+                                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                                        </h:outputText>
+                                    </p:column>
+                -->
+
+            </p:dataTable>
+
+            <p:commandButton id="createButton"                             icon="ui-icon-plus"   value="#{myBundle.Create}" actionListener="#{proveedoresController.prepareCreate}" update=":ProveedoresCreateForm" oncomplete="PF('ProveedoresCreateDialog').show()"/>
+            <p:commandButton id="viewButton"   style="visibility: hidden;" icon="ui-icon-search" value="#{myBundle.View}" update=":ProveedoresViewForm" oncomplete="PF('ProveedoresViewDialog').show()" disabled="#{empty proveedoresController.selected}"/>
+            <p:commandButton id="editButton"   style="visibility: hidden;" icon="ui-icon-pencil" value="#{myBundle.Edit}" update=":ProveedoresEditForm" oncomplete="PF('ProveedoresEditDialog').show()" disabled="#{empty proveedoresController.selected}"/>
+            <p:commandButton id="deleteButton" style="visibility: hidden;" icon="ui-icon-trash"  value="#{myBundle.Delete}" actionListener="#{proveedoresController.delete}" update=":growl,datalist" disabled="#{empty proveedoresController.selected}">
+                <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmDeleteMessage}" icon="ui-icon-alert"/>
+            </p:commandButton>
+
+        </p:panel>
+        <ui:include src="/confirmation.xhtml"/>
+    </h:form>
+
+</ui:composition>

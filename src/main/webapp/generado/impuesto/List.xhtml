@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="ImpuestoListForm">
+
+        <p:panel header="#{myBundle.ListImpuestoTitle}">
+            <p:contextMenu id="ImpuestoDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{myBundle.Create}" onclick="document.getElementById('ImpuestoListForm:createButton').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="#{myBundle.View}" onclick="document.getElementById('ImpuestoListForm:viewButton').click();" icon="ui-icon-search"/>
+                <p:menuitem value="#{myBundle.Edit}" onclick="document.getElementById('ImpuestoListForm:editButton').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{myBundle.Delete}" onclick="document.getElementById('ImpuestoListForm:deleteButton').click();" icon="ui-icon-trash"/>
+                <p:separator/>
+                <p:menuitem value="#{myBundle.ImpuestoMenuItem_productoList}" icon="ui-icon-search"  action="#{impuestoController.navigateProductoList}" disabled="#{empty impuestoController.selected.productoList}" ajax="false"/>  
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{impuestoController.items}"
+                         var="item"
+                         rowKey="#{item.codigoImpuesto}"
+                         paginator="true"
+                         rows="10"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{impuestoController.selected}">
+
+                <p:ajax event="rowSelect"   update=":ImpuestoListForm:createButton :ImpuestoListForm:viewButton :ImpuestoListForm:editButton :ImpuestoListForm:deleteButton :ImpuestoListForm:ImpuestoDataTableContextMenu" listener="#{impuestoController.resetParents}"/>
+                <p:ajax event="rowUnselect" update=":ImpuestoListForm:createButton :ImpuestoListForm:viewButton :ImpuestoListForm:editButton :ImpuestoListForm:deleteButton :ImpuestoListForm:ImpuestoDataTableContextMenu" listener="#{impuestoController.resetParents}"/>
+                <p:ajax event="contextMenu" update=" :ImpuestoListForm:createButton :ImpuestoListForm:viewButton :ImpuestoListForm:editButton :ImpuestoListForm:deleteButton" listener="#{impuestoController.resetParents}"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('ImpuestoListForm:viewButton').click();"/>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListImpuestoTitle_codigoImpuesto}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.codigoImpuesto}"/>
+                </p:column>
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListImpuestoTitle_descripcion}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.descripcion}"/>
+                </p:column>
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListImpuestoTitle_valor}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.valor}"/>
+                </p:column>
+
+
+            </p:dataTable>
+
+            <p:commandButton id="createButton"                             icon="ui-icon-plus"   value="#{myBundle.Create}" actionListener="#{impuestoController.prepareCreate}" update=":ImpuestoCreateForm" oncomplete="PF('ImpuestoCreateDialog').show()"/>
+            <p:commandButton id="viewButton"   style="visibility: hidden;" icon="ui-icon-search" value="#{myBundle.View}" update=":ImpuestoViewForm" oncomplete="PF('ImpuestoViewDialog').show()" disabled="#{empty impuestoController.selected}"/>
+            <p:commandButton id="editButton"   style="visibility: hidden;" icon="ui-icon-pencil" value="#{myBundle.Edit}" update=":ImpuestoEditForm" oncomplete="PF('ImpuestoEditDialog').show()" disabled="#{empty impuestoController.selected}"/>
+            <p:commandButton id="deleteButton" style="visibility: hidden;" icon="ui-icon-trash"  value="#{myBundle.Delete}" actionListener="#{impuestoController.delete}" update=":growl,datalist" disabled="#{empty impuestoController.selected}">
+                <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmDeleteMessage}" icon="ui-icon-alert"/>
+            </p:commandButton>
+
+        </p:panel>
+        <ui:include src="/confirmation.xhtml"/>
+    </h:form>
+
+</ui:composition>

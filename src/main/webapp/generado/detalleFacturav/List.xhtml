@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="DetalleFacturavListForm">
+
+        <p:panel header="#{myBundle.ListDetalleFacturavTitle}">
+            <p:contextMenu id="DetalleFacturavDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{myBundle.Create}" onclick="document.getElementById('DetalleFacturavListForm:createButton').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="#{myBundle.View}" onclick="document.getElementById('DetalleFacturavListForm:viewButton').click();" icon="ui-icon-search"/>
+                <p:menuitem value="#{myBundle.Edit}" onclick="document.getElementById('DetalleFacturavListForm:editButton').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{myBundle.Delete}" onclick="document.getElementById('DetalleFacturavListForm:deleteButton').click();" icon="ui-icon-trash"/>
+                <p:separator/>
+                <p:menuitem value="#{myBundle.DetalleFacturavMenuItem_cabeceraFacturav}" icon="ui-icon-search"  actionListener="#{detalleFacturavController.prepareCabeceraFacturav}" update=":CabeceraFacturavViewForm" oncomplete="PF('CabeceraFacturavViewDialog').show()" disabled="#{empty detalleFacturavController.selected.cabeceraFacturav}"/>  
+                <p:menuitem value="#{myBundle.DetalleFacturavMenuItem_producto}" icon="ui-icon-search"  actionListener="#{detalleFacturavController.prepareProducto}" update=":ProductoViewForm" oncomplete="PF('ProductoViewDialog').show()" disabled="#{empty detalleFacturavController.selected.producto}"/>  
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{detalleFacturavController.items}"
+                         var="item"
+                         rowKey="#{item.detalleFacturavPK}"
+                         paginator="true"
+                         rows="10"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{detalleFacturavController.selected}">
+
+                <p:ajax event="rowSelect"   update=":DetalleFacturavListForm:createButton :DetalleFacturavListForm:viewButton :DetalleFacturavListForm:editButton :DetalleFacturavListForm:deleteButton :DetalleFacturavListForm:DetalleFacturavDataTableContextMenu" listener="#{detalleFacturavController.resetParents}"/>
+                <p:ajax event="rowUnselect" update=":DetalleFacturavListForm:createButton :DetalleFacturavListForm:viewButton :DetalleFacturavListForm:editButton :DetalleFacturavListForm:deleteButton :DetalleFacturavListForm:DetalleFacturavDataTableContextMenu" listener="#{detalleFacturavController.resetParents}"/>
+                <p:ajax event="contextMenu" update=" :DetalleFacturavListForm:createButton :DetalleFacturavListForm:viewButton :DetalleFacturavListForm:editButton :DetalleFacturavListForm:deleteButton" listener="#{detalleFacturavController.resetParents}"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('DetalleFacturavListForm:viewButton').click();"/>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListDetalleFacturavTitle_cantidad}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.cantidad}"/>
+                </p:column>
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListDetalleFacturavTitle_precioUnitario}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.precioUnitario}"/>
+                </p:column>
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListDetalleFacturavTitle_total}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.total}"/>
+                </p:column>
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListDetalleFacturavTitle_cabeceraFacturav}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.cabeceraFacturav.codigoFactura}"/>
+                </p:column>
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListDetalleFacturavTitle_producto}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.producto.codigoProducto}"/>
+                </p:column>
+
+
+            </p:dataTable>
+
+            <p:commandButton id="createButton"                             icon="ui-icon-plus"   value="#{myBundle.Create}" actionListener="#{detalleFacturavController.prepareCreate}" update=":DetalleFacturavCreateForm" oncomplete="PF('DetalleFacturavCreateDialog').show()"/>
+            <p:commandButton id="viewButton"   style="visibility: hidden;" icon="ui-icon-search" value="#{myBundle.View}" update=":DetalleFacturavViewForm" oncomplete="PF('DetalleFacturavViewDialog').show()" disabled="#{empty detalleFacturavController.selected}"/>
+            <p:commandButton id="editButton"   style="visibility: hidden;" icon="ui-icon-pencil" value="#{myBundle.Edit}" update=":DetalleFacturavEditForm" oncomplete="PF('DetalleFacturavEditDialog').show()" disabled="#{empty detalleFacturavController.selected}"/>
+            <p:commandButton id="deleteButton" style="visibility: hidden;" icon="ui-icon-trash"  value="#{myBundle.Delete}" actionListener="#{detalleFacturavController.delete}" update=":growl,datalist" disabled="#{empty detalleFacturavController.selected}">
+                <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmDeleteMessage}" icon="ui-icon-alert"/>
+            </p:commandButton>
+
+        </p:panel>
+        <ui:include src="/confirmation.xhtml"/>
+    </h:form>
+
+</ui:composition>

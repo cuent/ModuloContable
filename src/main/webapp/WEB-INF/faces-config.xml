@@ -11,5 +11,10 @@
             <base-name>mensajes</base-name>
             <var>msj</var>
         </resource-bundle>
+        <resource-bundle>
+            <base-name>/MyBundle</base-name>
+            <var>myBundle</var>
+        </resource-bundle>
+        <navigation-handler>org.primefaces.mobile.application.MobileNavigationHandler</navigation-handler>
     </application>
 </faces-config>

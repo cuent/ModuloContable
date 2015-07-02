@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="CabeceraFacturavViewDlg" widgetVar="CabeceraFacturavViewDialog" modal="true" resizable="false"  appendTo="@(body)" header="#{myBundle.ViewCabeceraFacturavTitle}" closeOnEscape="true">
+
+            <h:form id="CabeceraFacturavViewForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="column" rendered="#{cabeceraFacturavController.selected != null}">
+
+                        <h:outputText value="#{myBundle.ViewCabeceraFacturavLabel_codigoFactura}"/>
+                        <h:outputText value="#{cabeceraFacturavController.selected.codigoFactura}" title="#{myBundle.ViewCabeceraFacturavTitle_codigoFactura}"/>
+
+                        <h:outputText value="#{myBundle.ViewCabeceraFacturavLabel_numeroFactura}"/>
+                        <h:outputText value="#{cabeceraFacturavController.selected.numeroFactura}" title="#{myBundle.ViewCabeceraFacturavTitle_numeroFactura}"/>
+
+                        <h:outputText value="#{myBundle.ViewCabeceraFacturavLabel_fecha}"/>
+                        <h:outputText value="#{cabeceraFacturavController.selected.fecha}" title="#{myBundle.ViewCabeceraFacturavTitle_fecha}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+
+                        <h:outputText value="#{myBundle.ViewCabeceraFacturavLabel_autorizacionSri}"/>
+                        <h:outputText value="#{cabeceraFacturavController.selected.autorizacionSri}" title="#{myBundle.ViewCabeceraFacturavTitle_autorizacionSri}"/>
+
+                        <h:outputText value="#{myBundle.ViewCabeceraFacturavLabel_establecimiento}"/>
+                        <h:outputText value="#{cabeceraFacturavController.selected.establecimiento}" title="#{myBundle.ViewCabeceraFacturavTitle_establecimiento}"/>
+
+                        <h:outputText value="#{myBundle.ViewCabeceraFacturavLabel_ptoEmision}"/>
+                        <h:outputText value="#{cabeceraFacturavController.selected.ptoEmision}" title="#{myBundle.ViewCabeceraFacturavTitle_ptoEmision}"/>
+
+                        <h:outputText value="#{myBundle.ViewCabeceraFacturavLabel_subtotal}"/>
+                        <h:outputText value="#{cabeceraFacturavController.selected.subtotal}" title="#{myBundle.ViewCabeceraFacturavTitle_subtotal}"/>
+
+                        <h:outputText value="#{myBundle.ViewCabeceraFacturavLabel_subtotalBase0}"/>
+                        <h:outputText value="#{cabeceraFacturavController.selected.subtotalBase0}" title="#{myBundle.ViewCabeceraFacturavTitle_subtotalBase0}"/>
+
+                        <h:outputText value="#{myBundle.ViewCabeceraFacturavLabel_subtotalBaseIva}"/>
+                        <h:outputText value="#{cabeceraFacturavController.selected.subtotalBaseIva}" title="#{myBundle.ViewCabeceraFacturavTitle_subtotalBaseIva}"/>
+
+                        <h:outputText value="#{myBundle.ViewCabeceraFacturavLabel_descuento}"/>
+                        <h:outputText value="#{cabeceraFacturavController.selected.descuento}" title="#{myBundle.ViewCabeceraFacturavTitle_descuento}"/>
+
+                        <h:outputText value="#{myBundle.ViewCabeceraFacturavLabel_iva}"/>
+                        <h:outputText value="#{cabeceraFacturavController.selected.iva}" title="#{myBundle.ViewCabeceraFacturavTitle_iva}"/>
+
+                        <h:outputText value="#{myBundle.ViewCabeceraFacturavLabel_total}"/>
+                        <h:outputText value="#{cabeceraFacturavController.selected.total}" title="#{myBundle.ViewCabeceraFacturavTitle_total}"/>
+
+                        <h:outputText value="#{myBundle.ViewCabeceraFacturavLabel_codigoCliente}"/>
+                        <h:outputText value="#{cabeceraFacturavController.selected.codigoCliente.codigoCliente}"/>
+
+                        <h:outputText value="#{myBundle.ViewCabeceraFacturavLabel_formaPago}"/>
+                        <h:outputText value="#{cabeceraFacturavController.selected.formaPago.descripcion}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{myBundle.Close}" onclick="PF('CabeceraFacturavViewDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

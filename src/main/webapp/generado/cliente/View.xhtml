@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ClienteViewDlg" widgetVar="ClienteViewDialog" modal="true" resizable="false"  appendTo="@(body)" header="#{myBundle.ViewClienteTitle}" closeOnEscape="true">
+
+            <h:form id="ClienteViewForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="column" rendered="#{clienteController.selected != null}">
+
+                        <h:outputText value="#{myBundle.ViewClienteLabel_codigoCliente}"/>
+                        <h:outputText value="#{clienteController.selected.codigoCliente}" title="#{myBundle.ViewClienteTitle_codigoCliente}"/>
+
+                        <h:outputText value="#{myBundle.ViewClienteLabel_tipoIdentificacion}"/>
+                        <h:outputText value="#{clienteController.selected.tipoIdentificacion}" title="#{myBundle.ViewClienteTitle_tipoIdentificacion}"/>
+
+                        <h:outputText value="#{myBundle.ViewClienteLabel_identificacion}"/>
+                        <h:outputText value="#{clienteController.selected.identificacion}" title="#{myBundle.ViewClienteTitle_identificacion}"/>
+
+                        <h:outputText value="#{myBundle.ViewClienteLabel_nombre}"/>
+                        <h:outputText value="#{clienteController.selected.nombre}" title="#{myBundle.ViewClienteTitle_nombre}"/>
+
+                        <h:outputText value="#{myBundle.ViewClienteLabel_apellido}"/>
+                        <h:outputText value="#{clienteController.selected.apellido}" title="#{myBundle.ViewClienteTitle_apellido}"/>
+
+                        <h:outputText value="#{myBundle.ViewClienteLabel_telefono}"/>
+                        <h:outputText value="#{clienteController.selected.telefono}" title="#{myBundle.ViewClienteTitle_telefono}"/>
+
+                        <h:outputText value="#{myBundle.ViewClienteLabel_direccion}"/>
+                        <h:outputText value="#{clienteController.selected.direccion}" title="#{myBundle.ViewClienteTitle_direccion}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{myBundle.Close}" onclick="PF('ClienteViewDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

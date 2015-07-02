@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="KardexListForm">
+
+        <p:panel header="#{myBundle.ListKardexTitle}">
+            <p:contextMenu id="KardexDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{myBundle.Create}" onclick="document.getElementById('KardexListForm:createButton').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="#{myBundle.View}" onclick="document.getElementById('KardexListForm:viewButton').click();" icon="ui-icon-search"/>
+                <p:menuitem value="#{myBundle.Edit}" onclick="document.getElementById('KardexListForm:editButton').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{myBundle.Delete}" onclick="document.getElementById('KardexListForm:deleteButton').click();" icon="ui-icon-trash"/>
+                <p:separator/>
+                <p:menuitem value="#{myBundle.KardexMenuItem_codigoFacturac}" icon="ui-icon-search"  actionListener="#{kardexController.prepareCodigoFacturac}" update=":CabeceraFacturacViewForm" oncomplete="PF('CabeceraFacturacViewDialog').show()" disabled="#{empty kardexController.selected.codigoFacturac}"/>  
+                <p:menuitem value="#{myBundle.KardexMenuItem_codigoProducto}" icon="ui-icon-search"  actionListener="#{kardexController.prepareCodigoProducto}" update=":ProductoViewForm" oncomplete="PF('ProductoViewDialog').show()" disabled="#{empty kardexController.selected.codigoProducto}"/>  
+                <p:menuitem value="#{myBundle.KardexMenuItem_codigoFacturav}" icon="ui-icon-search"  actionListener="#{kardexController.prepareCodigoFacturav}" update=":CabeceraFacturavViewForm" oncomplete="PF('CabeceraFacturavViewDialog').show()" disabled="#{empty kardexController.selected.codigoFacturav}"/>  
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{kardexController.items}"
+                         var="item"
+                         rowKey="#{item.codigoKardex}"
+                         paginator="true"
+                         rows="10"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{kardexController.selected}">
+
+                <p:ajax event="rowSelect"   update=":KardexListForm:createButton :KardexListForm:viewButton :KardexListForm:editButton :KardexListForm:deleteButton :KardexListForm:KardexDataTableContextMenu" listener="#{kardexController.resetParents}"/>
+                <p:ajax event="rowUnselect" update=":KardexListForm:createButton :KardexListForm:viewButton :KardexListForm:editButton :KardexListForm:deleteButton :KardexListForm:KardexDataTableContextMenu" listener="#{kardexController.resetParents}"/>
+                <p:ajax event="contextMenu" update=" :KardexListForm:createButton :KardexListForm:viewButton :KardexListForm:editButton :KardexListForm:deleteButton" listener="#{kardexController.resetParents}"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('KardexListForm:viewButton').click();"/>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListKardexTitle_codigoKardex}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.codigoKardex}"/>
+                </p:column>
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListKardexTitle_fecha}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.fecha}">
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:outputText>
+                </p:column>
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListKardexTitle_tipo}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.tipo}"/>
+                </p:column>
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListKardexTitle_detalle}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.detalle}"/>
+                </p:column>
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListKardexTitle_cantidad}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.cantidad}"/>
+                </p:column>
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListKardexTitle_costo}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.costo}"/>
+                </p:column>
+
+                <!--
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{myBundle.ListKardexTitle_subtotal}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.subtotal}"/>
+                                    </p:column>
+                -->
+                <!--
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{myBundle.ListKardexTitle_totalCantidad}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.totalCantidad}"/>
+                                    </p:column>
+                -->
+                <!--
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{myBundle.ListKardexTitle_totalCosto}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.totalCosto}"/>
+                                    </p:column>
+                -->
+                <!--
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{myBundle.ListKardexTitle_totalSubtotal}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.totalSubtotal}"/>
+                                    </p:column>
+                -->
+                <!--
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{myBundle.ListKardexTitle_codigoFacturac}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.codigoFacturac.codigoFactura}"/>
+                                    </p:column>
+                -->
+                <!--
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{myBundle.ListKardexTitle_codigoProducto}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.codigoProducto.codigoProducto}"/>
+                                    </p:column>
+                -->
+                <!--
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{myBundle.ListKardexTitle_codigoFacturav}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.codigoFacturav.codigoFactura}"/>
+                                    </p:column>
+                -->
+
+            </p:dataTable>
+
+            <p:commandButton id="createButton"                             icon="ui-icon-plus"   value="#{myBundle.Create}" actionListener="#{kardexController.prepareCreate}" update=":KardexCreateForm" oncomplete="PF('KardexCreateDialog').show()"/>
+            <p:commandButton id="viewButton"   style="visibility: hidden;" icon="ui-icon-search" value="#{myBundle.View}" update=":KardexViewForm" oncomplete="PF('KardexViewDialog').show()" disabled="#{empty kardexController.selected}"/>
+            <p:commandButton id="editButton"   style="visibility: hidden;" icon="ui-icon-pencil" value="#{myBundle.Edit}" update=":KardexEditForm" oncomplete="PF('KardexEditDialog').show()" disabled="#{empty kardexController.selected}"/>
+            <p:commandButton id="deleteButton" style="visibility: hidden;" icon="ui-icon-trash"  value="#{myBundle.Delete}" actionListener="#{kardexController.delete}" update=":growl,datalist" disabled="#{empty kardexController.selected}">
+                <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmDeleteMessage}" icon="ui-icon-alert"/>
+            </p:commandButton>
+
+        </p:panel>
+        <ui:include src="/confirmation.xhtml"/>
+    </h:form>
+
+</ui:composition>

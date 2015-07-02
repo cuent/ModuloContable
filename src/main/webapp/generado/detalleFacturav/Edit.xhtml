@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+        <p:dialog id="DetalleFacturavEditDlg" widgetVar="DetalleFacturavEditDialog" modal="true" resizable="false"  appendTo="@(body)" header="#{myBundle.EditDetalleFacturavTitle}" closeOnEscape="true">
+
+            <h:form id="DetalleFacturavEditForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid  columns="2" columnClasses="column" rendered="#{detalleFacturavController.selected != null}">
+
+                        <p:outputLabel value="#{myBundle.EditDetalleFacturavLabel_cantidad}" for="cantidad" />
+                        <p:inputText id="cantidad" value="#{detalleFacturavController.selected.cantidad}" title="#{myBundle.EditDetalleFacturavTitle_cantidad}" required="true" requiredMessage="#{myBundle.EditDetalleFacturavRequiredMessage_cantidad}"/>
+
+                        <p:outputLabel value="#{myBundle.EditDetalleFacturavLabel_precioUnitario}" for="precioUnitario" />
+                        <p:inputText id="precioUnitario" value="#{detalleFacturavController.selected.precioUnitario}" title="#{myBundle.EditDetalleFacturavTitle_precioUnitario}" required="true" requiredMessage="#{myBundle.EditDetalleFacturavRequiredMessage_precioUnitario}"/>
+
+                        <p:outputLabel value="#{myBundle.EditDetalleFacturavLabel_total}" for="total" />
+                        <p:inputText id="total" value="#{detalleFacturavController.selected.total}" title="#{myBundle.EditDetalleFacturavTitle_total}" required="true" requiredMessage="#{myBundle.EditDetalleFacturavRequiredMessage_total}"/>
+
+
+                        <h:outputLabel value="#{myBundle.EditDetalleFacturavLabel_cabeceraFacturav}" for="cabeceraFacturav" />
+                        <h:outputText id="cabeceraFacturav" value="#{detalleFacturavController.selected.cabeceraFacturav}" />
+
+
+                        <h:outputLabel value="#{myBundle.EditDetalleFacturavLabel_producto}" for="producto" />
+                        <h:outputText id="producto" value="#{detalleFacturavController.selected.producto}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{detalleFacturavController.save}" value="#{myBundle.Save}" update="display,:DetalleFacturavListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,PF('DetalleFacturavEditDialog'));">
+                        <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmEditMessage}" icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    <p:commandButton value="#{myBundle.Cancel}" onclick="PF('DetalleFacturavEditDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

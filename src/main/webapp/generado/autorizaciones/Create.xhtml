@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="AutorizacionesCreateDlg" widgetVar="AutorizacionesCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{myBundle.CreateAutorizacionesTitle}" closeOnEscape="true">
+
+            <h:form id="AutorizacionesCreateForm">
+
+                <h:panelGroup id="display" rendered="#{autorizacionesController.selected != null}">
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="#{myBundle.CreateAutorizacionesLabel_tipoDocumento}" for="tipoDocumento" />
+                        <p:inputText id="tipoDocumento" value="#{autorizacionesController.selected.tipoDocumento}" title="#{myBundle.CreateAutorizacionesTitle_tipoDocumento}" required="true" requiredMessage="#{myBundle.CreateAutorizacionesRequiredMessage_tipoDocumento}"/>
+
+                        <p:outputLabel value="#{myBundle.CreateAutorizacionesLabel_numeroAutorizacion}" for="numeroAutorizacion" />
+                        <p:inputText id="numeroAutorizacion" value="#{autorizacionesController.selected.numeroAutorizacion}" title="#{myBundle.CreateAutorizacionesTitle_numeroAutorizacion}" required="true" requiredMessage="#{myBundle.CreateAutorizacionesRequiredMessage_numeroAutorizacion}" size="120" maxlength="120"/>
+
+                        <p:outputLabel value="#{myBundle.CreateAutorizacionesLabel_establecimiento}" for="establecimiento" />
+                        <p:inputText id="establecimiento" value="#{autorizacionesController.selected.establecimiento}" title="#{myBundle.CreateAutorizacionesTitle_establecimiento}" required="true" requiredMessage="#{myBundle.CreateAutorizacionesRequiredMessage_establecimiento}" size="45" maxlength="45"/>
+
+                        <p:outputLabel value="#{myBundle.CreateAutorizacionesLabel_ptoEmision}" for="ptoEmision" />
+                        <p:inputText id="ptoEmision" value="#{autorizacionesController.selected.ptoEmision}" title="#{myBundle.CreateAutorizacionesTitle_ptoEmision}" required="true" requiredMessage="#{myBundle.CreateAutorizacionesRequiredMessage_ptoEmision}" size="45" maxlength="45"/>
+
+                        <p:outputLabel value="#{myBundle.CreateAutorizacionesLabel_numeroInicialDocumento}" for="numeroInicialDocumento" />
+                        <p:inputText id="numeroInicialDocumento" value="#{autorizacionesController.selected.numeroInicialDocumento}" title="#{myBundle.CreateAutorizacionesTitle_numeroInicialDocumento}" required="true" requiredMessage="#{myBundle.CreateAutorizacionesRequiredMessage_numeroInicialDocumento}" size="45" maxlength="45"/>
+
+                        <p:outputLabel value="#{myBundle.CreateAutorizacionesLabel_numeroFinalDocumento}" for="numeroFinalDocumento" />
+                        <p:inputText id="numeroFinalDocumento" value="#{autorizacionesController.selected.numeroFinalDocumento}" title="#{myBundle.CreateAutorizacionesTitle_numeroFinalDocumento}" required="true" requiredMessage="#{myBundle.CreateAutorizacionesRequiredMessage_numeroFinalDocumento}" size="45" maxlength="45"/>
+
+                        <p:outputLabel value="#{myBundle.CreateAutorizacionesLabel_numeroActual}" for="numeroActual" />
+                        <p:inputText id="numeroActual" value="#{autorizacionesController.selected.numeroActual}" title="#{myBundle.CreateAutorizacionesTitle_numeroActual}" required="true" requiredMessage="#{myBundle.CreateAutorizacionesRequiredMessage_numeroActual}" size="45" maxlength="45"/>
+
+                        <p:outputLabel value="#{myBundle.CreateAutorizacionesLabel_fechaCaducidad}" for="fechaCaducidad" />
+                        <p:calendar id="fechaCaducidad" pattern="MM/dd/yyyy HH:mm:ss" value="#{autorizacionesController.selected.fechaCaducidad}" title="#{myBundle.CreateAutorizacionesTitle_fechaCaducidad}" required="true" requiredMessage="#{myBundle.CreateAutorizacionesRequiredMessage_fechaCaducidad}" showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{autorizacionesController.saveNew}" value="#{myBundle.Save}" update="display,:AutorizacionesListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,PF('AutorizacionesCreateDialog'));">
+                        <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmCreateMessage}" icon="ui-icon-alert"/>
+                    </p:commandButton>
+
+                    <p:commandButton value="#{myBundle.Cancel}" onclick="PF('AutorizacionesCreateDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

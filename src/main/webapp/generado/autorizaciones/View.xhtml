@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="AutorizacionesViewDlg" widgetVar="AutorizacionesViewDialog" modal="true" resizable="false"  appendTo="@(body)" header="#{myBundle.ViewAutorizacionesTitle}" closeOnEscape="true">
+
+            <h:form id="AutorizacionesViewForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="column" rendered="#{autorizacionesController.selected != null}">
+
+                        <h:outputText value="#{myBundle.ViewAutorizacionesLabel_tipoDocumento}"/>
+                        <h:outputText value="#{autorizacionesController.selected.tipoDocumento}" title="#{myBundle.ViewAutorizacionesTitle_tipoDocumento}"/>
+
+                        <h:outputText value="#{myBundle.ViewAutorizacionesLabel_numeroAutorizacion}"/>
+                        <h:outputText value="#{autorizacionesController.selected.numeroAutorizacion}" title="#{myBundle.ViewAutorizacionesTitle_numeroAutorizacion}"/>
+
+                        <h:outputText value="#{myBundle.ViewAutorizacionesLabel_establecimiento}"/>
+                        <h:outputText value="#{autorizacionesController.selected.establecimiento}" title="#{myBundle.ViewAutorizacionesTitle_establecimiento}"/>
+
+                        <h:outputText value="#{myBundle.ViewAutorizacionesLabel_ptoEmision}"/>
+                        <h:outputText value="#{autorizacionesController.selected.ptoEmision}" title="#{myBundle.ViewAutorizacionesTitle_ptoEmision}"/>
+
+                        <h:outputText value="#{myBundle.ViewAutorizacionesLabel_numeroInicialDocumento}"/>
+                        <h:outputText value="#{autorizacionesController.selected.numeroInicialDocumento}" title="#{myBundle.ViewAutorizacionesTitle_numeroInicialDocumento}"/>
+
+                        <h:outputText value="#{myBundle.ViewAutorizacionesLabel_numeroFinalDocumento}"/>
+                        <h:outputText value="#{autorizacionesController.selected.numeroFinalDocumento}" title="#{myBundle.ViewAutorizacionesTitle_numeroFinalDocumento}"/>
+
+                        <h:outputText value="#{myBundle.ViewAutorizacionesLabel_numeroActual}"/>
+                        <h:outputText value="#{autorizacionesController.selected.numeroActual}" title="#{myBundle.ViewAutorizacionesTitle_numeroActual}"/>
+
+                        <h:outputText value="#{myBundle.ViewAutorizacionesLabel_fechaCaducidad}"/>
+                        <h:outputText value="#{autorizacionesController.selected.fechaCaducidad}" title="#{myBundle.ViewAutorizacionesTitle_fechaCaducidad}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{myBundle.Close}" onclick="PF('AutorizacionesViewDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

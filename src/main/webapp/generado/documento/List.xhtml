@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="DocumentoListForm">
+
+        <p:panel header="#{myBundle.ListDocumentoTitle}">
+            <p:contextMenu id="DocumentoDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{myBundle.Create}" onclick="document.getElementById('DocumentoListForm:createButton').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="#{myBundle.View}" onclick="document.getElementById('DocumentoListForm:viewButton').click();" icon="ui-icon-search"/>
+                <p:menuitem value="#{myBundle.Edit}" onclick="document.getElementById('DocumentoListForm:editButton').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{myBundle.Delete}" onclick="document.getElementById('DocumentoListForm:deleteButton').click();" icon="ui-icon-trash"/>
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{documentoController.items}"
+                         var="item"
+                         rowKey="#{item.codigoDocumento}"
+                         paginator="true"
+                         rows="10"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{documentoController.selected}">
+
+                <p:ajax event="rowSelect"   update=":DocumentoListForm:createButton :DocumentoListForm:viewButton :DocumentoListForm:editButton :DocumentoListForm:deleteButton :DocumentoListForm:DocumentoDataTableContextMenu"/>
+                <p:ajax event="rowUnselect" update=":DocumentoListForm:createButton :DocumentoListForm:viewButton :DocumentoListForm:editButton :DocumentoListForm:deleteButton :DocumentoListForm:DocumentoDataTableContextMenu"/>
+                <p:ajax event="contextMenu" update=" :DocumentoListForm:createButton :DocumentoListForm:viewButton :DocumentoListForm:editButton :DocumentoListForm:deleteButton"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('DocumentoListForm:viewButton').click();"/>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListDocumentoTitle_codigoDocumento}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.codigoDocumento}"/>
+                </p:column>
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListDocumentoTitle_docuemnto}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.docuemnto}"/>
+                </p:column>
+
+
+            </p:dataTable>
+
+            <p:commandButton id="createButton"                             icon="ui-icon-plus"   value="#{myBundle.Create}" actionListener="#{documentoController.prepareCreate}" update=":DocumentoCreateForm" oncomplete="PF('DocumentoCreateDialog').show()"/>
+            <p:commandButton id="viewButton"   style="visibility: hidden;" icon="ui-icon-search" value="#{myBundle.View}" update=":DocumentoViewForm" oncomplete="PF('DocumentoViewDialog').show()" disabled="#{empty documentoController.selected}"/>
+            <p:commandButton id="editButton"   style="visibility: hidden;" icon="ui-icon-pencil" value="#{myBundle.Edit}" update=":DocumentoEditForm" oncomplete="PF('DocumentoEditDialog').show()" disabled="#{empty documentoController.selected}"/>
+            <p:commandButton id="deleteButton" style="visibility: hidden;" icon="ui-icon-trash"  value="#{myBundle.Delete}" actionListener="#{documentoController.delete}" update=":growl,datalist" disabled="#{empty documentoController.selected}">
+                <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmDeleteMessage}" icon="ui-icon-alert"/>
+            </p:commandButton>
+
+        </p:panel>
+        <ui:include src="/confirmation.xhtml"/>
+    </h:form>
+
+</ui:composition>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ProductoCreateDlg" widgetVar="ProductoCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{myBundle.CreateProductoTitle}" closeOnEscape="true">
+
+            <h:form id="ProductoCreateForm">
+
+                <h:panelGroup id="display" rendered="#{productoController.selected != null}">
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="#{myBundle.CreateProductoLabel_nombre}" for="nombre" />
+                        <p:inputText id="nombre" value="#{productoController.selected.nombre}" title="#{myBundle.CreateProductoTitle_nombre}" required="true" requiredMessage="#{myBundle.CreateProductoRequiredMessage_nombre}" size="100" maxlength="100"/>
+
+                        <p:outputLabel value="#{myBundle.CreateProductoLabel_costo}" for="costo" />
+                        <p:inputText id="costo" value="#{productoController.selected.costo}" title="#{myBundle.CreateProductoTitle_costo}" required="true" requiredMessage="#{myBundle.CreateProductoRequiredMessage_costo}"/>
+
+                        <p:outputLabel value="#{myBundle.CreateProductoLabel_precio}" for="precio" />
+                        <p:inputText id="precio" value="#{productoController.selected.precio}" title="#{myBundle.CreateProductoTitle_precio}" required="true" requiredMessage="#{myBundle.CreateProductoRequiredMessage_precio}"/>
+
+                        <p:outputLabel value="#{myBundle.CreateProductoLabel_stock}" for="stock" />
+                        <p:inputText id="stock" value="#{productoController.selected.stock}" title="#{myBundle.CreateProductoTitle_stock}" required="true" requiredMessage="#{myBundle.CreateProductoRequiredMessage_stock}"/>
+
+                        <p:outputLabel value="#{myBundle.CreateProductoLabel_impuesto}" for="impuesto" />
+                        <p:selectOneMenu id="impuesto" value="#{productoController.selected.impuesto}" required="true" requiredMessage="#{myBundle.CreateProductoRequiredMessage_impuesto}" converter="impuestoConverter">
+                            <f:selectItem itemLabel="#{myBundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{impuestoController.items}"
+                                           var="impuestoItem"
+                                           itemValue="#{impuestoItem}"
+                                           itemLabel="#{impuestoItem.descripcion.toString()}"
+                                           />
+
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{productoController.saveNew}" value="#{myBundle.Save}" update="display,:ProductoListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,PF('ProductoCreateDialog'));">
+                        <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmCreateMessage}" icon="ui-icon-alert"/>
+                    </p:commandButton>
+
+                    <p:commandButton value="#{myBundle.Cancel}" onclick="PF('ProductoCreateDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

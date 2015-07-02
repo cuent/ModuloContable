@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="DocumentoCreateDlg" widgetVar="DocumentoCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{myBundle.CreateDocumentoTitle}" closeOnEscape="true">
+
+            <h:form id="DocumentoCreateForm">
+
+                <h:panelGroup id="display" rendered="#{documentoController.selected != null}">
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="#{myBundle.CreateDocumentoLabel_docuemnto}" for="docuemnto" />
+                        <p:inputText id="docuemnto" value="#{documentoController.selected.docuemnto}" title="#{myBundle.CreateDocumentoTitle_docuemnto}" required="true" requiredMessage="#{myBundle.CreateDocumentoRequiredMessage_docuemnto}" size="45" maxlength="45"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{documentoController.saveNew}" value="#{myBundle.Save}" update="display,:DocumentoListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,PF('DocumentoCreateDialog'));">
+                        <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmCreateMessage}" icon="ui-icon-alert"/>
+                    </p:commandButton>
+
+                    <p:commandButton value="#{myBundle.Cancel}" onclick="PF('DocumentoCreateDialog').hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="AutorizacionesListForm">
+
+        <p:panel header="#{myBundle.ListAutorizacionesTitle}">
+            <p:contextMenu id="AutorizacionesDataTableContextMenu" for="datalist">  
+                <p:menuitem value="#{myBundle.Create}" onclick="document.getElementById('AutorizacionesListForm:createButton').click();" icon="ui-icon-plus"/>
+                <p:menuitem value="#{myBundle.View}" onclick="document.getElementById('AutorizacionesListForm:viewButton').click();" icon="ui-icon-search"/>
+                <p:menuitem value="#{myBundle.Edit}" onclick="document.getElementById('AutorizacionesListForm:editButton').click();" icon="ui-icon-pencil"/>
+                <p:menuitem value="#{myBundle.Delete}" onclick="document.getElementById('AutorizacionesListForm:deleteButton').click();" icon="ui-icon-trash"/>
+            </p:contextMenu>
+            <p:dataTable id="datalist"
+                         value="#{autorizacionesController.items}"
+                         var="item"
+                         rowKey="#{item.numeroAutorizacion}"
+                         paginator="true"
+                         rows="10"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{autorizacionesController.selected}">
+
+                <p:ajax event="rowSelect"   update=":AutorizacionesListForm:createButton :AutorizacionesListForm:viewButton :AutorizacionesListForm:editButton :AutorizacionesListForm:deleteButton :AutorizacionesListForm:AutorizacionesDataTableContextMenu"/>
+                <p:ajax event="rowUnselect" update=":AutorizacionesListForm:createButton :AutorizacionesListForm:viewButton :AutorizacionesListForm:editButton :AutorizacionesListForm:deleteButton :AutorizacionesListForm:AutorizacionesDataTableContextMenu"/>
+                <p:ajax event="contextMenu" update=" :AutorizacionesListForm:createButton :AutorizacionesListForm:viewButton :AutorizacionesListForm:editButton :AutorizacionesListForm:deleteButton"/>
+                <p:ajax event="rowDblselect" onsuccess="document.getElementById('AutorizacionesListForm:viewButton').click();"/>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListAutorizacionesTitle_tipoDocumento}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.tipoDocumento}"/>
+                </p:column>
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListAutorizacionesTitle_numeroAutorizacion}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.numeroAutorizacion}"/>
+                </p:column>
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListAutorizacionesTitle_establecimiento}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.establecimiento}"/>
+                </p:column>
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListAutorizacionesTitle_ptoEmision}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.ptoEmision}"/>
+                </p:column>
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListAutorizacionesTitle_numeroInicialDocumento}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.numeroInicialDocumento}"/>
+                </p:column>
+
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{myBundle.ListAutorizacionesTitle_numeroFinalDocumento}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.numeroFinalDocumento}"/>
+                </p:column>
+
+                <!--
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{myBundle.ListAutorizacionesTitle_numeroActual}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.numeroActual}"/>
+                                    </p:column>
+                -->
+                <!--
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{myBundle.ListAutorizacionesTitle_fechaCaducidad}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.fechaCaducidad}">
+                                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                                        </h:outputText>
+                                    </p:column>
+                -->
+
+            </p:dataTable>
+
+            <p:commandButton id="createButton"                             icon="ui-icon-plus"   value="#{myBundle.Create}" actionListener="#{autorizacionesController.prepareCreate}" update=":AutorizacionesCreateForm" oncomplete="PF('AutorizacionesCreateDialog').show()"/>
+            <p:commandButton id="viewButton"   style="visibility: hidden;" icon="ui-icon-search" value="#{myBundle.View}" update=":AutorizacionesViewForm" oncomplete="PF('AutorizacionesViewDialog').show()" disabled="#{empty autorizacionesController.selected}"/>
+            <p:commandButton id="editButton"   style="visibility: hidden;" icon="ui-icon-pencil" value="#{myBundle.Edit}" update=":AutorizacionesEditForm" oncomplete="PF('AutorizacionesEditDialog').show()" disabled="#{empty autorizacionesController.selected}"/>
+            <p:commandButton id="deleteButton" style="visibility: hidden;" icon="ui-icon-trash"  value="#{myBundle.Delete}" actionListener="#{autorizacionesController.delete}" update=":growl,datalist" disabled="#{empty autorizacionesController.selected}">
+                <p:confirm header="#{myBundle.ConfirmationHeader}" message="#{myBundle.ConfirmDeleteMessage}" icon="ui-icon-alert"/>
+            </p:commandButton>
+
+        </p:panel>
+        <ui:include src="/confirmation.xhtml"/>
+    </h:form>
+
+</ui:composition>
