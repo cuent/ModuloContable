@@ -145,7 +145,8 @@ public class Cuenta implements Serializable {
     public List<Transaccion> getTransaccionList() {
         return transaccionList;
     }
-
+    
+    
     public void setTransaccionList(List<Transaccion> transaccionList) {
         this.transaccionList = transaccionList;
     }

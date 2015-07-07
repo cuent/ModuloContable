@@ -33,9 +33,14 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Transaccion.findByIdtransaccion", query = "SELECT t FROM Transaccion t WHERE t.idtransaccion = :idtransaccion"),
     @NamedQuery(name = "Transaccion.findByDebe", query = "SELECT t FROM Transaccion t WHERE t.debe = :debe"),
     @NamedQuery(name = "Transaccion.findByHaber", query = "SELECT t FROM Transaccion t WHERE t.haber = :haber"),
-    @NamedQuery(name = "Transaccion.findByReferencia", query = "SELECT t FROM Transaccion t WHERE t.referencia = :referencia")})
+    @NamedQuery(name = "Transaccion.findByReferencia", query = "SELECT t FROM Transaccion t WHERE t.referencia = :referencia"),
+    @NamedQuery(name = "Transaccion.groupByCuentas", query = "SELECT t FROM Transaccion t group by t.idcodcuenta"),
+    @NamedQuery(name = "Transaccion.findByCuenta", query = "SELECT t FROM Transaccion t where t.idcodcuenta = :idcodcuenta")})
 public class Transaccion implements Serializable {
+
     private static final long serialVersionUID = 1L;
+    public static final String groupByCuentas = "Transaccion.groupByCuentas";
+    public static final String findByCuenta = "Transaccion.findByCuenta";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -135,5 +140,5 @@ public class Transaccion implements Serializable {
     public String toString() {
         return "edu.uc.modulocontable.services.ejb.Transaccion[ idtransaccion=" + idtransaccion + " ]";
     }
-    
+
 }
