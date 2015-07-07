@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="../WEB-INF/templates/plantila.xhtml">
+        <ui:define name="content">
+            <h:form>
+                <p:messages autoUpdate="true" />
+
+                <p:dataTable var="inventario" value="#{kardexBeen.inventario}" resizableColumns="true">
+                    <f:facet name="header">
+                        Metodo LIFO
+                    </f:facet>
+
+                    <p:columnGroup type="header">
+                        <p:row>
+                            <p:column colspan="2" headerText="" />
+                            <p:column colspan="3" headerText="Entrada" />
+                            <p:column colspan="3" headerText="Salida" />
+                            <p:column colspan="3" headerText="Saldo" />
+                        </p:row>
+                        <p:row>
+                            <p:column headerText="Fecha" />
+                            <p:column headerText="Detalle" />
+                            <p:column headerText="# Unidades" />
+                            <p:column headerText="PU" />
+                            <p:column headerText="Costo Total" />
+                            <p:column headerText="# Unidades" />
+                            <p:column headerText="PU" />
+                            <p:column headerText="Costo Total" />
+                            <p:column headerText="# Unidades" />
+                            <p:column headerText="PU" />
+                            <p:column headerText="Costo Total" />
+                        </p:row>
+                    </p:columnGroup>
+
+                    <p:column>
+                        <h:outputText value="#{inventario.fecha}" />
+                    </p:column>
+
+                    <p:column>
+                        <h:outputText value="#{inventario.detalle}" />
+                    </p:column>
+
+                    <p:column>
+                        <h:outputText value="#{inventario.cantidad}" rendered="#{inventario.tipo == 'ENTRADA'}"/>
+                    </p:column>
+
+                    <p:column>
+                        <h:outputText value="#{inventario.costo}" rendered="#{inventario.tipo == 'ENTRADA'}"/>
+                    </p:column>
+
+                    <p:column>
+                        <h:outputText value="#{inventario.subtotal}" rendered="#{inventario.tipo == 'ENTRADA'}"/>
+                    </p:column>
+
+                    <p:column>
+                        <ui:repeat var="salida" value="#{inventario.salidas}">
+                            <h:outputText value="#{salida.cantidad}" />
+                            <br/>
+                        </ui:repeat>
+                    </p:column>
+
+                    <p:column>
+                        <ui:repeat var="salida" value="#{inventario.salidas}">
+                            <h:outputText value="#{salida.costo}" />
+                            <br/>
+                        </ui:repeat>
+                    </p:column>
+
+                    <p:column>
+                        <ui:repeat var="salida" value="#{inventario.salidas}">
+                            <h:outputText value="#{salida.subtotal}" />
+                            <br/>
+                        </ui:repeat>
+                    </p:column>
+
+                    <p:column>
+                        <ui:repeat var="saldo" value="#{inventario.saldo}">
+                            <h:outputText value="#{saldo.totalCantidad}" />
+                            <br/>
+                        </ui:repeat>
+                    </p:column>
+
+                    <p:column>
+                        <ui:repeat var="saldo" value="#{inventario.saldo}">
+                            <h:outputText value="#{saldo.totalCosto}" />
+                            <br/>
+                        </ui:repeat>
+                    </p:column>
+
+                    <p:column>
+                        <ui:repeat var="saldo" value="#{inventario.saldo}">
+                            <h:outputText value="#{saldo.totalSubtotal}" />
+                            <br/>
+                        </ui:repeat>
+                    </p:column>
+
+                    <p:columnGroup type="footer">
+                        <p:row>
+                            <p:column colspan="2" style="text-align:right" footerText="Total:" />
+                            <p:column footerText="#{kardexBeen.cantidadEntrada}" />
+                            <p:column colspan="2"/>
+                            <p:column footerText="#{kardexBeen.cantidadSalida}" />
+                            <p:column colspan="2"/>
+                            <p:column footerText="#{kardexBeen.saldoCantidad}" />
+                            <p:column/>
+                            <p:column footerText="$#{kardexBeen.saldoTotal}" />
+                        </p:row>
+                    </p:columnGroup>
+                </p:dataTable>
+                <p:commandButton value="Regresar" actionListener="#{kardexBeen.regresarPagina}" icon="ui-icon-check" />
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>
