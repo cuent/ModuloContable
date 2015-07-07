@@ -6,9 +6,12 @@
 package edu.uc.modulocontable.facade;
 
 import edu.uc.modulocontable.modelo2.Kardex;
+import edu.uc.modulocontable.modelo2.Producto;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -16,6 +19,7 @@ import javax.persistence.PersistenceContext;
  */
 @Stateless
 public class KardexFacade extends AbstractFacade<Kardex> {
+
     @PersistenceContext(unitName = "edu.uc_ModuloContable_war_1.0-SNAPSHOTPU")
     private EntityManager em;
 
@@ -27,5 +31,12 @@ public class KardexFacade extends AbstractFacade<Kardex> {
     public KardexFacade() {
         super(Kardex.class);
     }
-    
+
+    public List<Kardex> query(Producto p) {
+        Query q = em.createQuery("SELECT c FROM Kardex c WHERE c.codigoProducto.codigoProducto=:codProducto ORDER BY c.fecha")
+                .setParameter("codProducto", p.getCodigoProducto());
+        List<Kardex> resultado = q.getResultList();
+        return resultado;
+    }
+
 }

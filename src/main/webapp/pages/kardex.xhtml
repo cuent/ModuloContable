@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="../WEB-INF/templates/plantila.xhtml">
+        <ui:define name="content">
+            <h:form>
+                <p:messages autoUpdate="true" />
+
+                <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+                    <p:outputLabel for="producto" value="Seleccione un producto: " />
+                    <p:selectOneMenu id="producto" value="#{kardexBeen.producto}" converter="productoConverter">
+                        <f:selectItems value="#{kardexBeen.productos}" var="product" itemLabel="#{product.nombre}" itemValue="#{product}"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>
+
+                <p:commandButton value="Submit" actionListener="#{kardexBeen.test}" icon="ui-icon-check" />
+
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>
