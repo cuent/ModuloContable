@@ -6,9 +6,12 @@
 package edu.uc.modulocontable.facade;
 
 import edu.uc.modulocontable.modelo2.Producto;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -26,6 +29,26 @@ public class ProductoFacade extends AbstractFacade<Producto> {
 
     public ProductoFacade() {
         super(Producto.class);
+    }
+    public List<Producto> buscaProducto(int codigo) {
+        Query query = this.em.createNamedQuery(Producto.findByCodigoProducto);
+        query.setParameter("codigoProducto",codigo);
+
+        try {
+            return query.getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+    public List<Producto> buscaProducto(String nombre) {
+        Query query = this.em.createNamedQuery(Producto.findByNombre);
+        query.setParameter("nombre",nombre);
+
+        try {
+            return query.getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
     
 }

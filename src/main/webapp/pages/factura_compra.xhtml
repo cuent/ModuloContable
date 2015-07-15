@@ -1,0 +1,171 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="../WEB-INF/templates/plantila.xhtml">
+        <ui:define name="content">
+            <div class="panelTitulo">
+                FACTURACION COMPRAS
+            </div>
+            <h:form id="CabeceraFacturacCreateForm">
+                <p:growl id="growl" showDetail="true" sticky="true" /> 
+                #{cabeceraFacturacHelper.iniciarNuevo()}
+                <script type="text/javascript">
+                    $(document).on("keydown", ".ui-cell-editor-input input", function (event) {
+                        if (event.keyCode == 13) {
+                            someName();
+                        }
+                    });
+                </script>
+                <p:remoteCommand name="someName" value="jhg"  update="detalles,totalessss" actionListener="#{cabeceraFacturacHelper.actualizarFactura}"/>
+                <h:panelGroup id="display" rendered="#{cabeceraFacturacHelper.selected != null}">
+                    <h:panelGrid columns="4"  border="0" columnClasses="column1Class,column2Class,column3Class,column4Class" >
+
+                        <p:outputLabel value="Num Factura:" for="numeroFactura" />
+                        <p:inputText id="numeroFactura" value="#{cabeceraFacturacHelper.selected.numeroFactura}" title="#{bundle2.CreateCabeceraFacturacTitle_numeroFactura}" required="true" requiredMessage="#{bundle2.CreateCabeceraFacturacRequiredMessage_numeroFactura}" size="45" maxlength="45"/>
+
+                        <p:outputLabel value="Fecha:" for="fecha" />
+                        <p:calendar id="fecha" readonly="true" mindate="#{now}" pattern="MM/dd/yyyy HH:mm:ss" value="#{cabeceraFacturacHelper.selected.fecha}" title="#{bundle2.CreateCabeceraFacturacTitle_fecha}" required="true" requiredMessage="#{bundle2.CreateCabeceraFacturacRequiredMessage_fecha}" showOn="button"/>
+
+
+                        <p:outputLabel value="Codigo Proveedor" for="codigoProveedor" />
+                        <p:selectOneMenu id="codigoProveedor" value="#{cabeceraFacturacHelper.selected.codigoProveedor}" required="true" requiredMessage="#{bundle2.CreateCabeceraFacturacRequiredMessage_codigoProveedor}" converter="proveedoresConverter"
+                                         panelStyle="width:180px" effect="fade"  var="t" style="width:160px" filter="true"  filterMatchMode="startsWith" 
+                                         valueChangeListener="#{cabeceraFacturacHelper.proveedorSeleccionado}"
+                                         >
+                            <f:selectItems value="#{proveedoresHelper.items}"
+                                           var="codigoProveedorItem"
+                                           itemValue="#{codigoProveedorItem}"
+                                           itemLabel="#{codigoProveedorItem.nombre.toString()}" 
+                                           />
+                            <p:column style="width:10%" >
+                                <h:outputText value="#{t.codigoProveedores}" />
+                            </p:column>
+
+                            <p:column >
+                                <h:outputText value="#{t.nombre}" />
+                            </p:column>
+                            <p:ajax update="@this,establecimiento,ptoEmision,autorizacionSri"/>
+
+
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Nro. autorizacion:" for="autorizacionSri" />
+                        <p:inputText id="autorizacionSri"  readonly="true" value="#{cabeceraFacturacHelper.selected.autorizacionSri}" title="#{bundle2.CreateCabeceraFacturacTitle_autorizacionSri}" required="true" requiredMessage="#{bundle2.CreateCabeceraFacturacRequiredMessage_autorizacionSri}" size="30"/>
+
+                        <p:outputLabel value="Nombre:" for="establecimiento" />
+                        <p:inputText id="establecimiento" readonly="true" value="#{cabeceraFacturacHelper.selected.establecimiento}" title="#{bundle2.CreateCabeceraFacturacTitle_establecimiento}" required="true" requiredMessage="#{bundle2.CreateCabeceraFacturacRequiredMessage_establecimiento}" size="45" maxlength="45"/>
+
+                        <p:outputLabel value="Direccion:" for="ptoEmision" />
+                        <p:inputText id="ptoEmision" readonly="true" value="#{cabeceraFacturacHelper.selected.ptoEmision}" title="#{bundle2.CreateCabeceraFacturacTitle_ptoEmision}" required="true" requiredMessage="#{bundle2.CreateCabeceraFacturacRequiredMessage_ptoEmision}" size="30" maxlength="45"/>
+                        <p:outputLabel value="Forma Pago" for="formaPago" />
+                        <p:selectOneMenu id="formaPago"  value="#{cabeceraFacturacHelper.selected.formaPago}" required="true" requiredMessage="#{bundle2.CreateCabeceraFacturacRequiredMessage_formaPago}" converter="formasPagoConverter">
+                            <f:selectItem itemLabel="#{bundle2.SelectOneMessage}"/>
+                            <f:selectItems value="#{formasPagoHelper.items}"
+                                           var="formaPagoItem"
+                                           itemValue="#{formaPagoItem}"
+                                           itemLabel="#{formaPagoItem.descripcion.toString()}"
+                                           />
+
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+
+
+
+                    <p></p>
+
+                    <p:dataTable id="detalles" editable="true"  
+                                 selectionMode="single" 
+                                 selection="#{cabeceraFacturacHelper.selectedDetalle}" 
+                                 rowKey="#{t.producto}" 
+                                 editMode="cell" 
+                                 value="#{cabeceraFacturacHelper.detalles}"
+                                 var="t" scrollable="true" scrollHeight="150" >
+                        <p:ajax event="cellEdit" listener="#{cabeceraFacturacHelper.onCellEdit}" process="@this"  immediate="true"  update="detalles,descripcion,cantidad,total" />
+                        <p:column headerText="Codigo">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{t.producto.codigoProducto}"/></f:facet>
+                                <f:facet name="input"><h:outputText id="acSimple"  value="#{t.producto.codigoProducto}" /> </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="Descripción" >
+                            <p:cellEditor >
+                                <f:facet name="output" ><h:outputText  id="descripcion" value="#{t.producto.nombre}"/></f:facet>
+                                <f:facet name="input"> <p:autoComplete  value="#{t.producto.nombre}" completeMethod="#{cabeceraFacturacHelper.completeTextNombre}" >
+                                        <p:ajax event="itemSelect" listener="#{cabeceraFacturacHelper.handleSelectDescripcion}"  update="detalles,descripcion,cantidad,total"></p:ajax>
+                                    </p:autoComplete></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="Cantidad">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText id="cantidad" value="#{t.cantidad}"/></f:facet>
+                                <f:facet name="input"><p:inputText   value="#{t.cantidad}">
+                                        <p:ajax update="total"/>
+                                    </p:inputText></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column headerText="Costo">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText id="costo" value="#{t.producto.costo}"/></f:facet>
+                                <f:facet name="input"><p:inputText   value="#{t.producto.costo}" >
+                                        <p:ajax update="total"/>
+                                    </p:inputText>
+                                </f:facet>
+
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column headerText="Precio">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText id="precio" value="#{t.producto.precio}"/></f:facet>
+                                <f:facet name="input"><p:inputText   value="#{t.producto.precio}" >
+                                        <p:ajax update="total"/>
+                                    </p:inputText>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column >
+                            <f:facet name="header">
+                                <h:outputText value="total"/>
+                            </f:facet>
+                            <h:outputText id="total" value="#{t.total}"/>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton value="Cargar Producto" id="e"   process="@this"  action="#{cabeceraFacturacHelper.añadirDetalle}" update="detalles"/>
+                        </f:facet>
+                    </p:dataTable>
+                    <p:commandButton type="button" onclick="someName()" value="Actualizar" icon="ui-icon-refresh" />
+                    <h:panelGrid id="totalessss" columns="2"  border="0" columnClasses="column1Class,column2Class" >
+                        <p:outputLabel value="Subtotal:" for="subtotal" />
+                        <p:inputText id="subtotal" value="#{cabeceraFacturacHelper.selected.subtotal}" title="#{bundle2.CreateCabeceraFacturacTitle_subtotal}" required="true" requiredMessage="#{bundle2.CreateCabeceraFacturacRequiredMessage_subtotal}">
+                            <f:convertNumber pattern="#0.000" locale="pt_BR"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="Subtotal 0%:" for="subtotalBase0" />
+                        <p:inputText id="subtotalBase0" value="#{cabeceraFacturacHelper.selected.subtotalBase0}" title="#{bundle2.CreateCabeceraFacturacTitle_subtotalBase0}" required="true" requiredMessage="#{bundle2.CreateCabeceraFacturacRequiredMessage_subtotalBase0}"/>
+
+                        <p:outputLabel value="Subtotal 12%:" for="subtotalBaseIva" />
+                        <p:inputText id="subtotalBaseIva" value="#{cabeceraFacturacHelper.selected.subtotalBaseIva}" title="#{bundle2.CreateCabeceraFacturacTitle_subtotalBaseIva}" required="true" requiredMessage="#{bundle2.CreateCabeceraFacturacRequiredMessage_subtotalBaseIva}"/>
+
+                        <p:outputLabel value="Descuento:" for="descuento" />
+                        <p:inputText id="descuento" value="#{cabeceraFacturacHelper.selected.descuento}" title="#{bundle2.CreateCabeceraFacturacTitle_descuento}"/>
+
+                        <p:outputLabel value="IVA" for="iva" />
+                        <p:inputText id="iva" value="#{cabeceraFacturacHelper.selected.iva}" title="#{bundle2.CreateCabeceraFacturacTitle_iva}" required="true" requiredMessage="#{bundle2.CreateCabeceraFacturacRequiredMessage_iva}"/>
+
+                        <p:outputLabel value="Valor Total:" for="total" />
+                        <p:inputText id="total" value="#{cabeceraFacturacHelper.selected.total}" title="#{bundle2.CreateCabeceraFacturacTitle_total}" required="true" requiredMessage="#{bundle2.CreateCabeceraFacturacRequiredMessage_total}"/>
+                    </h:panelGrid>
+                    <p:commandButton actionListener="#{cabeceraFacturacHelper.gardarFactura}" value="Guadar" update="display,growl">
+                    </p:commandButton>
+                    <p:commandButton value="Cancelar" onclick="PF('CabeceraFacturacCreateDialog').hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

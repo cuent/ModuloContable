@@ -1,0 +1,159 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <h:form id="formFactura">
+            #{cabeceraFacturavHelper.iniciarNuevo()}
+            <p:panel header="Informacion Factura">
+                <h:panelGrid columns="4">
+                    <p:outputLabel value="Factura Nro:" />
+                    <h:panelGrid columns="3">
+                        <p:inputText  readonly="true" value="#{cabeceraFacturavHelper.selected.establecimiento}" size="3"/>
+                        <p:inputText readonly="true" value="#{cabeceraFacturavHelper.selected.ptoEmision}" size="3"/>
+                        <p:inputText readonly="true" value="#{cabeceraFacturavHelper.selected.numeroFactura}" size="9"/>
+                    </h:panelGrid>
+                    <p:outputLabel value="Fecha Emision:" for="fecha"/>
+                    <p:inputText readonly="true" value="#{cabeceraFacturavHelper.selected.fecha}" id="fecha">
+                        <f:convertDateTime pattern="dd-MM-yyyy HH:mm" />
+                    </p:inputText>
+                    <p:outputLabel value="Nro Autorizacion:" for="auto"/>
+                    <p:inputText readonly="true" value="#{cabeceraFacturavHelper.selected.autorizacionSri}" size="38" id="auto"/>
+                </h:panelGrid>
+            </p:panel>
+            <h:panelGrid columns="2">
+                <p:panel header="Informacion Cliente">
+                    <h:panelGrid columns="4">
+                        <p:outputLabel  for="console" value="Tipo de Identificacion:" />
+                        <p:selectOneMenu  id="console" required="true"  value="#{cabeceraFacturavHelper.tipoIdentificacion}" style="width:230px">
+
+
+
+                            <f:selectItem itemLabel="Consumidor Final" itemValue="Consumidor Final" />
+                            <f:selectItem itemLabel="Cedula" itemValue="Cedula" />
+                            <f:selectItem itemLabel="RUC" itemValue="RUC"  />
+                            <f:selectItem itemLabel="Pasaporte" itemValue="Pasaporte" />
+
+
+                            <p:ajax event="change" listener="#{cabeceraFacturavHelper.isConsumidorfinal()}"  update="display,identi"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="CI/RUC/Pasaporte:" rendered="#{!cabeceraFacturavHelper.esconsumidorfinal}" for="identi"/>
+                        <p:inputText id="identi" rendered="#{!cabeceraFacturavHelper.esconsumidorfinal}" value="#{cabeceraFacturavHelper.identificacionCliente}" size="13">
+                            <p:ajax event="blur" update="nombres,telefono,direccion" listener="#{cabeceraFacturavHelper.buscarCliente()}" />
+                        </p:inputText>
+                    </h:panelGrid>
+                    <h:panelGroup id="display" rendered="#{!cabeceraFacturavHelper.esconsumidorfinal}">
+                        <h:panelGrid id="panelcliente" columns="4">
+                            <p:outputLabel value="Nombre y Apellido:" for="nombres"/>
+                            <p:inputText id="nombres" readonly="true" value="#{cabeceraFacturavHelper.selected.codigoCliente.nombre} #{cabeceraFacturavHelper.selected.codigoCliente.apellido}" size="25"/>
+                            <p:outputLabel for="telefono" value="Telefono:"/>
+                            <p:inputText id="telefono" readonly="true" value="#{cabeceraFacturavHelper.selected.codigoCliente.telefono}" size="13"/>
+
+                            <p:outputLabel for="direccion" value="Direccion:"/>
+                            <p:inputText id="direccion" readonly="true" value="#{cabeceraFacturavHelper.selected.codigoCliente.direccion}" size="25"/>
+
+                        </h:panelGrid>
+                    </h:panelGroup>
+                </p:panel>
+                <p:panel header="Forma Pago">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel for="car" value="Forma Pago:" />
+                        <p:selectOneMenu id="car" required="true"  value="#{cabeceraFacturavHelper.formaPago}" converter="formasPagoConverter">
+                            <f:selectItem itemLabel="Selecione.."/>
+                            <f:selectItems value="#{formasPagoHelper.items}" var="pago" itemLabel="#{pago.descripcion}" />
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                </p:panel>
+            </h:panelGrid>
+
+            <p:panel header="Detalles">
+                <p:dataTable id="formDetalle" 
+                             var="item" 
+                             rows="10" 
+                             value="#{cabeceraFacturavHelper.listaDetalle}"
+                             selection="#{cabeceraFacturavHelper.detalleFactura}">
+                    <p:column width="15%">
+                        <f:facet name="header">
+                            <h:outputText value="Codigo"/>
+                        </f:facet>
+                        <h:outputText value="#{item.producto.codigoProducto}" />
+                    </p:column>
+                    <p:column width="15%">
+                        <f:facet name="header">
+                            <h:outputText value="Descripcion"/>
+                        </f:facet>
+                        <h:outputText value="#{item.producto.nombre}" />
+                    </p:column>
+                    <p:column width="15%">
+                        <f:facet name="header">
+                            <h:outputText value="Cantidad"/>
+                        </f:facet>
+                        <h:outputText value="#{item.cantidad}" />
+                    </p:column>
+
+                    <p:column width="15%">
+                        <f:facet name="header">
+                            <h:outputText value="P. Unitario"/>
+                        </f:facet>
+                        <h:outputText value="#{item.producto.precio}" />
+                    </p:column>
+                    <p:column width="15%">
+                        <f:facet name="header">
+                            <h:outputText value="Total"/>
+                        </f:facet>
+                        <h:outputText value="#{item.total}" />
+                    </p:column>
+
+                    <p:column width="15%">
+                        <f:facet name="header">
+                            <h:outputText value="Eliminar"/>
+                        </f:facet>
+                        <p:commandButton value="Eliminar" action="#{cabeceraFacturavHelper.eliminarDetalle(item)}" update="formDetalle"/>
+                    </p:column>
+
+                    <f:facet name="footer">
+
+                        <p:commandButton value="Cargar Producto" icon="fa fa-plus-square" type="button" onclick="PF('dlg2').show();" />
+
+                    </f:facet>
+
+                </p:dataTable>
+
+            </p:panel>
+            <p:panel>
+                <h:panelGrid columns="2" style="width: 25%; margin-left: 75%;">
+                    <p:outputLabel value="SubTotal 12%:" for="doce"/>
+                    <p:inputText value="#{cabeceraFacturavHelper.selected.subtotalBaseIva}" readonly="true"  size="13" id="doce"/>
+                    <p:outputLabel value="SubTotal 0%:" for="cero"/>
+                    <p:inputText value="#{cabeceraFacturavHelper.selected.subtotalBase0}" readonly="true"  size="13" id="cero"/>
+                    <p:outputLabel value="SubTotal:" for="subtotal"/>
+                    <p:inputText value="#{cabeceraFacturavHelper.selected.subtotal}" readonly="true"  size="13" id="subtotal"/>
+                    <h:panelGrid columns="3">
+                        <p:outputLabel value="Descuento:" for="descuento"/>
+                        <p:inputText value="#{cabeceraFacturavHelper.descuento}"   size="3" id="descuento">
+                            <p:ajax event="keyup" update="totaldescuento,totaldescuento,valortotal" listener="#{cabeceraFacturavHelper.calacularSubTotalesFactura()}" />
+                        </p:inputText>
+                    </h:panelGrid>
+                    <p:inputText value="#{cabeceraFacturavHelper.selected.descuento}" readonly="true"  size="13" id="totaldescuento"/>
+                    <p:outputLabel value="IVA 12%:" for="iva"/>
+                    <p:inputText value="#{cabeceraFacturavHelper.selected.iva}" readonly="true"  size="13" id="iva"/>
+                    <p:outputLabel value="Valor Total:" for="valortotal"/>
+                    <p:inputText value="#{cabeceraFacturavHelper.selected.total}" readonly="true" style="color: red;"  size="13" id="valortotal"/>
+                </h:panelGrid>
+            </p:panel>
+
+            <p:commandButton value="Guardar Factura" actionListener="#{cabeceraFacturavHelper.gudarFactura}" ajax="false"/>
+            <p:commandButton value="Cancelar"/>
+
+        </h:form>
+        <ui:include src="detalleFactura.xhtml"/>
+
+    </h:body>
+</html>
+

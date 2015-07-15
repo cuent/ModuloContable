@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <h:form id="ClienteListForm">
+            <p:growl id="msgs" showDetail="true"/>
+            <p:panel header="Lista de Clientes">
+
+                <p:dataTable id="datalistClientes"
+                             value="#{clienteController.items}"
+                             var="item"
+                             rowKey="#{item.codigoCliente}"
+                             style="width: 100%; font-size: 0.9em;"
+                             editable="true"
+                             selection="#{clienteController.selected}"
+                             paginatorPosition="bottom"
+                             paginator="true"
+                             rows="10"
+                             >
+
+                    <p:ajax event="rowEdit" listener="#{clienteController.onRowEdit}" update=":ClienteListForm:msgs"/>
+                    <p:ajax event="rowEditCancel" listener="#{clienteController.onRowEdit}" update=":ClienteListForm:msgs"/>
+
+
+                    <p:column headerText="Tipo Identificacion">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.tipoIdentificacion}" /></f:facet>
+                            <f:facet name="input">
+                                <p:selectOneMenu id="console" value="#{item.tipoIdentificacion}"  required="true"   style="width:125px">
+                                    <f:selectItem itemLabel="Selecione.." itemValue="0" />
+                                    <f:selectItem itemLabel="RUC" itemValue="RUC" />
+                                    <f:selectItem itemLabel="Cedula" itemValue="Cedula" />
+                                    <f:selectItem itemLabel="Pasaporte" itemValue="Pasaporte" />
+                                    <f:selectItem itemLabel="Consumidor Final" itemValue="Consumidor Final" />
+                                </p:selectOneMenu>
+
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+
+
+                    <p:column headerText="Identificacion" sortBy="#{item.identificacion}" filterBy="#{item.identificacion}">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.identificacion}" /></f:facet>
+                            <f:facet name="input"><p:inputText id="Input1" value="#{item.identificacion}" style="width:100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+
+                    <p:column headerText="Nombre" sortBy="#{item.nombre}" filterBy="#{item.nombre}">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.nombre}" /></f:facet>
+                            <f:facet name="input"><p:inputText id="Input2" value="#{item.nombre}" style="width:100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+
+
+                    <p:column headerText="Apellido" sortBy="#{item.apellido}" filterBy="#{item.apellido}">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.apellido}" /></f:facet>
+                            <f:facet name="input"><p:inputText id="Input3" value="#{item.apellido}" style="width:100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Telefono">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.telefono}" /></f:facet>
+                            <f:facet name="input"><p:inputText id="Input4" value="#{item.telefono}" style="width:100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+
+                    <p:column headerText="Direccion">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.direccion}" /></f:facet>
+                            <f:facet name="input"><p:inputText id="Input5" value="#{item.direccion}" style="width:100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column style="width:32px">
+                        <p:rowEditor />
+                    </p:column>
+
+                    <p:column width="8%">
+                        <f:facet name="header">
+                            <h:outputText value=""/>
+                        </f:facet>
+                        <p:commandButton actionListener="#{clienteController.eliminarcliente(item)}" 
+                                         process="@this"
+                                         update=":#{p:component('datalistClientes')}"
+                                         icon="fa fa-times" title="Eliminar fila"/>
+                    </p:column>
+                </p:dataTable>
+
+
+
+            </p:panel>
+
+        </h:form>
+    </h:body>
+</html>
+

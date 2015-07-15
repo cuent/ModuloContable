@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="../WEB-INF/templates/plantila.xhtml">
+        <ui:define name="content">
+            <h:form id="ProductoCreateForm">
+                #{productoHelper.iniciarNuevo()}
+                <h:panelGroup id="display" rendered="#{productoHelper.selected != null}">
+                    <p:panelGrid columns="2" columnClasses="column">
+
+                        <p:outputLabel value="Nombre:" for="nombre" />
+                        <p:inputText id="nombre" value="#{productoHelper.selected.nombre}" title="#{myBundle.CreateProductoTitle_nombre}" required="true" requiredMessage="#{myBundle.CreateProductoRequiredMessage_nombre}" size="100" maxlength="100"/>
+
+                        <p:outputLabel value="#{myBundle.CreateProductoLabel_costo}" for="costo" />
+                        <p:inputText id="costo" value="#{productoHelper.selected.costo}" title="#{myBundle.CreateProductoTitle_costo}" required="true" requiredMessage="#{myBundle.CreateProductoRequiredMessage_costo}"/>
+
+                        <p:outputLabel value="Precio:" for="precio" />
+                        <p:inputText id="precio" value="#{productoHelper.selected.precio}" title="#{myBundle.CreateProductoTitle_precio}" required="true" requiredMessage="#{myBundle.CreateProductoRequiredMessage_precio}"/>
+
+                        <p:outputLabel value="Stock:" for="stock" />
+                        <p:inputText id="stock" value="#{productoHelper.selected.stock}" title="#{myBundle.CreateProductoTitle_stock}" required="true" requiredMessage="#{myBundle.CreateProductoRequiredMessage_stock}"/>
+
+                        <p:outputLabel value="Impuesto:" for="impuesto" />
+                        <p:selectOneMenu id="impuesto" value="#{productoHelper.selected.impuesto}" required="true" requiredMessage="#{myBundle.CreateProductoRequiredMessage_impuesto}" converter="impuestoConverter">
+                            <f:selectItem itemLabel="Selecione..."/>
+                            <f:selectItems value="#{impuestoHelper.items}"
+                                           var="impuestoItem"
+                                           itemValue="#{impuestoItem}"
+                                           itemLabel="#{impuestoItem.descripcion.toString()}"
+                                           />
+
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{productoHelper.guardarNuevo(event)}" value="Guardar" 
+                                     update="display,
+                                     :#{p:component('nombre')},
+                                     :#{p:component('costo')},
+                                     :#{p:component('precio')},
+                                     :#{p:component('stock')},
+                                     :#{p:component('impuesto')},
+                                     :#{p:component('datalistProductos')}" >
+
+                    </p:commandButton>
+
+                </h:panelGroup>
+
+            </h:form>
+            <ui:include src="lista_producto.xhtml"/>
+        </ui:define>
+    </ui:composition>
+</html>

@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <p:dialog header="Creacion de Detalle" widgetVar="dlg2" width="500px" modal="true" height="250">
+            <h:form id="formDetalleFactura">
+                #{cabeceraFacturavController.iniciarDetalleFactura()}
+                <p:growl id="growldetalle" showDetail="true" sticky="true" />  
+                <h:panelGrid columns="2">
+
+                    <p:outputLabel value="Codigo Producto:" for="codigoProducto"/>
+                    <p:inputText id="codigoProducto"  value="#{cabeceraFacturavController.codigoProducto}"> 
+                        <p:ajax event="blur" update="growldetalle,nombreProducto,unit" listener="#{cabeceraFacturavController.buscarProducto()}" />
+                    </p:inputText>
+
+                    <p:outputLabel value="Nombre Producto:" for="nombreProducto"/>
+
+                    <p:selectOneMenu id="nombreProducto" 
+                                     
+                                     value="#{cabeceraFacturavController.detalleFactura.producto}"
+                                     converter="productoConverter" panelStyle="width:180px"
+                                     effect="fade" var="t" style="width:160px" 
+                                     filter="true" filterMatchMode="startsWith"
+                                     >
+                        <f:selectItem itemLabel="Selecione.."/>
+                        <f:selectItems value="#{productoController.items}" var="theme" itemLabel="#{theme.nombre}" itemValue="#{theme}" />
+
+
+                        <p:column>
+                            <h:outputText value="#{t.nombre}" />
+                        </p:column>
+                        <p:ajax event="change" listener="#{cabeceraFacturavController.buscarProductoNombre()}" update="unit,codigoProducto" />
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="Cantidad:" for="cantidad"/>
+                    <p:inputText id="cantidad" required="true" value="#{cabeceraFacturavController.detalleFactura.cantidad}">
+                        <p:ajax event="keyup" update="growldetalle,total" listener="#{cabeceraFacturavController.calcularTotal()}" />
+
+                    </p:inputText>
+
+                    <p:outputLabel value="Precio Unit:" for="unit"/>
+                    <p:inputText id="unit" readonly="true" value="#{cabeceraFacturavController.detalleFactura.precioUnitario}"/>
+
+                    <p:outputLabel value="Precio total:"  for="total"/>
+                    <p:inputText id="total" readonly="true" value="#{cabeceraFacturavController.detalleFactura.total}"/>
+
+                </h:panelGrid>
+
+                <p:commandButton value="Agregar" update="growldetalle,codigoProducto,nombreProducto,cantidad,unit,total,
+                                 :#{p:component('doce')},
+                                 :#{p:component('cero')},
+                                 :#{p:component('totaldescuento')},
+                                 :#{p:component('iva')},
+                                 :#{p:component('subtotal')},
+                                 :#{p:component('valortotal')},
+                                 :#{p:component('formDetalle')}"    
+                                 
+                                 actionListener="#{cabeceraFacturavController.guadarDetalleFactura()}" oncomplete="PF('dlg2').hide()"/>
+
+                <p:commandButton value="Cancelar"/>
+            </h:form>
+        </p:dialog> 
+    </h:body>
+</html>
+

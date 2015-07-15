@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <p:panel>
+            <h:form id="formlistaProductos">
+                <p:growl id="msgs" showDetail="true"/>
+                <p:dataTable id="datalistProductos"  value="#{productoHelper.items}"
+                             var="item"
+                             rowKey="#{item.codigoProducto}"
+                             style="width: 100%; font-size: 0.9em;"
+                             editable="true"
+                             selection="#{productoHelper.selected}"
+                             paginatorPosition="bottom"
+                             paginator="true"
+                             rows="10">
+                    <f:facet name="header">Lista de Productos</f:facet>
+                    <p:ajax event="rowEdit" listener="#{productoHelper.onRowEdit}" update=":formlistaProductos:msgs"/>
+                    <p:ajax event="rowEditCancel" listener="#{productoHelper.onRowCancel}" update=":formlistaProductos:msgs"/>
+
+                    <p:column headerText="Codigo" sortBy="#{item.codigoProducto}" filterBy="#{item.codigoProducto}">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.codigoProducto}" /></f:facet>
+                            <f:facet name="input"><p:inputText id="Input1" value="#{item.codigoProducto}" style="width:100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Nombre" sortBy="#{item.nombre}" filterBy="#{item.nombre}">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.nombre}" /></f:facet>
+                            <f:facet name="input"><p:inputText id="Input2" value="#{item.nombre}" style="width:100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Costo">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.costo}" /></f:facet>
+                            <f:facet name="input"><p:inputText id="Input21" value="#{item.costo}" style="width:100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+
+                    <p:column headerText="Precio">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.precio}" /></f:facet>
+                            <f:facet name="input"><p:inputText id="Input3" value="#{item.precio}" style="width:100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Stock">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.stock}" /></f:facet>
+                            <f:facet name="input"><p:inputText id="Input4" value="#{item.stock}" style="width:100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Impuesto">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.impuesto.descripcion}" /></f:facet>
+                            <f:facet name="input">
+                                <p:selectOneMenu id="impuesto" value="#{item.impuesto}" required="true" requiredMessage="#{myBundle.CreateProductoRequiredMessage_impuesto}" converter="impuestoConverter">
+                                    <f:selectItem itemLabel="Selecione.."/>
+                                    <f:selectItems value="#{impuestoHelper.items}"
+                                                   var="impuestoItem"
+                                                   itemValue="#{impuestoItem}"
+                                                   itemLabel="#{impuestoItem.descripcion.toString()}"
+                                                   />
+
+                                </p:selectOneMenu>
+
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column style="width:32px">
+                        <p:rowEditor />
+                    </p:column>
+
+                    <p:column width="8%">
+                        <f:facet name="header">
+                            <h:outputText value=""/>
+                        </f:facet>
+                        <p:commandButton actionListener="#{productoHelper.eliminar(item)}" 
+                                         process="@this"
+                                         update=":#{p:component('datalistProductos')}"
+                                         icon="fa fa-times" title="Eliminar fila"/>
+                    </p:column>
+
+
+                </p:dataTable>
+            </h:form>
+        </p:panel>
+    </h:body>
+</html>
+

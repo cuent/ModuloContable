@@ -10,6 +10,7 @@ import edu.uc.modulocontable.facade.KardexFacade;
 import edu.uc.modulocontable.facade.ProductoFacade;
 import edu.uc.modulocontable.modelo2.Producto;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Stack;
@@ -27,7 +28,7 @@ import javax.faces.context.FacesContext;
  */
 @ManagedBean(name = "kardexBeen")
 @SessionScoped
-public class KardexBean {
+public class KardexBean implements Serializable{
 
     @EJB
     private ProductoFacade productoFacade;

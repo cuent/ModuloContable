@@ -50,6 +50,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "CabeceraFacturav.findByIva", query = "SELECT c FROM CabeceraFacturav c WHERE c.iva = :iva"),
     @NamedQuery(name = "CabeceraFacturav.findByTotal", query = "SELECT c FROM CabeceraFacturav c WHERE c.total = :total")})
 public class CabeceraFacturav implements Serializable {
+     public static String findByNumeroFactura = "CabeceraFacturav.findByNumeroFactura";
+    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

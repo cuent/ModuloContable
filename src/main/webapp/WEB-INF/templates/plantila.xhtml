@@ -35,15 +35,23 @@
                             <p:submenu label="Mantenimiento">
                                 <p:menuitem value="#{msj['tipo']}" outcome="/pages/tipo" icon="ui-icon-star"/>
                                 <p:menuitem value="#{msj['cuentas']}" outcome="/pages/cuentas" icon="ui-icon-star"/>
+                                <p:menuitem value="#{msj['cliente']}" outcome="/pages/crear_cliente" icon="ui-icon-star"/>
+                                <p:menuitem value="#{msj['producto']}" outcome="/pages/crear_producto" icon="ui-icon-star"/>
+                                <p:menuitem value="#{msj['proveedores']}" outcome="/pages/create_proveedores" icon="ui-icon-star"/>
                             </p:submenu>
                             <p:submenu label="Asientos">
                                 <p:menuitem value="#{msj['nuevoAsiento']}" outcome="/pages/nuevoAsiento" icon="ui-icon-star"/>
                             </p:submenu>
                             <p:submenu label="Reportes">
                                 <p:menuitem value="#{msj['libroDiario']}" outcome="/pages/asiento" icon="ui-icon-star"/>
+                                <p:menuitem value="#{msj['libroMayor']}" outcome="/pages/libroMayor" icon="ui-icon-star"/>
                             </p:submenu>
                             <p:submenu label="Kardex">
                                 <p:menuitem value="#{msj['generarKardex']}" outcome="/pages/kardex" icon="ui-icon-star"/>
+                            </p:submenu>
+                            <p:submenu label="Facturacion">
+                                <p:menuitem value="#{msj['ventas']}" outcome="/pages/crear_factura" icon="ui-icon-star"/>
+                                <p:menuitem value="#{msj['compras']}" outcome="/pages/factura_compra" icon="ui-icon-star"/>
                             </p:submenu>
                         </p:menu>
                     </h:form>

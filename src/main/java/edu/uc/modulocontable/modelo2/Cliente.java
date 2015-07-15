@@ -40,6 +40,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Cliente.findByTelefono", query = "SELECT c FROM Cliente c WHERE c.telefono = :telefono"),
     @NamedQuery(name = "Cliente.findByDireccion", query = "SELECT c FROM Cliente c WHERE c.direccion = :direccion")})
 public class Cliente implements Serializable {
+    public static String findByIdentificacion = "Cliente.findByIdentificacion";
+     public static String findByTipoIdentificacion = "Cliente.findByTipoIdentificacion";
+   
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="ProveedoresListForm">
+
+        <p:panel header="Lista de Proveedores">
+
+            <p:dataTable id="datalistProveedores"
+                         value="#{proveedoresHelper.items}"
+                         var="item"
+                         rowKey="#{item.codigoProveedores}"
+                         paginator="true"
+                         rows="10"
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         selectionMode="single"
+                         selection="#{proveedoresHelper.selected}">
+
+
+
+                <p:column sortBy="#{item.codigoProveedores}" filterBy="#{item.codigoProveedores}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle2.ListProveedoresTitle_codigoProveedores}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.codigoProveedores}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.tipoIdentificacion}" filterBy="#{item.tipoIdentificacion}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle2.ListProveedoresTitle_tipoIdentificacion}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.tipoIdentificacion}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.identificacion}" filterBy="#{item.identificacion}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle2.ListProveedoresTitle_identificacion}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.identificacion}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.nombre}" filterBy="#{item.nombre}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle2.ListProveedoresTitle_nombre}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.nombre}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.direccion}" filterBy="#{item.direccion}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle2.ListProveedoresTitle_direccion}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.direccion}"/>
+                </p:column>
+
+
+                <p:column sortBy="#{item.telefono}" filterBy="#{item.telefono}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle2.ListProveedoresTitle_telefono}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.telefono}"/>
+                </p:column>
+                <p:column style="width:20px">
+                    <f:facet name="header">
+                        <h:outputText value=""/>
+                    </f:facet>
+                    <p:commandButton actionListener="#{proveedoresHelper.eliminarcliente(item)}" 
+                                     process="@this"
+                                     update=":#{p:component('datalistProveedores')}"
+                                     icon="fa fa-times" title="Eliminar fila"/>
+                </p:column>
+            </p:dataTable>
+
+        </p:panel>
+
+    </h:form>
+
+</ui:composition>

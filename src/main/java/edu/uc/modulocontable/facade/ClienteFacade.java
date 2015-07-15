@@ -6,9 +6,12 @@
 package edu.uc.modulocontable.facade;
 
 import edu.uc.modulocontable.modelo2.Cliente;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -28,4 +31,24 @@ public class ClienteFacade extends AbstractFacade<Cliente> {
         super(Cliente.class);
     }
     
+     public List<Cliente> buscaCliente(String cedula) {
+        Query query = this.em.createNamedQuery(Cliente.findByIdentificacion);
+        query.setParameter("identificacion",cedula);
+
+        try {
+            return query.getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+    public List<Cliente> buscaTipoIdentificador(String nombre) {
+        Query query = this.em.createNamedQuery(Cliente.findByTipoIdentificacion);
+        query.setParameter("tipoIdentificacion",nombre);
+
+        try {
+            return query.getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }  
 }

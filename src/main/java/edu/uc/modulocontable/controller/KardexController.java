@@ -7,11 +7,6 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.inject.Named;
-import javax.faces.view.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
-import javax.inject.Inject;
 
 @ManagedBean(name = "kardexController")
 @SessionScoped

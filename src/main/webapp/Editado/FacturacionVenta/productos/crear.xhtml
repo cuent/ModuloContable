@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <h:form id="ProductoCreateForm">
+            #{productoController.iniciarNuevo()}
+            <h:panelGroup id="display" rendered="#{productoController.selected != null}">
+                <p:panelGrid columns="2" columnClasses="column">
+
+                    <p:outputLabel value="Nombre:" for="nombre" />
+                    <p:inputText id="nombre" value="#{productoController.selected.nombre}" title="#{myBundle1.CreateProductoTitle_nombre}" required="true" requiredMessage="#{myBundle1.CreateProductoRequiredMessage_nombre}" size="100" maxlength="100"/>
+
+                    <p:outputLabel value="#{myBundle1.CreateProductoLabel_costo}" for="costo" />
+                    <p:inputText id="costo" value="#{productoController.selected.costo}" title="#{myBundle1.CreateProductoTitle_costo}" required="true" requiredMessage="#{myBundle1.CreateProductoRequiredMessage_costo}"/>
+
+                    <p:outputLabel value="Precio:" for="precio" />
+                    <p:inputText id="precio" value="#{productoController.selected.precio}" title="#{myBundle1.CreateProductoTitle_precio}" required="true" requiredMessage="#{myBundle1.CreateProductoRequiredMessage_precio}"/>
+
+                    <p:outputLabel value="Stock:" for="stock" />
+                    <p:inputText id="stock" value="#{productoController.selected.stock}" title="#{myBundle1.CreateProductoTitle_stock}" required="true" requiredMessage="#{myBundle1.CreateProductoRequiredMessage_stock}"/>
+
+                    <p:outputLabel value="Impuesto:" for="impuesto" />
+                    <p:selectOneMenu id="impuesto" value="#{productoController.selected.impuesto}" required="true" requiredMessage="#{myBundle1.CreateProductoRequiredMessage_impuesto}" converter="impuestoConverter">
+                        <f:selectItem itemLabel="Selecione.."/>
+                        <f:selectItems value="#{impuestoController.items}"
+                                       var="impuestoItem"
+                                       itemValue="#{impuestoItem}"
+                                       itemLabel="#{impuestoItem.descripcion.toString()}"
+                                       />
+
+                    </p:selectOneMenu>
+                </p:panelGrid>
+                <p:commandButton actionListener="#{productoController.guardarNuevo(event)}" value="#{myBundle1.Save}" 
+                                 update="display,
+                                 :#{p:component('nombre')},
+                                 :#{p:component('costo')},
+                                 :#{p:component('precio')},
+                                 :#{p:component('stock')},
+                                 :#{p:component('impuesto')},
+                                 :#{p:component('datalistProductos')}" >
+
+                </p:commandButton>
+                <p:commandButton value="Cancelar"/>
+
+            </h:panelGroup>
+
+        </h:form>
+        <ui:include src="lista.xhtml"/>
+    </h:body>
+</html>
+

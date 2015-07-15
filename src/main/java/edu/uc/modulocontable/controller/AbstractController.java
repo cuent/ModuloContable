@@ -4,6 +4,7 @@ import edu.uc.modulocontable.facade.AbstractFacade;
 import edu.uc.modulocontable.bean.util.JsfUtil;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.event.ActionEvent;
@@ -26,10 +27,10 @@ import javax.validation.ConstraintViolationException;
 public abstract class AbstractController<T> implements Serializable {
 
     @EJB
-     AbstractFacade<T> ejbFacade;
+    AbstractFacade<T> ejbFacade;
     private Class<T> itemClass;
     private T selected;
-    private Collection<T> items;
+    private List<T> items;
 
     protected AbstractFacade<T> getFacade() {
         return ejbFacade;
@@ -108,7 +109,7 @@ public abstract class AbstractController<T> implements Serializable {
      *
      * @param items a collection of Entity items
      */
-    public void setItems(Collection<T> items) {
+    public void setItems(List<T> items) {
         this.items = items;
     }
 
@@ -245,7 +246,7 @@ public abstract class AbstractController<T> implements Serializable {
     public void initParams() {
         Object paramItems = FacesContext.getCurrentInstance().getExternalContext().getRequestMap().get(itemClass.getSimpleName() + "_items");
         if (paramItems != null) {
-            this.items = (Collection<T>) paramItems;
+            this.items = (List<T>) paramItems;
         }
     }
 
