@@ -35,6 +35,8 @@ public class TransaccionHelper {
     private List<Asiento> asientos;
     private List<Transaccion> transacciones;
     private List<Transaccion> auxTransacciones;
+    private Cuenta cuenta;
+
     @EJB
     private AsientoFacade asientoFacade;
     @EJB
@@ -43,7 +45,17 @@ public class TransaccionHelper {
     private TransaccionFacade transaccionFacade;
     private BigDecimal totalDebe = BigDecimal.ZERO;
     private BigDecimal totalHaber = BigDecimal.ZERO;
-    
+    private BigDecimal totalDeudor = BigDecimal.ZERO;
+    private BigDecimal totalAcreedor = BigDecimal.ZERO;
+
+    public Cuenta getCuenta() {
+        return cuenta;
+    }
+
+    public void setCuenta(Cuenta cuenta) {
+        this.cuenta = cuenta;
+    }
+
     public List<Transaccion> getTransacciones() {
         return transacciones = transaccionFacade.findAll();
     }
@@ -71,32 +83,296 @@ public class TransaccionHelper {
         return cuentas;
     }
 
-    public void CuentaListener(ActionEvent actionEvent){        
+    public List<Cuenta> getListaCuentasCorrientes() {
+        cuentas = cuentaFacade.findAll();
+        transacciones = transaccionFacade.getCuentas();
+        List<Cuenta> cuentasAux = new ArrayList<>();
+        for (Transaccion t : transacciones) {
+            for (Cuenta cuenta : cuentas) {
+                if (cuenta.getIdcodcuenta().equals(t.getIdcodcuenta().getIdcodcuenta())) {
+                    if (cuenta.getNumcuenta().startsWith("1.1.")) {
+                        cuentasAux.add(cuenta);
+                    }
+                }
+            }
+        }
+        cuentas = cuentasAux;
+        return cuentas;
+    }
+
+    public List<Cuenta> getListaCuentasNoCorrientes() {
+        cuentas = cuentaFacade.findAll();
+        transacciones = transaccionFacade.getCuentas();
+        List<Cuenta> cuentasAux = new ArrayList<>();
+        for (Transaccion t : transacciones) {
+            for (Cuenta cuenta : cuentas) {
+                if (cuenta.getIdcodcuenta().equals(t.getIdcodcuenta().getIdcodcuenta())) {
+                    if (cuenta.getNumcuenta().startsWith("1.2.")) {
+                        cuentasAux.add(cuenta);
+                    }
+                }
+            }
+        }
+        cuentas = cuentasAux;
+        return cuentas;
+    }
+
+    public List<Cuenta> getListaCuentasPasivo() {
+        cuentas = cuentaFacade.findAll();
+        transacciones = transaccionFacade.getCuentas();
+        List<Cuenta> cuentasAux = new ArrayList<>();
+        for (Transaccion t : transacciones) {
+            for (Cuenta cuenta : cuentas) {
+                if (cuenta.getIdcodcuenta().equals(t.getIdcodcuenta().getIdcodcuenta())) {
+                    if (cuenta.getNumcuenta().startsWith("2.1.")) {
+                        cuentasAux.add(cuenta);
+                    }
+                }
+            }
+        }
+        cuentas = cuentasAux;
+        return cuentas;
+    }
+
+    public List<Cuenta> getListaCuentasPatrimonio() {
+        cuentas = cuentaFacade.findAll();
+        transacciones = transaccionFacade.getCuentas();
+        List<Cuenta> cuentasAux = new ArrayList<>();
+        for (Transaccion t : transacciones) {
+            for (Cuenta cuenta : cuentas) {
+                if (cuenta.getIdcodcuenta().equals(t.getIdcodcuenta().getIdcodcuenta())) {
+                    if (cuenta.getNumcuenta().startsWith("3.1.")) {
+                        cuentasAux.add(cuenta);
+                    }
+                }
+            }
+        }
+        cuentas = cuentasAux;
+        return cuentas;
+    }
+
+    public List<Cuenta> getListaCuentasIngresosOperacionales() {
+        cuentas = cuentaFacade.findAll();
+        transacciones = transaccionFacade.getCuentas();
+        List<Cuenta> cuentasAux = new ArrayList<>();
+        for (Transaccion t : transacciones) {
+            for (Cuenta cuenta : cuentas) {
+                if (cuenta.getIdcodcuenta().equals(t.getIdcodcuenta().getIdcodcuenta())) {
+                    if (cuenta.getNumcuenta().startsWith("4.1.")) {
+                        cuentasAux.add(cuenta);
+                    }
+                }
+            }
+        }
+        cuentas = cuentasAux;
+        return cuentas;
+    }
+
+    public List<Cuenta> getListaCuentasGastosOperacionales() {
+        cuentas = cuentaFacade.findAll();
+        transacciones = transaccionFacade.getCuentas();
+        List<Cuenta> cuentasAux = new ArrayList<>();
+        for (Transaccion t : transacciones) {
+            for (Cuenta cuenta : cuentas) {
+                if (cuenta.getIdcodcuenta().equals(t.getIdcodcuenta().getIdcodcuenta())) {
+                    if (cuenta.getNumcuenta().startsWith("5.1.")) {
+                        cuentasAux.add(cuenta);
+                    }
+                }
+            }
+        }
+        cuentas = cuentasAux;
+        return cuentas;
+    }
+
+    public List<Cuenta> getListaCuentasGastosNoOperacionales() {
+        cuentas = cuentaFacade.findAll();
+        transacciones = transaccionFacade.getCuentas();
+        List<Cuenta> cuentasAux = new ArrayList<>();
+        for (Transaccion t : transacciones) {
+            for (Cuenta cuenta : cuentas) {
+                if (cuenta.getIdcodcuenta().equals(t.getIdcodcuenta().getIdcodcuenta())) {
+                    if (cuenta.getNumcuenta().startsWith("5.2.")) {
+                        cuentasAux.add(cuenta);
+                    }
+                }
+            }
+        }
+        cuentas = cuentasAux;
+        return cuentas;
+    }
+
+    public BigDecimal getTotalCorrientes() {
+        BigDecimal diferencia = BigDecimal.ZERO;
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (Cuenta c : getListaCuentasCorrientes()) {
+            diferencia = c.getDiferencia();
+            total = total.add(diferencia);
+        }
+        return total;
+    }
+
+    public BigDecimal getTotalNoCorrientes() {
+        BigDecimal diferencia = BigDecimal.ZERO;
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (Cuenta c : getListaCuentasNoCorrientes()) {
+            diferencia = c.getDiferencia();
+            total = total.add(diferencia);
+        }
+        return total;
+    }
+
+    public BigDecimal getTotalActivo() {
+        BigDecimal total = BigDecimal.ZERO;
+
+        total = getTotalCorrientes().add(getTotalNoCorrientes());
+
+        return total;
+    }
+
+    public BigDecimal getTotalPasivo() {
+        BigDecimal diferencia = BigDecimal.ZERO;
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (Cuenta c : getListaCuentasPasivo()) {
+            diferencia = c.getDiferencia();
+            total = total.add(diferencia);
+        }
+        return total;
+    }
+
+    public BigDecimal getTotalPatrimonio() {
+        BigDecimal diferencia = BigDecimal.ZERO;
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (Cuenta c : getListaCuentasPatrimonio()) {
+            diferencia = c.getDiferencia();
+            total = total.add(diferencia);
+        }
+        total = total.add(getTotalUtilidadEjercicio());
+        return total;
+    }
+
+    public BigDecimal getTotalPasivoPatrimonio() {
+        BigDecimal total = BigDecimal.ZERO;
+        total = getTotalPasivo().add(getTotalPatrimonio());
+        return total;
+    }
+
+    public BigDecimal getTotalIngresosOperacionales() {
+        BigDecimal diferencia = BigDecimal.ZERO;
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (Cuenta c : getListaCuentasIngresosOperacionales()) {
+            diferencia = c.getDiferencia();
+            total = total.add(diferencia);
+        }
+        return total;
+    }
+
+    public BigDecimal getTotalGastosOperacionales() {
+        BigDecimal diferencia = BigDecimal.ZERO;
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (Cuenta c : getListaCuentasGastosOperacionales()) {
+            diferencia = c.getDiferencia();
+            total = total.add(diferencia);
+        }
+        return total;
+    }
+
+    public BigDecimal getTotalUtilidadOperacional() {
+        BigDecimal total = BigDecimal.ZERO;
+        total = getTotalIngresosOperacionales().subtract(getTotalGastosOperacionales());
+        return total;
+    }
+
+    public BigDecimal getTotalGastosNoOperacionales() {
+        BigDecimal diferencia = BigDecimal.ZERO;
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (Cuenta c : getListaCuentasGastosNoOperacionales()) {
+            diferencia = c.getDiferencia();
+            total = total.add(diferencia);
+        }
+        return total;
+    }
+
+    public BigDecimal getTotalUtilidadEjercicio() {
+        BigDecimal total = BigDecimal.ZERO;
+        total = getTotalUtilidadOperacional().subtract(getTotalGastosNoOperacionales());
+        return total;
+    }
+
+    public void CuentaListener(ActionEvent actionEvent) {
         Integer idcodcuenta = Integer.parseInt(actionEvent.toString());
-        
+
         setTransaccionesCuenta(idcodcuenta);
     }
-    
-    public void setTransaccionesCuenta(Integer idcodcuenta){
-        auxTransacciones = transaccionFacade.getCuenta(idcodcuenta);     
+
+    public void setTransaccionesCuenta(Integer idcodcuenta) {
+        auxTransacciones = transaccionFacade.getCuenta(idcodcuenta);
     }
-    
-    public List<Transaccion> getTransaccionesCuenta(){
+
+    public List<Transaccion> getTransaccionesCuenta() {
         return auxTransacciones;
     }
-    
+
     public void getSumas() {
         BigDecimal auxFDebe = BigDecimal.ZERO;
         BigDecimal auxFHaber = BigDecimal.ZERO;
-        
-        transacciones = transaccionFacade.getCuentas();
-        
+
+        transacciones = transaccionFacade.findAll();
+
         for (Transaccion t : transacciones) {
             auxFDebe = auxFDebe.add(t.getDebe());
             auxFHaber = auxFHaber.add(t.getHaber());
-        }        
+        }
+
         setTotalDebe(auxFDebe);
-        setTotalHaber(auxFHaber);        
+        setTotalHaber(auxFHaber);
+    }
+
+    public void getSumasTipo() {
+        BigDecimal auxAcreedor = BigDecimal.ZERO;
+        BigDecimal auxDeudor = BigDecimal.ZERO;
+        BigDecimal diferencia = BigDecimal.ZERO;
+
+        int i = 0;
+        for (Cuenta c : getListaCuentas()) {
+
+            diferencia = c.getTotalDebe().subtract(c.getTotalHaber());
+            System.out.println(i + " " + diferencia);
+            if (diferencia.doubleValue() < 0) {
+                System.out.println("Acreedor");
+                auxAcreedor = auxAcreedor.add(diferencia.negate());
+            } else {
+                System.out.println("Deudor");
+                auxDeudor = auxDeudor.add(diferencia);
+            }
+        }
+        setTotalAcreedor(auxAcreedor);
+        setTotalDeudor(auxDeudor);
+    }
+
+    public BigDecimal getTotalDeudor() {
+        getSumasTipo();
+        return totalDeudor;
+    }
+
+    public void setTotalDeudor(BigDecimal totalDeudor) {
+        this.totalDeudor = totalDeudor;
+    }
+
+    public BigDecimal getTotalAcreedor() {
+        getSumasTipo();
+        return totalAcreedor;
+    }
+
+    public void setTotalAcreedor(BigDecimal totalAcreedor) {
+        this.totalAcreedor = totalAcreedor;
     }
 
     public TransaccionFacade getTransaccionFacade() {
@@ -111,15 +387,16 @@ public class TransaccionHelper {
         return asientos = asientoFacade.findAll();
     }
 
-    public BigDecimal getTotalDebe() {   
+    public BigDecimal getTotalDebe() {
         getSumas();
         return totalDebe;
     }
-    
+
     public BigDecimal getTotalHaber() {
+        getSumas();
         return totalDebe;
     }
-    
+
     public BigDecimal getTotalDebe1() {
         totalDebe = BigDecimal.ZERO;
         for (Transaccion auxT : getTransacciones()) {

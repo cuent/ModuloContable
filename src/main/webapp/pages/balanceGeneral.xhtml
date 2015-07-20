@@ -1,0 +1,146 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="../WEB-INF/templates/plantila.xhtml">
+        <ui:define name="content">
+            <h:form>
+                <p:dataTable var="cuentas" value="#{transaccionHelper.listaCuentasCorrientes}">
+                    <p:columnGroup type="header">
+                        <p:row>                            
+                            <p:column colspan="5" headerText="Balance de Resultados" />
+                        </p:row>
+                        <p:row>
+                            <p:column headerText="ACTIVO" />
+                            <p:column headerText="" />
+                            <p:column headerText="" />
+                            <p:column headerText="" />
+                            <p:column headerText="" />
+                        </p:row>  
+                        <p:row>
+                            <p:column headerText="" />
+                            <p:column headerText="CORRIENTE" />
+                            <p:column headerText="" />
+                            <p:column headerText="" />
+                            <p:column headerText="$#{transaccionHelper.totalCorrientes}" />                            
+                        </p:row>  
+                    </p:columnGroup>
+                    <p:column/>
+                    <p:column/>
+                    <p:column>
+                        #{cuentas.descripcion}
+                    </p:column>
+                    <p:column>
+                        #{cuentas.diferencia}
+                    </p:column>
+                    <p:column/>
+                </p:dataTable>
+
+                <p:dataTable var="cuentas" value="#{transaccionHelper.listaCuentasNoCorrientes}">
+                    <p:columnGroup type="header">                        
+                        <p:row>
+                            <p:column headerText="" />
+                            <p:column headerText="NO CORRIENTE" />
+                            <p:column headerText="" />
+                            <p:column headerText="" />
+                            <p:column headerText="$#{transaccionHelper.totalNoCorrientes}" />                            
+                        </p:row>  
+                    </p:columnGroup>
+                    <p:column/>
+                    <p:column/>
+                    <p:column>
+                        #{cuentas.descripcion}
+                    </p:column>
+                    <p:column>
+                        #{cuentas.diferencia}
+                    </p:column>
+                    <p:column/>
+                    <p:columnGroup type="footer">
+                        <p:row>
+                            <p:column colspan="1" style="text-align:right" footerText="TOTAL ACTIVO:"/>
+                            <p:column footerText="" />
+                            <p:column footerText="" />
+                            <p:column footerText="" />
+                            <p:column footerText="$#{transaccionHelper.totalActivo}" />
+                        </p:row>
+                    </p:columnGroup>
+                </p:dataTable>
+
+                <p:dataTable var="cuentas" value="#{transaccionHelper.listaCuentasPasivo}">
+                    <p:columnGroup type="header">                        
+                        <p:row>
+                            <p:column headerText="PASIVO" />
+                            <p:column headerText="" />
+                            <p:column headerText="" />
+                            <p:column headerText="" />
+                            <p:column headerText="" />
+                        </p:row>  
+                        <p:row>
+                            <p:column headerText="" />
+                            <p:column headerText="CORRIENTE" />
+                            <p:column headerText="" />
+                            <p:column headerText="" />
+                            <p:column headerText="$#{transaccionHelper.totalPasivo}" />                            
+                        </p:row>  
+                    </p:columnGroup>
+                    <p:column/>
+                    <p:column/>
+                    <p:column>
+                        #{cuentas.descripcion}
+                    </p:column>
+                    <p:column>
+                        #{cuentas.diferencia}
+                    </p:column>
+                    <p:column/>
+                    <p:columnGroup type="footer">
+                        <p:row>
+                            <p:column colspan="1" style="text-align:right" footerText="TOTAL PASIVO:"/>
+                            <p:column footerText="" />
+                            <p:column footerText="" />
+                            <p:column footerText="" />
+                            <p:column footerText="$#{transaccionHelper.totalPasivo}" />
+                        </p:row>
+                    </p:columnGroup>
+                </p:dataTable> 
+
+                <p:dataTable var="cuentas" value="#{transaccionHelper.listaCuentasPatrimonio}">
+                    <p:columnGroup type="header">                        
+                        <p:row>
+                            <p:column headerText="PATRIMONIO" />
+                            <p:column headerText="" />
+                            <p:column headerText="" />
+                            <p:column headerText="" />
+                            <p:column headerText="$#{transaccionHelper.totalPatrimonio}" />                            
+                        </p:row>    
+                        <p:row>
+                            <p:column headerText="" />
+                            <p:column headerText="" />
+                            <p:column headerText="Utilidad" />
+                            <p:column headerText="" />
+                            <p:column headerText="$#{transaccionHelper.totalUtilidadEjercicio}" />                            
+                        </p:row>
+                    </p:columnGroup>                    
+                    <p:column/>
+                    <p:column/>
+                    <p:column>
+                        #{cuentas.descripcion}
+                    </p:column>
+                    <p:column>
+                        #{cuentas.diferencia}
+                    </p:column>
+                    <p:column/>
+                    <p:columnGroup type="footer">
+                        <p:row>
+                            <p:column colspan="1" style="text-align:right" footerText="TOTAL PASIVO Y PATRIMONIO:"/>
+                            <p:column footerText="" />
+                            <p:column footerText="" />
+                            <p:column footerText="" />
+                            <p:column footerText="$#{transaccionHelper.totalPasivoPatrimonio}" />
+                        </p:row>
+                    </p:columnGroup>
+                </p:dataTable>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

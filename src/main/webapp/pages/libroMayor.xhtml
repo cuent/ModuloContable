@@ -6,39 +6,46 @@
     <ui:composition template="../WEB-INF/templates/plantila.xhtml">
         <ui:define name="content">
             <h:form>
-                <h:panelGrid columns="2" id="display">
-                    <h:outputLabel value="Cuenta"/>
-                    
-                    <h:selectOneMenu style="width:100%" value="#{transaccionHelper.transaccionesCuenta}">
-                        <f:selectItem itemLabel=" " itemValue="" />
-                        <f:selectItems value="#{transaccionHelper.listaCuentas}" var="cuenta" 
-                                       itemLabel="#{cuenta.descripcion}"
-                                       itemValue="#{cuenta}"
-                                       actionListener="#{transaccionHelper.CuentaListener}"/>
-                    </h:selectOneMenu>
-                    
-                </h:panelGrid>
-                <p:dataTable var="trans" value="#{transaccionHelper.transaccionesCuenta}">
+                <p:dataTable var="cuentas" value="#{transaccionHelper.listaCuentas}">
                     <f:facet name="header">
-                        Suma
+                        Libro Mayor
                     </f:facet>
 
-                    <p:column headerText="Debe">
-                        <h:outputText value="#{trans.debe}" />
+                    <p:column style="width:16px">
+                        <p:rowToggler />
                     </p:column>
-                    
-                    <p:column headerText="Haber">
-                        <h:outputText value="#{trans.haber}" />
-                    </p:column>
+                    <p:column headerText="Cuenta">
+                        <h:outputText value="#{cuentas.descripcion}" />
+                    </p:column>                    
 
+                    <p:rowExpansion>
+                        <p:dataTable var="transaccion" value="#{cuentas.transaccionList}">
 
-                    <p:columnGroup type="footer">
-                        <p:row>
-                            <p:column footerText="$0" />
-                            <p:column footerText="$0" />
-                        </p:row>
-                    </p:columnGroup>
+                            <p:column headerText="#{msj['transaccionDebe']}">
+                                <h:outputText value="#{transaccion.debe}" >
+                                    <f:convertNumber type="currency" currencySymbol="$" />
+                                </h:outputText>
+                            </p:column>
 
+                            <p:column headerText="#{msj['transaccionHaber']}">
+                                <h:outputText value="#{transaccion.haber}">
+                                    <f:convertNumber type="currency" currencySymbol="$" />
+                                </h:outputText>
+                            </p:column>
+
+                            <p:columnGroup type="footer">
+                                <p:row>                                    
+                                    <p:column footerText="$#{cuentas.totalDebe}" />
+                                    <p:column footerText="$#{cuentas.totalHaber}" />
+                                </p:row>
+                                <p:row>                                    
+                                    <p:column footerText="#{cuentas.tipo}" />
+                                    <p:column footerText="$#{cuentas.diferencia}"/>                                        
+                                </p:row>
+                            </p:columnGroup>
+                        </p:dataTable>
+
+                    </p:rowExpansion>
                 </p:dataTable>
             </h:form>
         </ui:define>
