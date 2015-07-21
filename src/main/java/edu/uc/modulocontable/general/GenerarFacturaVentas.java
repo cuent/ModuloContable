@@ -310,7 +310,7 @@ public class GenerarFacturaVentas {
         int[] alineamientos = { 0, 0 };
         tablaVertical.setTamanos(tamanos2);
         tablaVertical.setTitulos("Número de Autorización:");
-        Object[] datos10 = {c.getAutorizacionSri() };
+        Object[] datos10 = {c.getAutorizacionSri().getNumeroAutorizacion() };
         tablaVertical.setContenidos(datos10);
         tablaVertical.setAlineamientos(alineamientos);
         tablaVertical.llenarTabla(false);

@@ -7,6 +7,7 @@ import edu.uc.modulocontable.facade.FormasPagoFacade;
 import edu.uc.modulocontable.facade.ImpuestoFacade;
 import edu.uc.modulocontable.facade.ProductoFacade;
 import edu.uc.modulocontable.facade.ProveedoresFacade;
+import edu.uc.modulocontable.general.GenerarFacturaCompras;
 import edu.uc.modulocontable.modelo2.CabeceraFacturac;
 import edu.uc.modulocontable.modelo2.DetalleFacturac;
 import edu.uc.modulocontable.modelo2.DetalleFacturacPK;
@@ -241,6 +242,10 @@ public class CabeceraFacturacHelper implements Serializable {
                             //Sesion.redireccionaPagina(ResourceBundle.getBundle("/MyBundle").getString("listaFacturasc"));
                             msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ustede ha realizado una compra!", "Factura Generada");
                             FacesContext.getCurrentInstance().addMessage(null, msg);
+                            
+                            //this.getSelected()
+                            this.getSelected().setDetalleFacturacList(detalles);
+                            descargarFactura();
                         }
 
                     } else {
@@ -263,6 +268,17 @@ public class CabeceraFacturacHelper implements Serializable {
             msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Informacion", "select en null");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
+
+    }
+
+    private void descargarFactura() {
+        //String ruta = "/Users/cuent/" + nombre + ".pdf";
+        CabeceraFacturac c = this.getSelected();
+        String nombre = c.getPtoEmision() + "-" + c.getEstablecimiento() + "-" + c.getNumeroFactura() + ".pdf";
+        String ruta = "/Users/cuent/Downloads/" + nombre;
+
+        GenerarFacturaCompras generarPdf = new GenerarFacturaCompras();
+        generarPdf.generarFactura(c, ruta);
 
     }
 
