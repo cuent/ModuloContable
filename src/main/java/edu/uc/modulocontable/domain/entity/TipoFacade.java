@@ -27,5 +27,5 @@ public class TipoFacade extends AbstractFacade<Tipo> {
     public TipoFacade() {
         super(Tipo.class);
     }
-    
+
 }

@@ -36,6 +36,8 @@ public class CuentaFacade extends AbstractFacade<Cuenta> {
         Query q = em.createQuery("SELECT count(c) FROM Cuenta c WHERE c.idcodcuentapadre.idcodcuenta=:padre")
                 .setParameter("padre", idcuentapadre);
         List<Long> resultado = q.getResultList();
+        Query q1 = em.createQuery("SELECT t FROM Transaccion t GROUP BY t.idcodcuenta");
+        q1.getResultList();
         return resultado.get(0);
     }
 

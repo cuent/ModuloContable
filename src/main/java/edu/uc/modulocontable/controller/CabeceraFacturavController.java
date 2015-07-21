@@ -79,7 +79,7 @@ public class CabeceraFacturavController extends AbstractController<CabeceraFactu
             getSelected().setNumeroFactura(Integer.parseInt(getAutorizacion().getNumeroActual()) + 1);
             getSelected().setPtoEmision(getAutorizacion().getPtoEmision());
             getSelected().setEstablecimiento(getAutorizacion().getEstablecimiento());
-            getSelected().setAutorizacionSri(getAutorizacion().getNumeroAutorizacion());
+            getSelected().setAutorizacionSri(new Autorizaciones());
             getSelected().setFecha(new Date());
 
         }

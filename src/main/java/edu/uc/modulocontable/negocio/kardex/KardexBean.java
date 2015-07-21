@@ -28,7 +28,7 @@ import javax.faces.context.FacesContext;
  */
 @ManagedBean(name = "kardexBeen")
 @SessionScoped
-public class KardexBean implements Serializable{
+public class KardexBean implements Serializable {
 
     @EJB
     private ProductoFacade productoFacade;
@@ -75,7 +75,7 @@ public class KardexBean implements Serializable{
     }
 
     public List<KardexLIFO> getInventario() {
-        GenerarKardex kardex = new GenerarKardex(kardexFacade.query(producto));
+        GenerarKardex kardex = new GenerarKardex(kardexFacade.query(producto), producto);
         kardex.generarLIFO();
         return kardex.getInventarioTotalLIFO();
     }
@@ -109,7 +109,7 @@ public class KardexBean implements Serializable{
     }
 
     public void test() {
-        GenerarKardex kardex = new GenerarKardex(kardexFacade.query(producto));
+        GenerarKardex kardex = new GenerarKardex(kardexFacade.query(producto), producto);
 //        //Metodo FIFO
 //        kardex.generarFIFO();
 //        List<KardexFIFO> fifo = kardex.getInventarioTotalFIFO();
@@ -120,6 +120,13 @@ public class KardexBean implements Serializable{
         //Metodo LIFO
         kardex.generarLIFO();
         List<KardexLIFO> lifo = kardex.getInventarioTotalLIFO();
+        kardex.descargarFactura();
+
+        setCantidadEntrada(0);
+        setCantidadSalida(0);
+        setSaldoCantidad(0);
+        setSaldoTotal(0);
+
         for (KardexLIFO lifo1 : lifo) {
             System.out.println(lifo1);
             if (lifo1.getTipo().equalsIgnoreCase("entrada")) {
@@ -133,8 +140,8 @@ public class KardexBean implements Serializable{
         }
         Stack<Inventario> saldo = kardex.getInventarioLIFO();
         for (Inventario saldo1 : saldo) {
-            setSaldoCantidad(getSaldoCantidad()+saldo1.getTotalCantidad());
-            setSaldoTotal(getSaldoTotal()+saldo1.getTotalSubtotal());
+            setSaldoCantidad(getSaldoCantidad() + saldo1.getTotalCantidad());
+            setSaldoTotal(getSaldoTotal() + saldo1.getTotalSubtotal());
         }
 //        System.out.println("\n\n\n\n ******************************************  \n\n\n\n");
 //        //Metodo Poderado

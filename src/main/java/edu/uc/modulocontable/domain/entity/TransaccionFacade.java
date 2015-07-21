@@ -19,6 +19,7 @@ import javax.persistence.Query;
  */
 @Stateless
 public class TransaccionFacade extends AbstractFacade<Transaccion> {
+
     @PersistenceContext(unitName = "edu.uc_ModuloContable_war_1.0-SNAPSHOTPU")
     private EntityManager em;
 
@@ -30,16 +31,18 @@ public class TransaccionFacade extends AbstractFacade<Transaccion> {
     public TransaccionFacade() {
         super(Transaccion.class);
     }
-    
-    public List<Transaccion> getCuentas(){
-        Query query = this.em.createNamedQuery(Transaccion.groupByCuentas);
-        return query.getResultList();
+
+    public List<Transaccion> getCuentas() {
+//        Query query = this.em.createNamedQuery("Transaccion.groupByCuentas");
+//        return query.getResultList();
+        Query q = em.createQuery("SELECT t FROM Transaccion t");
+        return q.getResultList();
     }
-    
-    public List<Transaccion> getCuenta(Integer idcodcuenta){
+
+    public List<Transaccion> getCuenta(Integer idcodcuenta) {
         Query query = this.em.createNamedQuery(Transaccion.findByCuenta);
         query.setParameter("idcodcuenta", idcodcuenta);
         return query.getResultList();
     }
-    
+
 }

@@ -47,17 +47,18 @@
                             <f:validateRegex pattern="[0-9 ]*" />
                         </p:inputText>
 
-                        <p:outputLabel value="Autorizacion" for="autorizacion" />
-                        <p:inputText id="autorizacion"  required="true" value="#{proveedoresHelper.selected.autorizacion}" title="#{bundle2.CreateProveedoresTitle_autorizacion}" size="40">
-                            <f:validateRegex pattern="[A-Za-z0-9 ]*" />
-                        </p:inputText>
-
-                        <p:outputLabel value="Fecha Caducidad:" for="fechaCaducidadAutorizacion" />
-                        <p:calendar  required="true" id="fechaCaducidadAutorizacion" pattern="MM/dd/yyyy HH:mm:ss" value="#{proveedoresHelper.selected.fechaCaducidadAutorizacion}" title="#{bundle2.CreateProveedoresTitle_fechaCaducidadAutorizacion}"  showOn="button"/>
+                        <p:outputLabel for="autorizacion" value="Autorizacion" />
+                        <p:selectOneMenu id="autorizacion" required="true" value="#{proveedoresHelper.auxAutorizacion}" converter="autorizacionesConverter">
+                            <f:selectItem itemLabel="Selecione..."/>
+                            <f:selectItems value="#{proveedoresHelper.autorizaciones}" var="auto" 
+                                           itemValue="#{auto}"
+                                           itemLabel="#{auto.numeroAutorizacion}"/>
+                            <p:ajax event="change" update="@this" />
+                        </p:selectOneMenu>
                     </h:panelGrid>
 
                 </h:panelGroup>
-                <div style=" width: 30%; margin-left: 40%; margin-top: 5%; margin-bottom: 5%;">
+                <div style=" width: 30%; margin-left: 10%; margin-top: 5%; margin-bottom: 5%;">
                     <p:commandButton id="bGuardar" disabled="#{!proveedoresHelper.validaciones}" actionListener="#{proveedoresHelper.guadar}" 
                                      value="Guardar" 
                                      update="display,
@@ -66,7 +67,7 @@
 
                     </p:commandButton>
 
-                    <p:commandButton value="Cancelar" onclick="PF('ProveedoresCreateDialog').hide()"/>
+                    
                 </div>
             </h:form>
             <ui:include src="lista_proveedores.xhtml"/>

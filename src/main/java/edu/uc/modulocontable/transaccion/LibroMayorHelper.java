@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package edu.uc.modulocontable.transaccion;
 
 import edu.uc.modulocontable.domain.entity.CuentaFacade;
@@ -12,6 +11,8 @@ import edu.uc.modulocontable.services.ejb.Cuenta;
 import edu.uc.modulocontable.services.ejb.Transaccion;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -25,7 +26,7 @@ import javax.faces.bean.RequestScoped;
 @ManagedBean(name = "libroMayorHelper")
 @RequestScoped
 public class LibroMayorHelper {
-    
+
     @ManagedProperty("#{beanLibroMayor}")
     private BeanLibroMayor beanLibroMayor;
     private List<Cuenta> cuentas;
@@ -60,6 +61,17 @@ public class LibroMayorHelper {
     public List<Cuenta> getListaCuentas() {
         cuentas = cuentaFacade.findAll();
         transacciones = transaccionFacade.getCuentas();
+        
+        HashSet<Integer> set = new HashSet();
+        List<Transaccion> tAux = new ArrayList<>();
+        for (Transaccion t : transacciones) {
+            if (!set.contains(t.getIdcodcuenta().getIdcodcuenta())) {
+                set.add(t.getIdcodcuenta().getIdcodcuenta());
+                tAux.add(t);
+            }
+        }
+        transacciones = tAux;
+
         List<Cuenta> cuentasAux = new ArrayList<>();
         for (Transaccion t : transacciones) {
             for (Cuenta cuenta : cuentas) {
@@ -294,7 +306,7 @@ public class LibroMayorHelper {
         total = getTotalUtilidadOperacional().subtract(getTotalGastosNoOperacionales());
         return total;
     }
-    
+
     public void getSumas() {
         BigDecimal auxFDebe = BigDecimal.ZERO;
         BigDecimal auxFHaber = BigDecimal.ZERO;
@@ -392,7 +404,6 @@ public class LibroMayorHelper {
         this.totalHaber = totalHaber;
     }
 
-
     public BeanLibroMayor getBeanLibroMayor() {
         return beanLibroMayor;
     }
@@ -401,4 +412,4 @@ public class LibroMayorHelper {
         this.beanLibroMayor = beanLibroMayor;
     }
 
-}   
+}

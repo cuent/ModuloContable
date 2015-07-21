@@ -7,29 +7,39 @@ package edu.uc.modulocontable.modelo2;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Juan Pablo
  */
 @Entity
-@Table(name = "autorizaciones", catalog = "contables", schema = "")
+@Table(name = "autorizaciones", catalog = "contables", schema = "", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"numero_autorizacion"})})
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Autorizaciones.findAll", query = "SELECT a FROM Autorizaciones a"),
-    @NamedQuery(name = "Autorizaciones.findByTipoDocumento", query = "SELECT a FROM Autorizaciones a WHERE a.tipoDocumento = :tipoDocumento"),
+    @NamedQuery(name = "Autorizaciones.findByIdAutorizacion", query = "SELECT a FROM Autorizaciones a WHERE a.idAutorizacion = :idAutorizacion"),
     @NamedQuery(name = "Autorizaciones.findByNumeroAutorizacion", query = "SELECT a FROM Autorizaciones a WHERE a.numeroAutorizacion = :numeroAutorizacion"),
     @NamedQuery(name = "Autorizaciones.findByEstablecimiento", query = "SELECT a FROM Autorizaciones a WHERE a.establecimiento = :establecimiento"),
     @NamedQuery(name = "Autorizaciones.findByPtoEmision", query = "SELECT a FROM Autorizaciones a WHERE a.ptoEmision = :ptoEmision"),
@@ -39,11 +49,11 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Autorizaciones.findByFechaCaducidad", query = "SELECT a FROM Autorizaciones a WHERE a.fechaCaducidad = :fechaCaducidad")})
 public class Autorizaciones implements Serializable {
     private static final long serialVersionUID = 1L;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "tipo_documento", nullable = false)
-    private int tipoDocumento;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id_autorizacion", nullable = false)
+    private Integer idAutorizacion;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 120)
@@ -79,17 +89,26 @@ public class Autorizaciones implements Serializable {
     @Column(name = "fecha_caducidad", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCaducidad;
+    @JoinColumn(name = "tipo_documento", referencedColumnName = "codigo_documento", nullable = false)
+    @ManyToOne(optional = false)
+    private Documento tipoDocumento;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "autorizacion")
+    private List<Proveedores> proveedoresList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "autorizacionSri")
+    private List<CabeceraFacturac> cabeceraFacturacList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "autorizacionSri")
+    private List<CabeceraFacturav> cabeceraFacturavList;
 
     public Autorizaciones() {
     }
 
-    public Autorizaciones(String numeroAutorizacion) {
-        this.numeroAutorizacion = numeroAutorizacion;
+    public Autorizaciones(Integer idAutorizacion) {
+        this.idAutorizacion = idAutorizacion;
     }
 
-    public Autorizaciones(String numeroAutorizacion, int tipoDocumento, String establecimiento, String ptoEmision, String numeroInicialDocumento, String numeroFinalDocumento, String numeroActual, Date fechaCaducidad) {
+    public Autorizaciones(Integer idAutorizacion, String numeroAutorizacion, String establecimiento, String ptoEmision, String numeroInicialDocumento, String numeroFinalDocumento, String numeroActual, Date fechaCaducidad) {
+        this.idAutorizacion = idAutorizacion;
         this.numeroAutorizacion = numeroAutorizacion;
-        this.tipoDocumento = tipoDocumento;
         this.establecimiento = establecimiento;
         this.ptoEmision = ptoEmision;
         this.numeroInicialDocumento = numeroInicialDocumento;
@@ -98,12 +117,12 @@ public class Autorizaciones implements Serializable {
         this.fechaCaducidad = fechaCaducidad;
     }
 
-    public int getTipoDocumento() {
-        return tipoDocumento;
+    public Integer getIdAutorizacion() {
+        return idAutorizacion;
     }
 
-    public void setTipoDocumento(int tipoDocumento) {
-        this.tipoDocumento = tipoDocumento;
+    public void setIdAutorizacion(Integer idAutorizacion) {
+        this.idAutorizacion = idAutorizacion;
     }
 
     public String getNumeroAutorizacion() {
@@ -162,10 +181,45 @@ public class Autorizaciones implements Serializable {
         this.fechaCaducidad = fechaCaducidad;
     }
 
+    public Documento getTipoDocumento() {
+        return tipoDocumento;
+    }
+
+    public void setTipoDocumento(Documento tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
+    }
+
+    @XmlTransient
+    public List<Proveedores> getProveedoresList() {
+        return proveedoresList;
+    }
+
+    public void setProveedoresList(List<Proveedores> proveedoresList) {
+        this.proveedoresList = proveedoresList;
+    }
+
+    @XmlTransient
+    public List<CabeceraFacturac> getCabeceraFacturacList() {
+        return cabeceraFacturacList;
+    }
+
+    public void setCabeceraFacturacList(List<CabeceraFacturac> cabeceraFacturacList) {
+        this.cabeceraFacturacList = cabeceraFacturacList;
+    }
+
+    @XmlTransient
+    public List<CabeceraFacturav> getCabeceraFacturavList() {
+        return cabeceraFacturavList;
+    }
+
+    public void setCabeceraFacturavList(List<CabeceraFacturav> cabeceraFacturavList) {
+        this.cabeceraFacturavList = cabeceraFacturavList;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (numeroAutorizacion != null ? numeroAutorizacion.hashCode() : 0);
+        hash += (idAutorizacion != null ? idAutorizacion.hashCode() : 0);
         return hash;
     }
 
@@ -176,7 +230,7 @@ public class Autorizaciones implements Serializable {
             return false;
         }
         Autorizaciones other = (Autorizaciones) object;
-        if ((this.numeroAutorizacion == null && other.numeroAutorizacion != null) || (this.numeroAutorizacion != null && !this.numeroAutorizacion.equals(other.numeroAutorizacion))) {
+        if ((this.idAutorizacion == null && other.idAutorizacion != null) || (this.idAutorizacion != null && !this.idAutorizacion.equals(other.idAutorizacion))) {
             return false;
         }
         return true;
@@ -184,7 +238,7 @@ public class Autorizaciones implements Serializable {
 
     @Override
     public String toString() {
-        return "edu.uc.modulocontable.modelo2.Autorizaciones[ numeroAutorizacion=" + numeroAutorizacion + " ]";
+        return "nuevo.paquete.modeloNuevo.Autorizaciones[ idAutorizacion=" + idAutorizacion + " ]";
     }
     
 }

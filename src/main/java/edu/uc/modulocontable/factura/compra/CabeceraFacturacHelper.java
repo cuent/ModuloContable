@@ -69,6 +69,9 @@ public class CabeceraFacturacHelper implements Serializable {
 
     public void iniciarNuevo() {
         this.setSelected(new CabeceraFacturac());
+        getSelected().setFecha(new Date());
+        int numFactura = ejbFacade.findAll().size() + 1;
+        getSelected().setNumeroFactura(String.valueOf(numFactura));
         detalles = new ArrayList<DetalleFacturac>();
         selectedDetalle = new DetalleFacturac();
     }
@@ -211,39 +214,50 @@ public class CabeceraFacturacHelper implements Serializable {
     public void gardarFactura(ActionEvent event) {
 
         if (getSelected() != null) {
+            if (Integer.parseInt(getSelected().getNumeroFactura())
+                    >= Integer.parseInt(getSelected().getAutorizacionSri().getNumeroInicialDocumento())
+                    && Integer.parseInt(getSelected().getNumeroFactura())
+                    <= Integer.parseInt(getSelected().getAutorizacionSri().getNumeroFinalDocumento())) {
 
-            if (getSelected().getCodigoProveedor() != null) {
+                if (getSelected().getCodigoProveedor() != null) {
 
-                if (getSelected().getFormaPago() != null) {
-                    this.getSelected().setFecha(new Date());
-                    ejbFacade.create(this.getSelected());
-                    List< CabeceraFacturac> listac = ejbFacade.buscaxNumeroFac(getSelected().getNumeroFactura());
-                    if (listac != null && listac.size() > 0) {
-                        CabeceraFacturac c = listac.get(0);
-                        for (DetalleFacturac d : detalles) {
-                            productoFacade.edit(d.getProducto());
+                    if (getSelected().getFormaPago() != null) {
+                        this.getSelected().setFecha(new Date());
+                        ejbFacade.create(this.getSelected());
+                        List< CabeceraFacturac> listac = ejbFacade.buscaxNumeroFac(getSelected().getNumeroFactura());
+                        if (listac != null && listac.size() > 0) {
+                            CabeceraFacturac c = listac.get(0);
+                            for (DetalleFacturac d : detalles) {
+                                d.getProducto().setStock(d.getCantidad() + d.getProducto().getStock());
+                                productoFacade.edit(d.getProducto());
+                            }
+
+                            for (DetalleFacturac d : detalles) {
+                                System.out.println("codigo factura # " + c.getCodigoFactura());
+                                System.out.println("codigo producto: " + d.getProducto().getCodigoProducto());
+                                d.setDetalleFacturacPK(new DetalleFacturacPK(c.getCodigoFactura(), d.getProducto().getCodigoProducto()));
+                                detalleFCFacade.create(d);
+                            }
+                            //Sesion.redireccionaPagina(ResourceBundle.getBundle("/MyBundle").getString("listaFacturasc"));
+                            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ustede ha realizado una compra!", "Factura Generada");
+                            FacesContext.getCurrentInstance().addMessage(null, msg);
                         }
 
-                        for (DetalleFacturac d : detalles) {
-                            System.out.println("codigo fac" + c.getCodigoFactura());
-                            System.out.println("codigo pro" + d.getProducto().getCodigoProducto());
-                            d.setDetalleFacturacPK(new DetalleFacturacPK(c.getCodigoFactura(), d.getProducto().getCodigoProducto()));
-                            detalleFCFacade.create(d);
-                        }
-                        Sesion.redireccionaPagina(ResourceBundle.getBundle("/MyBundle").getString("listaFacturasc"));
-
+                    } else {
+                        msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Informacion", "Carge forma Pago");
+                        FacesContext.getCurrentInstance().addMessage(null, msg);
                     }
 
                 } else {
-                    msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Informacion", "Carge forma Pago");
+                    msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Informacion", "Carge un Proveedor");
                     FacesContext.getCurrentInstance().addMessage(null, msg);
                 }
-
             } else {
-                msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Informacion", "Carge un Proveedor");
+                msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "ADVERTENCIA", "Revise el rango de facturas ["
+                        + getSelected().getAutorizacionSri().getNumeroInicialDocumento() + ","
+                        + getSelected().getAutorizacionSri().getNumeroFinalDocumento() + "]");
                 FacesContext.getCurrentInstance().addMessage(null, msg);
             }
-
         } else {
 
             msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Informacion", "select en null");
@@ -292,7 +306,8 @@ public class CabeceraFacturacHelper implements Serializable {
         boolean isTarifaCero = false;
 
         for (DetalleFacturac detalle : detalles) {
-            detalle.getProducto().setStock(detalle.getCantidad());
+
+            //detalle.getProducto().setStock(detalle.getCantidad());
             detalle.setPrecioUnitario(detalle.getProducto().getPrecio());
             detalle.setTotal(detalle.getCantidad() * detalle.getProducto().getPrecio());
 

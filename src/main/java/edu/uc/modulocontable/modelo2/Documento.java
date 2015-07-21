@@ -6,7 +6,9 @@
 package edu.uc.modulocontable.modelo2;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,10 +16,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -42,6 +46,8 @@ public class Documento implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "docuemnto", nullable = false, length = 45)
     private String docuemnto;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoDocumento")
+    private List<Autorizaciones> autorizacionesList;
 
     public Documento() {
     }
@@ -71,6 +77,15 @@ public class Documento implements Serializable {
         this.docuemnto = docuemnto;
     }
 
+    @XmlTransient
+    public List<Autorizaciones> getAutorizacionesList() {
+        return autorizacionesList;
+    }
+
+    public void setAutorizacionesList(List<Autorizaciones> autorizacionesList) {
+        this.autorizacionesList = autorizacionesList;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -93,7 +108,7 @@ public class Documento implements Serializable {
 
     @Override
     public String toString() {
-        return "edu.uc.modulocontable.modelo2.Documento[ codigoDocumento=" + codigoDocumento + " ]";
+        return "nuevo.paquete.modeloNuevo.Documento[ codigoDocumento=" + codigoDocumento + " ]";
     }
     
 }

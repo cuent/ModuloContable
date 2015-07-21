@@ -5,8 +5,11 @@
  */
 package edu.uc.modulocontable.negocio.kardex;
 
+import edu.uc.modulocontable.general.GenerarFacturaKardex;
 import edu.uc.modulocontable.modelo2.Kardex;
+import edu.uc.modulocontable.modelo2.Producto;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -25,9 +28,11 @@ public class GenerarKardex {
     private List<KardexFIFO> inventarioTotalFIFO = new ArrayList();
     private List<KardexLIFO> inventarioTotalLIFO = new ArrayList();
     private List<KardexPonderado> inventarioTotalPonderado = new ArrayList();
+    private Producto producto;
 
-    public GenerarKardex(List<Kardex> movimientos) {
+    public GenerarKardex(List<Kardex> movimientos, Producto producto) {
         this.movimientos = movimientos;
+        this.producto = producto;
     }
 
     public Inventario getInventarioPonderado() {
@@ -86,6 +91,14 @@ public class GenerarKardex {
         this.inventarioTotalFIFO = inventarioTotalFIFO;
     }
 
+    public Producto getProducto() {
+        return producto;
+    }
+
+    public void setProducto(Producto producto) {
+        this.producto = producto;
+    }
+
     public void generarLIFO() {
         KardexLIFO fifo = null;
         Inventario inventario;
@@ -98,29 +111,30 @@ public class GenerarKardex {
             } else if (movimiento.getTipo().equalsIgnoreCase("salida")) {
                 inventario = inventarioLIFO.pop();
                 if (movimiento.getCantidad() == inventario.getTotalCantidad()) {
-                    salidas.add(new SalidaKardex(inventario.getTotalCantidad(), inventario.getTotalCosto(), inventario.getTotalSubtotal()));
+                    salidas.add(new SalidaKardex(inventario.getTotalCantidad(), inventario.getTotalCosto(), Math.round(inventario.getTotalSubtotal() * 100.0) / 100.0));
                 } else if (movimiento.getCantidad() < inventario.getTotalCantidad()) {
                     inventario.setTotalCantidad(inventario.getTotalCantidad() - movimiento.getCantidad());
-                    inventario.setTotalSubtotal(inventario.getTotalCosto() * inventario.getTotalCantidad());
-                    salidas.add(new SalidaKardex(movimiento.getCantidad(), inventario.getTotalCosto(), movimiento.getCantidad() * inventario.getTotalCosto()));
-                    inventarioLIFO.add(0, inventario);
+                    inventario.setTotalSubtotal(Math.round((inventario.getTotalCosto() * inventario.getTotalCantidad()) * 100.0) / 100.0);
+                    salidas.add(new SalidaKardex(movimiento.getCantidad(), inventario.getTotalCosto(), Math.round((movimiento.getCantidad() * inventario.getTotalCosto()) * 100.0) / 100.0));
+                    inventarioLIFO.add(inventario);
+                    //inventarioLIFO.add(0, inventario);
                 } else if (movimiento.getCantidad() > inventario.getTotalCantidad()) {
                     int unidades = movimiento.getCantidad() - inventario.getTotalCantidad();
-                    salidas.add(new SalidaKardex(inventario.getTotalCantidad(), inventario.getTotalCosto(), inventario.getTotalSubtotal()));
+                    salidas.add(new SalidaKardex(inventario.getTotalCantidad(), inventario.getTotalCosto(), Math.round(inventario.getTotalSubtotal() * 100.0) / 100.0));
                     while (true) {
                         if (unidades > 0) {
                             inventario = inventarioLIFO.pop();
                             if (unidades <= inventario.getTotalCantidad()) {
                                 salidas.add(new SalidaKardex(unidades, inventario.getTotalCosto(), unidades * inventario.getTotalCosto()));
                             } else {
-                                salidas.add(new SalidaKardex(inventario.getTotalCantidad(), inventario.getTotalCosto(), inventario.getTotalSubtotal()));
+                                salidas.add(new SalidaKardex(inventario.getTotalCantidad(), inventario.getTotalCosto(), Math.round(inventario.getTotalSubtotal() * 100.0) / 100.0));
                             }
                             unidades -= inventario.getTotalCantidad();
                         } else if (unidades < 0) {
                             unidades *= -1;
                             inventario.setTotalCantidad(unidades);
-                            inventario.setTotalSubtotal(inventario.getTotalCosto() * inventario.getTotalCantidad());
-                            inventarioLIFO.add(0, inventario);
+                            inventario.setTotalSubtotal(Math.round((inventario.getTotalCosto() * inventario.getTotalCantidad()) * 100.0) / 100.0);
+                            inventarioLIFO.add(inventario);
                             break;
                         } else if (unidades == 0) {
                             break;
@@ -131,6 +145,16 @@ public class GenerarKardex {
                 fifo = new KardexLIFO(movimiento.getFecha(), movimiento.getTipo(), movimiento.getDetalle(), movimiento.getCantidad(), movimiento.getCosto(), movimiento.getSubtotal(), i, salidas);
             }
             inventarioTotalLIFO.add(fifo);
+        }
+    }
+
+    public void descargarFactura() {
+        if (!getInventarioTotalLIFO().isEmpty()) {
+            String nombre = "Kardex_Inventario_LIFO_" + new Date().toString() + ".pdf";
+            String ruta = "/Users/cuent/Downloads/" + nombre;
+
+            GenerarFacturaKardex generarPdf = new GenerarFacturaKardex();
+            generarPdf.generarFactura(getInventarioTotalLIFO(), getProducto(), ruta);
         }
     }
 

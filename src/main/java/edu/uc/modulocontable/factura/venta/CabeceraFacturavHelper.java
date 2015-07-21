@@ -157,7 +157,7 @@ public class CabeceraFacturavHelper implements Serializable {
 
     }
 
-    public void buscarCliente() {
+        public void buscarCliente() {
         if (identificacionCliente != null && identificacionCliente.length() > 0) {
             List<Cliente> listaC = ejeClienteFacade.buscaCliente(getIdentificacionCliente());
             if (listaC != null && listaC.size() > 0) {
@@ -175,7 +175,7 @@ public class CabeceraFacturavHelper implements Serializable {
             getSelected().setNumeroFactura(Integer.parseInt(getAutorizacion().getNumeroActual()) + 1);
             getSelected().setPtoEmision(getAutorizacion().getPtoEmision());
             getSelected().setEstablecimiento(getAutorizacion().getEstablecimiento());
-            getSelected().setAutorizacionSri(getAutorizacion().getNumeroAutorizacion());
+            getSelected().setAutorizacionSri(autorizacion);
             getSelected().setFecha(new Date());
         }
     }

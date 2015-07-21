@@ -40,7 +40,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "CabeceraFacturac.findByCodigoFactura", query = "SELECT c FROM CabeceraFacturac c WHERE c.codigoFactura = :codigoFactura"),
     @NamedQuery(name = "CabeceraFacturac.findByNumeroFactura", query = "SELECT c FROM CabeceraFacturac c WHERE c.numeroFactura = :numeroFactura"),
     @NamedQuery(name = "CabeceraFacturac.findByFecha", query = "SELECT c FROM CabeceraFacturac c WHERE c.fecha = :fecha"),
-    @NamedQuery(name = "CabeceraFacturac.findByAutorizacionSri", query = "SELECT c FROM CabeceraFacturac c WHERE c.autorizacionSri = :autorizacionSri"),
     @NamedQuery(name = "CabeceraFacturac.findByEstablecimiento", query = "SELECT c FROM CabeceraFacturac c WHERE c.establecimiento = :establecimiento"),
     @NamedQuery(name = "CabeceraFacturac.findByPtoEmision", query = "SELECT c FROM CabeceraFacturac c WHERE c.ptoEmision = :ptoEmision"),
     @NamedQuery(name = "CabeceraFacturac.findBySubtotal", query = "SELECT c FROM CabeceraFacturac c WHERE c.subtotal = :subtotal"),
@@ -50,7 +49,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "CabeceraFacturac.findByIva", query = "SELECT c FROM CabeceraFacturac c WHERE c.iva = :iva"),
     @NamedQuery(name = "CabeceraFacturac.findByTotal", query = "SELECT c FROM CabeceraFacturac c WHERE c.total = :total")})
 public class CabeceraFacturac implements Serializable {
-    public static final String findByNumeroFactura="CabeceraFacturac.findByNumeroFactura";
+    public static final String  findByNumeroFactura="CabeceraFacturac.findByNumeroFactura";
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -67,20 +66,11 @@ public class CabeceraFacturac implements Serializable {
     @Column(name = "fecha", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 120)
-    @Column(name = "autorizacion_sri", nullable = false, length = 120)
-    private String autorizacionSri;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "establecimiento", nullable = false, length = 45)
+    @Size(max = 45)
+    @Column(name = "establecimiento", length = 45)
     private String establecimiento;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "pto_emision", nullable = false, length = 45)
+    @Size(max = 45)
+    @Column(name = "pto_emision", length = 45)
     private String ptoEmision;
     @Basic(optional = false)
     @NotNull
@@ -109,8 +99,11 @@ public class CabeceraFacturac implements Serializable {
     private List<DetalleFacturac> detalleFacturacList;
     @OneToMany(mappedBy = "codigoFacturac")
     private List<Kardex> kardexList;
-    @JoinColumn(name = "forma_pago", referencedColumnName = "codigo_formap", nullable = false)
+    @JoinColumn(name = "autorizacion_sri", referencedColumnName = "id_autorizacion", nullable = false)
     @ManyToOne(optional = false)
+    private Autorizaciones autorizacionSri;
+    @JoinColumn(name = "forma_pago", referencedColumnName = "codigo_formap")
+    @ManyToOne
     private FormasPago formaPago;
     @JoinColumn(name = "codigo_proveedor", referencedColumnName = "codigo_proveedores", nullable = false)
     @ManyToOne(optional = false)
@@ -123,13 +116,10 @@ public class CabeceraFacturac implements Serializable {
         this.codigoFactura = codigoFactura;
     }
 
-    public CabeceraFacturac(Integer codigoFactura, String numeroFactura, Date fecha, String autorizacionSri, String establecimiento, String ptoEmision, double subtotal, double subtotalBase0, double subtotalBaseIva, double iva, double total) {
+    public CabeceraFacturac(Integer codigoFactura, String numeroFactura, Date fecha, double subtotal, double subtotalBase0, double subtotalBaseIva, double iva, double total) {
         this.codigoFactura = codigoFactura;
         this.numeroFactura = numeroFactura;
         this.fecha = fecha;
-        this.autorizacionSri = autorizacionSri;
-        this.establecimiento = establecimiento;
-        this.ptoEmision = ptoEmision;
         this.subtotal = subtotal;
         this.subtotalBase0 = subtotalBase0;
         this.subtotalBaseIva = subtotalBaseIva;
@@ -159,14 +149,6 @@ public class CabeceraFacturac implements Serializable {
 
     public void setFecha(Date fecha) {
         this.fecha = fecha;
-    }
-
-    public String getAutorizacionSri() {
-        return autorizacionSri;
-    }
-
-    public void setAutorizacionSri(String autorizacionSri) {
-        this.autorizacionSri = autorizacionSri;
     }
 
     public String getEstablecimiento() {
@@ -251,6 +233,14 @@ public class CabeceraFacturac implements Serializable {
         this.kardexList = kardexList;
     }
 
+    public Autorizaciones getAutorizacionSri() {
+        return autorizacionSri;
+    }
+
+    public void setAutorizacionSri(Autorizaciones autorizacionSri) {
+        this.autorizacionSri = autorizacionSri;
+    }
+
     public FormasPago getFormaPago() {
         return formaPago;
     }
@@ -289,7 +279,7 @@ public class CabeceraFacturac implements Serializable {
 
     @Override
     public String toString() {
-        return "edu.uc.modulocontable.modelo2.CabeceraFacturac[ codigoFactura=" + codigoFactura + " ]";
+        return "nuevo.paquete.modeloNuevo.CabeceraFacturac[ codigoFactura=" + codigoFactura + " ]";
     }
     
 }

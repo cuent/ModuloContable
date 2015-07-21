@@ -25,7 +25,7 @@ public class Titulo2 extends Elemento {
     }
 
     public void getElementoRojo() {
-        setFont(new Font(getFont_arial_negrita().getBaseFont(), 10, Font.BOLD,new BaseColor(29,127, 32)));
+        setFont(new Font(getFont_arial_negrita().getBaseFont(), 10, Font.BOLD,new BaseColor(255,3, 3)));
     }
 
     public void CambiarPosicion(float tamano) {
