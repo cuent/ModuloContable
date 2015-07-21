@@ -6,7 +6,7 @@
     <ui:composition template="../WEB-INF/templates/plantila.xhtml">
         <ui:define name="content">
             <h:form>
-                <p:dataTable var="cuentas" value="#{transaccionHelper.listaCuentas}">
+                <p:dataTable var="cuentas" value="#{libroMayorHelper.listaCuentas}">
                     <p:columnGroup type="header">
                         <p:row>
                             <p:column rowspan="3" headerText="Cuenta" />
@@ -41,10 +41,10 @@
                     <p:columnGroup type="footer">
                         <p:row>
                             <p:column colspan="1" style="text-align:right" footerText="Totales:"/>
-                            <p:column footerText="$#{transaccionHelper.totalDebe}" />
-                            <p:column footerText="$#{transaccionHelper.totalHaber}" />
-                            <p:column footerText="$#{transaccionHelper.totalDeudor}" />
-                            <p:column footerText="$#{transaccionHelper.totalAcreedor}" />
+                            <p:column footerText="$#{libroMayorHelper.totalDebe}" />
+                            <p:column footerText="$#{libroMayorHelper.totalHaber}" />
+                            <p:column footerText="$#{libroMayorHelper.totalDeudor}" />
+                            <p:column footerText="$#{libroMayorHelper.totalAcreedor}" />
                         </p:row>
                     </p:columnGroup>
                 </p:dataTable>

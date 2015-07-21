@@ -6,7 +6,7 @@
     <ui:composition template="../WEB-INF/templates/plantila.xhtml">
         <ui:define name="content">
             <h:form>
-                <p:dataTable var="cuentas" value="#{transaccionHelper.listaCuentasIngresosOperacionales}">
+                <p:dataTable var="cuentas" value="#{libroMayorHelper.listaCuentasIngresosOperacionales}">
                     <p:columnGroup type="header">
                         <p:row>                            
                             <p:column colspan="5" headerText="Estado de Resultados" />
@@ -15,7 +15,7 @@
                             <p:column colspan="2" headerText="INGRESOS OPERACIONALES" />
                             <p:column headerText="" />
                             <p:column headerText="" />
-                            <p:column headerText="$#{transaccionHelper.totalIngresosOperacionales}" />
+                            <p:column headerText="$#{libroMayorHelper.totalIngresosOperacionales}" />
                         </p:row>  
                     </p:columnGroup>
                     <p:column/>
@@ -29,13 +29,13 @@
                     <p:column/>
                 </p:dataTable>
                 
-                <p:dataTable var="cuentas" value="#{transaccionHelper.listaCuentasGastosOperacionales}">
+                <p:dataTable var="cuentas" value="#{libroMayorHelper.listaCuentasGastosOperacionales}">
                     <p:columnGroup type="header">                        
                         <p:row>
                             <p:column colspan="2" headerText="(-)GASTOS OPERACIONALES" />
                             <p:column headerText="" />
                             <p:column headerText="" />
-                            <p:column headerText="$#{transaccionHelper.totalGastosOperacionales}" />                            
+                            <p:column headerText="$#{libroMayorHelper.totalGastosOperacionales}" />                            
                         </p:row>  
                     </p:columnGroup>
                     <p:column/>
@@ -52,18 +52,18 @@
                             <p:column colspan="2" style="text-align:right" footerText="= UTILIDAD OPERACIONAL"/>
                             <p:column footerText="" />
                             <p:column footerText="" />
-                            <p:column footerText="$#{transaccionHelper.totalUtilidadOperacional}" />
+                            <p:column footerText="$#{libroMayorHelper.totalUtilidadOperacional}" />
                         </p:row>
                     </p:columnGroup>
                 </p:dataTable>
                 
-                <p:dataTable var="cuentas" value="#{transaccionHelper.listaCuentasGastosNoOperacionales}">
+                <p:dataTable var="cuentas" value="#{libroMayorHelper.listaCuentasGastosNoOperacionales}">
                     <p:columnGroup type="header">                        
                         <p:row>
                             <p:column colspan="2" headerText="(+/-) OTRAS RENTAS Y GASTOS" />
                             <p:column headerText="" />
                             <p:column headerText="" />
-                            <p:column headerText="$#{transaccionHelper.totalGastosNoOperacionales}" />
+                            <p:column headerText="$#{libroMayorHelper.totalGastosNoOperacionales}" />
                         </p:row>  
                     </p:columnGroup>
                     <p:column/>
@@ -80,7 +80,7 @@
                             <p:column colspan="2" style="text-align:right" footerText="= UTILIDAD DEL EJERCICIO"/>                            
                             <p:column footerText="" />
                             <p:column footerText="" />
-                            <p:column footerText="$#{transaccionHelper.totalUtilidadEjercicio}" />
+                            <p:column footerText="$#{libroMayorHelper.totalUtilidadEjercicio}" />
                         </p:row>
                     </p:columnGroup>
                 </p:dataTable> 

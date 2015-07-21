@@ -6,7 +6,7 @@
     <ui:composition template="../WEB-INF/templates/plantila.xhtml">
         <ui:define name="content">
             <h:form>
-                <p:dataTable var="cuentas" value="#{transaccionHelper.listaCuentasCorrientes}">
+                <p:dataTable var="cuentas" value="#{libroMayorHelper.listaCuentasCorrientes}">
                     <p:columnGroup type="header">
                         <p:row>                            
                             <p:column colspan="5" headerText="Balance de Resultados" />
@@ -23,7 +23,7 @@
                             <p:column headerText="CORRIENTE" />
                             <p:column headerText="" />
                             <p:column headerText="" />
-                            <p:column headerText="$#{transaccionHelper.totalCorrientes}" />                            
+                            <p:column headerText="$#{libroMayorHelper.totalCorrientes}" />                            
                         </p:row>  
                     </p:columnGroup>
                     <p:column/>
@@ -37,14 +37,14 @@
                     <p:column/>
                 </p:dataTable>
 
-                <p:dataTable var="cuentas" value="#{transaccionHelper.listaCuentasNoCorrientes}">
+                <p:dataTable var="cuentas" value="#{libroMayorHelper.listaCuentasNoCorrientes}">
                     <p:columnGroup type="header">                        
                         <p:row>
                             <p:column headerText="" />
                             <p:column headerText="NO CORRIENTE" />
                             <p:column headerText="" />
                             <p:column headerText="" />
-                            <p:column headerText="$#{transaccionHelper.totalNoCorrientes}" />                            
+                            <p:column headerText="$#{libroMayorHelper.totalNoCorrientes}" />                            
                         </p:row>  
                     </p:columnGroup>
                     <p:column/>
@@ -62,12 +62,12 @@
                             <p:column footerText="" />
                             <p:column footerText="" />
                             <p:column footerText="" />
-                            <p:column footerText="$#{transaccionHelper.totalActivo}" />
+                            <p:column footerText="$#{libroMayorHelper.totalActivo}" />
                         </p:row>
                     </p:columnGroup>
                 </p:dataTable>
 
-                <p:dataTable var="cuentas" value="#{transaccionHelper.listaCuentasPasivo}">
+                <p:dataTable var="cuentas" value="#{libroMayorHelper.listaCuentasPasivo}">
                     <p:columnGroup type="header">                        
                         <p:row>
                             <p:column headerText="PASIVO" />
@@ -81,7 +81,7 @@
                             <p:column headerText="CORRIENTE" />
                             <p:column headerText="" />
                             <p:column headerText="" />
-                            <p:column headerText="$#{transaccionHelper.totalPasivo}" />                            
+                            <p:column headerText="$#{libroMayorHelper.totalPasivo}" />                            
                         </p:row>  
                     </p:columnGroup>
                     <p:column/>
@@ -99,26 +99,26 @@
                             <p:column footerText="" />
                             <p:column footerText="" />
                             <p:column footerText="" />
-                            <p:column footerText="$#{transaccionHelper.totalPasivo}" />
+                            <p:column footerText="$#{libroMayorHelper.totalPasivo}" />
                         </p:row>
                     </p:columnGroup>
                 </p:dataTable> 
 
-                <p:dataTable var="cuentas" value="#{transaccionHelper.listaCuentasPatrimonio}">
+                <p:dataTable var="cuentas" value="#{libroMayorHelper.listaCuentasPatrimonio}">
                     <p:columnGroup type="header">                        
                         <p:row>
                             <p:column headerText="PATRIMONIO" />
                             <p:column headerText="" />
                             <p:column headerText="" />
                             <p:column headerText="" />
-                            <p:column headerText="$#{transaccionHelper.totalPatrimonio}" />                            
+                            <p:column headerText="$#{libroMayorHelper.totalPatrimonio}" />                            
                         </p:row>    
                         <p:row>
                             <p:column headerText="" />
                             <p:column headerText="" />
                             <p:column headerText="Utilidad" />
                             <p:column headerText="" />
-                            <p:column headerText="$#{transaccionHelper.totalUtilidadEjercicio}" />                            
+                            <p:column headerText="$#{libroMayorHelper.totalUtilidadEjercicio}" />                            
                         </p:row>
                     </p:columnGroup>                    
                     <p:column/>
@@ -136,7 +136,7 @@
                             <p:column footerText="" />
                             <p:column footerText="" />
                             <p:column footerText="" />
-                            <p:column footerText="$#{transaccionHelper.totalPasivoPatrimonio}" />
+                            <p:column footerText="$#{libroMayorHelper.totalPasivoPatrimonio}" />
                         </p:row>
                     </p:columnGroup>
                 </p:dataTable>

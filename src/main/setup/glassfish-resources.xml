@@ -6,7 +6,7 @@
         <property name="portNumber" value="3306"/>
         <property name="databaseName" value="contables"/>
         <property name="User" value="root"/>
-        <property name="Password" value="43844384"/>
+        <property name="Password" value="bases"/>
         <property name="URL" value="jdbc:mysql://localhost:3306/contables?zeroDateTimeBehavior=convertToNull"/>
         <property name="driverClass" value="com.mysql.jdbc.Driver"/>
     </jdbc-connection-pool>
