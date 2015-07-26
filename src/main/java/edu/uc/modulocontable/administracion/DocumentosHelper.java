@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.uc.modulocontable.factura.venta;
+package edu.uc.modulocontable.administracion;
 
-import edu.uc.modulocontable.facade.FormasPagoFacade;
-import edu.uc.modulocontable.modelo2.FormasPago;
+import edu.uc.modulocontable.facade.DocumentoFacade;
+import edu.uc.modulocontable.modelo2.Documento;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -22,40 +22,40 @@ import org.primefaces.event.RowEditEvent;
  *
  * @author cuent
  */
-@ManagedBean(name = "formasPagoHelper")
+@ManagedBean(name = "documentHelper")
 @SessionScoped
-public class FormasPagoHelper implements Serializable {
+public class DocumentosHelper implements Serializable {
 
     @EJB
-    private FormasPagoFacade ejbFacade;
-    private List<FormasPago> items;
-    private FormasPago selected;
+    private DocumentoFacade ejbFacade;
+    private List<Documento> items;
+    private Documento selected;
     FacesMessage msg;
+
+    public void iniciarNuevo() {
+        this.setSelected(new Documento());
+        this.setItems(ejbFacade.findAll());
+    }
 
     @PostConstruct
     public void init() {
         items = ejbFacade.findAll();
     }
 
-    public List<FormasPago> getItems() {
-        return items;
-    }
-
-    public void setItems(List<FormasPago> items) {
-        this.items = items;
-    }
-
-    public FormasPago getSelected() {
+    public Documento getSelected() {
         return selected;
     }
 
-    public void setSelected(FormasPago selected) {
+    public void setSelected(Documento selected) {
         this.selected = selected;
     }
 
-    public void iniciarNuevo() {
-        this.setSelected(new FormasPago());
-        this.setItems(ejbFacade.findAll());
+    public List<Documento> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Documento> items) {
+        this.items = items;
     }
 
     public void guardarNuevo(ActionEvent event) {
@@ -67,12 +67,12 @@ public class FormasPagoHelper implements Serializable {
     }
 
     public void onRowEdit(RowEditEvent event) {
-        if ((FormasPago) event.getObject() != null) {
-            ejbFacade.edit((FormasPago) event.getObject());
-            msg = new FacesMessage("Informacion", "La Forma de Pago ha sido Modificado");
+        if ((Documento) event.getObject() != null) {
+            ejbFacade.edit((Documento) event.getObject());
+            msg = new FacesMessage("Informacion", "El Documento ha sido Modificado");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } else {
-            msg = new FacesMessage("Error", "La Forma de Pago no pudo ser modificado");
+            msg = new FacesMessage("Error", "El Documento no pudo ser modificado");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
 
@@ -83,9 +83,9 @@ public class FormasPagoHelper implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
-    public void eliminar(FormasPago impuesto) {
-        if (impuesto != null) {
-            ejbFacade.remove(impuesto);
+    public void eliminar(Documento documento) {
+        if (documento != null) {
+            ejbFacade.remove(documento);
             this.setItems(ejbFacade.findAll());
 
         }

@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.uc.modulocontable.factura.venta;
+package edu.uc.modulocontable.administracion;
 
-import edu.uc.modulocontable.facade.ImpuestoFacade;
-import edu.uc.modulocontable.modelo2.Impuesto;
+import edu.uc.modulocontable.facade.AutorizacionesFacade;
+import edu.uc.modulocontable.modelo2.Autorizaciones;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -22,40 +22,44 @@ import org.primefaces.event.RowEditEvent;
  *
  * @author cuent
  */
-@ManagedBean(name = "impuestoHelper")
+@ManagedBean(name = "autorizacionesHelper")
 @SessionScoped
-public class ImpuestoHelper implements Serializable {
+public class AutorizacionesHelper implements Serializable {
 
     @EJB
-    private ImpuestoFacade ejbFacade;
-    private List<Impuesto> items;
-    private Impuesto selected;
+    private AutorizacionesFacade ejbFacade;
+    private List<Autorizaciones> items;
+    private Autorizaciones selected;
+    private Date fechaCaducidad;
     FacesMessage msg;
 
-    @PostConstruct
-    public void init() {
-        items = ejbFacade.findAll();
+    public Date getFechaCaducidad() {
+        return fechaCaducidad;
     }
 
-    public List<Impuesto> getItems() {
-        return items;
-    }
-
-    public void setItems(List<Impuesto> items) {
-        this.items = items;
+    public void setFechaCaducidad(Date fechaCaducidad) {
+        this.fechaCaducidad = fechaCaducidad;
     }
 
     public void iniciarNuevo() {
-        this.setSelected(new Impuesto());
+        this.setSelected(new Autorizaciones());
         this.setItems(ejbFacade.findAll());
     }
 
-    public Impuesto getSelected() {
+    public Autorizaciones getSelected() {
         return selected;
     }
 
-    public void setSelected(Impuesto selected) {
+    public void setSelected(Autorizaciones selected) {
         this.selected = selected;
+    }
+
+    public List<Autorizaciones> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Autorizaciones> items) {
+        this.items = items;
     }
 
     public void guardarNuevo(ActionEvent event) {
@@ -67,12 +71,12 @@ public class ImpuestoHelper implements Serializable {
     }
 
     public void onRowEdit(RowEditEvent event) {
-        if ((Impuesto) event.getObject() != null) {
-            ejbFacade.edit((Impuesto) event.getObject());
-            msg = new FacesMessage("Informacion", "El Impuesto ha sido Modificado");
+        if ((Autorizaciones) event.getObject() != null) {
+            ejbFacade.edit((Autorizaciones) event.getObject());
+            msg = new FacesMessage("Informacion", "La Autorizacion ha sido Modificado");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } else {
-            msg = new FacesMessage("Error", "El Impuesto no pudo ser modificado");
+            msg = new FacesMessage("Error", "La Autorizacion no pudo ser modificado");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
 
@@ -83,9 +87,9 @@ public class ImpuestoHelper implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
-    public void eliminar(Impuesto impuesto) {
-        if (impuesto != null) {
-            ejbFacade.remove(impuesto);
+    public void eliminar(Autorizaciones autorizacion) {
+        if (autorizacion != null) {
+            ejbFacade.remove(autorizacion);
             this.setItems(ejbFacade.findAll());
 
         }

@@ -41,9 +41,15 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Cuenta.findByDescripcion", query = "SELECT c FROM Cuenta c WHERE c.descripcion = :descripcion"),
     @NamedQuery(name = "Cuenta.findByCategoria", query = "SELECT c FROM Cuenta c WHERE c.categoria = :categoria"),
     @NamedQuery(name = "Cuenta.findBySaldoinicial", query = "SELECT c FROM Cuenta c WHERE c.saldoinicial = :saldoinicial"),
+    @NamedQuery(name = "Cuentas.findByNumeroCategoria", query = "SELECT c FROM Cuenta c WHERE c.numcuenta like :numcuenta AND c.categoria = :categoria"),
     @NamedQuery(name = "Cuenta.findBySaldofinal", query = "SELECT c FROM Cuenta c WHERE c.saldofinal = :saldofinal")})
 public class Cuenta implements Serializable {
+
+    public static String findByNumcuenta = "Cuenta.findByNumcuenta";
+    public static String findByNumeroCategoria = "Cuentas.findByNumeroCategoria";
+
     private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -79,7 +85,7 @@ public class Cuenta implements Serializable {
     @JoinColumn(name = "idtipo", referencedColumnName = "idtipo")
     @ManyToOne(optional = false)
     private Tipo idtipo;
-    
+
     public Cuenta() {
     }
 
@@ -146,77 +152,72 @@ public class Cuenta implements Serializable {
     public List<Transaccion> getTransaccionList() {
         return transaccionList;
     }
-    
-    
+
     public void setTransaccionList(List<Transaccion> transaccionList) {
         this.transaccionList = transaccionList;
     }
-    
+
     public BigDecimal getTotalDebe() {
         BigDecimal totalDebe = new BigDecimal(BigInteger.ZERO);
-        for(int i=0; i<getTransaccionList().size();i++){
+        for (int i = 0; i < getTransaccionList().size(); i++) {
             totalDebe = totalDebe.add(getTransaccionList().get(i).getDebe());
         }
         return totalDebe;
     }
-    
+
     public BigDecimal getTotalHaber() {
         BigDecimal totalHaber = new BigDecimal(BigInteger.ZERO);
-        for(int i=0; i<getTransaccionList().size();i++){
+        for (int i = 0; i < getTransaccionList().size(); i++) {
             totalHaber = totalHaber.add(getTransaccionList().get(i).getHaber());
         }
         return totalHaber;
     }
-    
-    public String getTipo(){
+
+    public String getTipo() {
         BigDecimal total = new BigDecimal(BigInteger.ZERO);
         total = getTotalDebe().subtract(getTotalHaber());
-        if(total.doubleValue() < 0){
+        if (total.doubleValue() < 0) {
             System.out.println("Haber");
             return "Acreedor";
-        }
-        else{
+        } else {
             System.out.println("Debe");
             return "Deudor";
         }
     }
-    
-    public BigDecimal getAcreedor(){
+
+    public BigDecimal getAcreedor() {
         BigDecimal total = new BigDecimal(BigInteger.ZERO);
         BigDecimal cero = new BigDecimal(BigInteger.ZERO);
         total = getTotalDebe().subtract(getTotalHaber());
-        if(total.doubleValue() < 0){
+        if (total.doubleValue() < 0) {
             System.out.println("Haber");
             return total.negate();
-        }
-        else{
+        } else {
             System.out.println("Debe");
             return cero;
         }
     }
-    
-    public BigDecimal getDeudor(){
+
+    public BigDecimal getDeudor() {
         BigDecimal total = new BigDecimal(BigInteger.ZERO);
-        BigDecimal cero = new BigDecimal(BigInteger.ZERO);        
+        BigDecimal cero = new BigDecimal(BigInteger.ZERO);
         total = getTotalDebe().subtract(getTotalHaber());
-        if(total.doubleValue() < 0){
+        if (total.doubleValue() < 0) {
             System.out.println("Haber");
             return cero;
-        }
-        else{
+        } else {
             System.out.println("Debe");
-            return total;            
+            return total;
         }
     }
-    
-    public BigDecimal getDiferencia(){
+
+    public BigDecimal getDiferencia() {
         BigDecimal total = new BigDecimal(BigInteger.ZERO);
         total = getTotalDebe().subtract(getTotalHaber());
-        if(total.doubleValue() < 0){
+        if (total.doubleValue() < 0) {
             System.out.println("Haber");
             return total.negate();
-        }
-        else{
+        } else {
             System.out.println("Debe");
             return total;
         }
@@ -271,5 +272,5 @@ public class Cuenta implements Serializable {
     public String toString() {
         return "edu.uc.modulocontable.services.ejb.Cuenta[ idcodcuenta=" + idcodcuenta + " ]";
     }
-    
+
 }

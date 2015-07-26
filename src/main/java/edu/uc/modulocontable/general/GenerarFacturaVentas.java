@@ -262,7 +262,7 @@ public class GenerarFacturaVentas {
         imagen.setDir("/Users/cuent/Downloads/abc-logo.jpg");
         tablePanelIzquierdo.addCell(imagen.getImage());
 
-        titulo1.setTexto("Empresa ABC");
+        titulo1.setTexto("Ventas SA");
         tablePanelIzquierdo.addCell(titulo1.getElemento());
 
 //        tablaVertical.limpiar();
@@ -289,7 +289,7 @@ public class GenerarFacturaVentas {
 //        tablePanelIzquierdo.addCell(tablaVertical.getTabla());
         tablePanelInicial.addCell(tablePanelIzquierdo);
 
-        titulo2.setTexto("RUC: " + "010855512271");
+        titulo2.setTexto("RUC: " + "0103199865001");
         tablePanelDerecho.addCell(titulo2.getElemento());
 
         tablePanelDerecho.addCell(espacioBlanco.getElemento());

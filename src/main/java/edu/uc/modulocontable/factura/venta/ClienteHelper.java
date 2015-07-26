@@ -31,6 +31,7 @@ public class ClienteHelper implements Serializable {
     private String tipoIdentificacion;
     private List<Cliente> items;
     private Cliente selected;
+    private boolean isValid = false;
 
     public void iniciarCliente() {
         this.setSelected(new Cliente());
@@ -62,36 +63,42 @@ public class ClienteHelper implements Serializable {
     }
 
     public void validarCedulaORuc() {
-//        System.out.println("hola" +getTipoIdentificacion());
-//        if (getTipoIdentificacion().equalsIgnoreCase("0")) {
-//
-//            if (this.getSelected().getIdentificacion() != null && this.getSelected().getIdentificacion().length() > 0) {
-//                if (this.getSelected().getTipoIdentificacion().equalsIgnoreCase("Cedula")) {
-//                    if (validarCedula(this.getSelected().getIdentificacion())) {
-//                        msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Informacion", "La Cedula es Correcta");
-//                        FacesContext.getCurrentInstance().addMessage(null, msg);
-//                    } else {
-//                        msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Informacion", "La Cedula es Incorrecta");
-//                        FacesContext.getCurrentInstance().addMessage(null, msg);
-//                    }
-//
-//                } else if (getTipoIdentificacion().equalsIgnoreCase("RUC")) {
-//
-//                }
-//            }
-//        }
+        System.out.println("hola " + getTipoIdentificacion());
+        if (getTipoIdentificacion().equalsIgnoreCase("Cedula")) {
+
+            if (this.getSelected().getIdentificacion() != null && this.getSelected().getIdentificacion().length() > 0) {
+                if (getTipoIdentificacion().equalsIgnoreCase("Cedula")) {
+                    if (validarCedula(this.getSelected().getIdentificacion())) {
+                        msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Informacion", "La Cedula es Correcta");
+                        FacesContext.getCurrentInstance().addMessage(null, msg);
+                        isValid = true;
+                    } else {
+                        msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Informacion", "La Cedula es Incorrecta");
+                        FacesContext.getCurrentInstance().addMessage(null, msg);
+                        isValid = false;
+                    }
+
+                } else if (getTipoIdentificacion().equalsIgnoreCase("RUC")) {
+                    isValid = true;
+                } else {
+                    isValid = true;
+                }
+            }
+        }
     }
 
     public void guardarNuevo(ActionEvent evet) {
-        if (this.getSelected() != null) {
-            this.getSelected().setTipoIdentificacion(getTipoIdentificacion());
+        if (isValid) {
+            if (this.getSelected() != null) {
+                this.getSelected().setTipoIdentificacion(getTipoIdentificacion());
 
-            ejbFacade.create(this.getSelected());
-            setItems(ejbFacade.findAll());
-            iniciarCliente();
+                ejbFacade.create(this.getSelected());
+                setItems(ejbFacade.findAll());
+                iniciarCliente();
 
-        } else {
-            System.out.println("no guardo cliente");
+            } else {
+                System.out.println("no guardo cliente");
+            }
         }
     }
 
@@ -111,15 +118,54 @@ public class ClienteHelper implements Serializable {
         msg = new FacesMessage("Cliente", "Modificacion Cancelada");
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-    
-       public void eliminarcliente(Cliente c) {
-        
+
+    public void eliminarcliente(Cliente c) {
+
         if (c != null) {
             ejbFacade.remove(c);
             this.setItems(ejbFacade.findAll());
             msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Informacion", "Cliente Eliminado");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
-        
+
+    }
+
+    public boolean validarCedula(String x) {
+        int suma = 0;
+        if (x.length() == 9) {
+            System.out.println("Ingrese su cedula de 10 digitos");
+            return false;
+        } else {
+            int a[] = new int[x.length() / 2];
+            int b[] = new int[(x.length() / 2)];
+            int c = 0;
+            int d = 1;
+            for (int i = 0; i < x.length() / 2; i++) {
+                a[i] = Integer.parseInt(String.valueOf(x.charAt(c)));
+                c = c + 2;
+                if (i < (x.length() / 2) - 1) {
+                    b[i] = Integer.parseInt(String.valueOf(x.charAt(d)));
+                    d = d + 2;
+                }
+            }
+
+            for (int i = 0; i < a.length; i++) {
+                a[i] = a[i] * 2;
+                if (a[i] > 9) {
+                    a[i] = a[i] - 9;
+                }
+                suma = suma + a[i] + b[i];
+            }
+            int aux = suma / 10;
+            int dec = (aux + 1) * 10;
+            if ((dec - suma) == Integer.parseInt(String.valueOf(x.charAt(x.length() - 1)))) {
+                return true;
+            } else if (suma % 10 == 0 && x.charAt(x.length() - 1) == '0') {
+                return true;
+            } else {
+                return false;
+            }
+
+        }
     }
 }

@@ -73,7 +73,7 @@
                         </p:cellEditor>
                     </p:column>
 
-                    <p:column id="colCuentaDescripcion" headerText="#{msj['cuentaDescripcion']}" style="width: 25%">
+                    <p:column id="colCuentaDescripcion" headerText="#{msj['cuentaDescripcion']}" style="width: 25%" sortBy="#{cuenta.descripcion}" filterBy="#{cuenta.descripcion}">
                         <p:cellEditor>
                             <f:facet name="output"><h:outputText value="#{cuenta.descripcion}"/></f:facet>
                             <f:facet name="input"><p:inputText value="#{cuenta.descripcion}" 
@@ -82,7 +82,7 @@
                     </p:column>
 
 
-                    <p:column id="colTipo" headerText="#{msj['cuentaTipo']}" style="width: 17%">
+                    <p:column id="colTipo" headerText="#{msj['cuentaTipo']}" style="width: 17%" sortBy="#{cuenta.idtipo.nombretipo}" filterBy="#{cuenta.idtipo.nombretipo}">
                         <p:cellEditor>
                             <f:facet name="output"><h:outputText value="#{cuenta.idtipo.nombretipo}" /></f:facet>
                             <f:facet name="input">
@@ -93,7 +93,7 @@
                         </p:cellEditor>
                     </p:column>
 
-                    <p:column id="colCategoria" headerText="#{msj['cuentaCategoria']}" style="width: 17%">
+                    <p:column id="colCategoria" headerText="#{msj['cuentaCategoria']}" style="width: 17%" sortBy="#{cuenta.categoria}" filterBy="#{cuenta.categoria}">
                         <p:cellEditor>
                             <f:facet name="output"><h:outputText value="#{cuenta.categoria}" /></f:facet>
                             <f:facet name="input">

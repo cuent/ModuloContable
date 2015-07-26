@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="../WEB-INF/templates/plantila.xhtml">
+        <ui:define name="content">
+            <h:form id="ImpuestoCreateForm">
+                #{impuestoHelper.iniciarNuevo()}
+                <h:panelGroup id="display" rendered="#{impuestoHelper.selected != null}">
+                    <p:panelGrid columns="2" columnClasses="column">
+                        
+                        <p:outputLabel value="#{myBundle.CreateImpuestoLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{impuestoHelper.selected.descripcion}" title="#{myBundle.CreateImpuestoTitle_descripcion}" required="true" requiredMessage="#{myBundle.CreateImpuestoRequiredMessage_descripcion}"/>
+
+                        <p:outputLabel value="Precio:" for="valor" />
+                        <p:inputText id="valor" value="#{impuestoHelper.selected.valor}" title="#{myBundle.CreateImpuestoTitle_valor}" required="true" requiredMessage="#{myBundle.CreateImpuestoRequiredMessage_valor}"/>
+
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{impuestoHelper.guardarNuevo(event)}" value="Guardar" 
+                                     update="display,
+                                     :#{p:component('descripcion')},
+                                     :#{p:component('valor')},
+                                     :#{p:component('datalistImpuesto')}" >
+
+                    </p:commandButton>
+                </h:panelGroup>
+
+            </h:form>
+            <ui:include src="lista_impuesto.xhtml"/>
+        </ui:define>
+    </ui:composition>
+</html>

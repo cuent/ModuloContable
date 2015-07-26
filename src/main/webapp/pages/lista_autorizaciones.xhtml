@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <p:panel>
+            <h:form id="formlistaAutorizaciones">
+                <p:growl id="msgs" showDetail="true"/>
+                <p:dataTable id="datalistAutorizaciones"  value="#{autorizacionesHelper.items}"
+                             var="item"
+                             rowKey="#{item.idAutorizacion}"
+                             style="width: 100%; font-size: 0.9em;"
+                             editable="true"
+                             selection="#{autorizacionesHelper.selected}"
+                             paginatorPosition="bottom"
+                             paginator="true"
+                             rows="10">
+                    <f:facet name="header">Lista de Autorizaciones</f:facet>
+                    <p:ajax event="rowEdit" listener="#{autorizacionesHelper.onRowEdit}" update=":formlistaAutorizaciones:msgs"/>
+                    <p:ajax event="rowEditCancel" listener="#{autorizacionesHelper.onRowCancel}" update=":formlistaAutorizaciones:msgs"/>
+
+                    <p:column headerText="Código Autorización" sortBy="#{item.idAutorizacion}" filterBy="#{item.idAutorizacion}">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.idAutorizacion}" /></f:facet>
+                            <f:facet name="input"><p:inputText id="Input1" value="#{item.idAutorizacion}" style="width:100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Tipo Documento" sortBy="#{item.tipoDocumento.docuemnto}" filterBy="#{item.tipoDocumento.docuemnto}">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.tipoDocumento.docuemnto}" /></f:facet>
+                            <f:facet name="input"><p:inputText id="Input2" value="#{item.tipoDocumento.docuemnto}" style="width:100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Número Autorización" sortBy="#{item.numeroAutorizacion}" filterBy="#{item.numeroAutorizacion}">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.numeroAutorizacion}" /></f:facet>
+                            <f:facet name="input"><p:inputText id="Input3" value="#{item.numeroAutorizacion}" style="width:100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Establecimiento">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.establecimiento}" /></f:facet>
+                            <f:facet name="input"><p:inputText id="Input4" value="#{item.establecimiento}" style="width:100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Pto. de Emisión">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.ptoEmision}" /></f:facet>
+                            <f:facet name="input"><p:inputText id="Input5" value="#{item.ptoEmision}" style="width:100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Num. Inicial">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.numeroInicialDocumento}" /></f:facet>
+                            <f:facet name="input"><p:inputText id="Input6" value="#{item.numeroInicialDocumento}" style="width:100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Num. Final">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.numeroFinalDocumento}" /></f:facet>
+                            <f:facet name="input"><p:inputText id="Input7" value="#{item.numeroFinalDocumento}" style="width:100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Num. Actual">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.numeroActual}" /></f:facet>
+                            <f:facet name="input"><p:inputText id="Input8" value="#{item.numeroActual}" style="width:100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Fecha Caducidad">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.fechaCaducidad}" /></f:facet>
+                            <f:facet name="input">
+                                <p:calendar id="fechaCaducidad" value="#{item.fechaCaducidad}" mindate="#{now}" required="true" style="width: 100%"/>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column style="width:32px">
+                        <p:rowEditor />
+                    </p:column>
+
+                    <p:column width="8%">
+                        <f:facet name="header">
+                            <h:outputText value=""/>
+                        </f:facet>
+                        <p:commandButton actionListener="#{autorizacionesHelper.eliminar(item)}" 
+                                         process="@this"
+                                         update=":#{p:component('datalistAutorizaciones')}"
+                                         icon="fa fa-times" title="Eliminar fila"/>
+                    </p:column>
+
+
+                </p:dataTable>
+            </h:form>
+        </p:panel>
+    </h:body>
+</html>
+

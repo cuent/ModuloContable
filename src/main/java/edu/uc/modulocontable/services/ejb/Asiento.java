@@ -48,6 +48,14 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Asiento.findByDocumento", query = "SELECT a FROM Asiento a WHERE a.documento = :documento")})
 public class Asiento implements Serializable {
     private static final long serialVersionUID = 1L;
+    public static String findByNumCuenta = "Cuentas.findByNumCuenta";
+    public static String findByNombre = "Cuentas.findByNombre";
+    public static String findByNumCuentaLike = "Cuentas.findByNumCuentaLike";
+    public static String findByNumeroCategoria = "Cuentas.findByNumeroCategoria";
+    public static String findByNombreCategoria = "Cuentas.findByNombreCategoria";
+    public static String findByNumasiento = "Asiento.findByNumasiento";
+    
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
