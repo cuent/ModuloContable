@@ -242,7 +242,7 @@ public class CabeceraFacturacHelper implements Serializable {
                             //Sesion.redireccionaPagina(ResourceBundle.getBundle("/MyBundle").getString("listaFacturasc"));
                             msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ustede ha realizado una compra!", "Factura Generada");
                             FacesContext.getCurrentInstance().addMessage(null, msg);
-                            
+
                             //this.getSelected()
                             this.getSelected().setDetalleFacturacList(detalles);
                             descargarFactura();
@@ -313,43 +313,32 @@ public class CabeceraFacturacHelper implements Serializable {
     }
 
     public void actualizarFactura() {
-
         double subtotal = 0;
         double baseCero = 0;
         double baseIva = 0;
         double total = 0;
         double iva = 0;
-        boolean isTarifaCero = false;
 
         for (DetalleFacturac detalle : detalles) {
-
             //detalle.getProducto().setStock(detalle.getCantidad());
-            detalle.setPrecioUnitario(detalle.getProducto().getPrecio());
-            detalle.setTotal(detalle.getCantidad() * detalle.getProducto().getPrecio());
+            detalle.setPrecioUnitario(detalle.getProducto().getCosto());
+            detalle.setTotal(detalle.getCantidad() * detalle.getProducto().getCosto());
 
-            if (detalle.getProducto().getImpuesto().getValor() == 12) {
-                isTarifaCero = false;
-            } else if (detalle.getProducto().getImpuesto().getValor() == 0) {
-                isTarifaCero = true;
+            if (detalle.getProducto().getImpuesto().getValor() != 0) {
+                baseIva = baseIva + (detalle.getCantidad() * (detalle.getProducto().getCosto()));
+                iva += 0.12 * detalle.getCantidad() * detalle.getProducto().getCosto();
             } else {
-
-            }
-
-            if (isTarifaCero) {
-                baseCero = baseCero + detalle.getCantidad() * detalle.getProducto().getPrecio();
-            } else {
-                baseIva = baseIva + (detalle.getCantidad() * (detalle.getProducto().getPrecio()));
+                baseCero = baseCero + detalle.getCantidad() * detalle.getProducto().getCosto();
             }
 
             subtotal = subtotal + detalle.getTotal();
-
         }
 
         this.getSelected().setSubtotal(subtotal);
         this.getSelected().setSubtotalBase0(baseCero);
         this.getSelected().setSubtotalBaseIva(baseIva);
-        this.getSelected().setIva(subtotal * 0.12);
-        this.getSelected().setTotal(subtotal + (subtotal * 0.12));
+        this.getSelected().setIva(iva);
+        this.getSelected().setTotal(subtotal + iva);
 
     }
 

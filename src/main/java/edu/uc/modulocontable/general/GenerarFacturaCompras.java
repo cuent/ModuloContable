@@ -114,7 +114,7 @@ public class GenerarFacturaCompras {
         int i = 1;
 
         if (bus.getDetalleFacturacList() != null && bus.getDetalleFacturacList().size() > 0) {
-            System.out.println("lliata llena");
+            System.out.println("lista llena");
             espacionBlanco(1);
             tablaHorizontal.setColumnas(5);
             tablaHorizontal.setTitulos("Código", "Descripción", "Cant.", "P. Unitario", "Total");
