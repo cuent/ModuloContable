@@ -9,6 +9,7 @@ import edu.uc.modulocontable.services.ejb.Asiento;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -35,5 +36,16 @@ public class AsientoFacade extends AbstractFacade<Asiento> {
         Query q1=em.createQuery("SELECT c FROM Asiento c LEFT OUTER JOIN FETCH c.transaccionList");
         List<Asiento> asientos=q.getResultList();
         
+    }
+    public List<Asiento> AsientoxNumeroAsiento(int numero) {
+
+        Query query = this.em.createNamedQuery(Asiento.findByNumasiento);
+        query.setParameter("numasiento", numero);
+
+        try {
+            return query.getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 }

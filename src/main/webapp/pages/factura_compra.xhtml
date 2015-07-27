@@ -28,7 +28,7 @@
                         <p:inputText id="numeroFactura" value="#{cabeceraFacturacHelper.selected.numeroFactura}" title="#{bundle2.CreateCabeceraFacturacTitle_numeroFactura}" required="true" requiredMessage="#{bundle2.CreateCabeceraFacturacRequiredMessage_numeroFactura}" size="45" maxlength="45"/>
 
                         <p:outputLabel value="Fecha:" for="fecha" />
-                        <p:calendar id="fecha" readonly="true" mindate="#{now}" pattern="MM/dd/yyyy HH:mm:ss" value="#{cabeceraFacturacHelper.selected.fecha}" title="#{bundle2.CreateCabeceraFacturacTitle_fecha}" required="true" requiredMessage="#{bundle2.CreateCabeceraFacturacRequiredMessage_fecha}" showOn="button"/>
+                        <p:calendar id="fecha" readonly="true" mindate="#{now}" pattern="MM/dd/yyyy HH:mm:ss" value="#{cabeceraFacturacHelper.selected.fecha}" title="#{bundle2.CreateCabeceraFacturacTitle_fecha}" required="true" requiredMessage="#{bundle2.CreateCabeceraFacturacRequiredMessage_fecha}" showOn="button" readonlyInput="true"/>
 
 
                         <p:outputLabel value="Codigo Proveedor" for="codigoProveedor" />
@@ -54,7 +54,7 @@
                         </p:selectOneMenu>
 
                         <p:outputLabel value="Nro. autorizacion:" for="autorizacionSri" />
-                        <p:inputText id="autorizacionSri"  readonly="true" value="#{cabeceraFacturacHelper.selected.autorizacionSri}" title="#{bundle2.CreateCabeceraFacturacTitle_autorizacionSri}" required="true" requiredMessage="#{bundle2.CreateCabeceraFacturacRequiredMessage_autorizacionSri}" size="30"/>
+                        <p:inputText id="autorizacionSri"  readonly="true" value="#{cabeceraFacturacHelper.selected.autorizacionSri.numeroAutorizacion}" title="#{bundle2.CreateCabeceraFacturacTitle_autorizacionSri}" required="true" requiredMessage="#{bundle2.CreateCabeceraFacturacRequiredMessage_autorizacionSri}" size="30"/>
 
                         <p:outputLabel value="Nombre:" for="establecimiento" />
                         <p:inputText id="establecimiento" readonly="true" value="#{cabeceraFacturacHelper.selected.establecimiento}" title="#{bundle2.CreateCabeceraFacturacTitle_establecimiento}" required="true" requiredMessage="#{bundle2.CreateCabeceraFacturacRequiredMessage_establecimiento}" size="45" maxlength="45"/>
@@ -140,7 +140,7 @@
                         </f:facet>
                     </p:dataTable>
                     <p:commandButton type="button" onclick="someName()" value="Actualizar" icon="ui-icon-refresh" />
-                    <h:panelGrid id="totalessss" columns="2"  border="0" columnClasses="column1Class,column2Class" >
+                    <h:panelGrid id="totalessss" columns="2"  border="0" columnClasses="column1Class,column2Class" style="width: 25%; margin-left: 75%;">
                         <p:outputLabel value="Subtotal:" for="subtotal" />
                         <p:inputText id="subtotal" value="#{cabeceraFacturacHelper.selected.subtotal}" title="#{bundle2.CreateCabeceraFacturacTitle_subtotal}" required="true" requiredMessage="#{bundle2.CreateCabeceraFacturacRequiredMessage_subtotal}">
                             <f:convertNumber pattern="#0.000" locale="pt_BR"/>
@@ -161,9 +161,8 @@
                         <p:outputLabel value="Valor Total:" for="total" />
                         <p:inputText id="total" value="#{cabeceraFacturacHelper.selected.total}" title="#{bundle2.CreateCabeceraFacturacTitle_total}" required="true" requiredMessage="#{bundle2.CreateCabeceraFacturacRequiredMessage_total}"/>
                     </h:panelGrid>
-                    <p:commandButton actionListener="#{cabeceraFacturacHelper.gardarFactura}" value="Guadar" update="display,growl">
+                    <p:commandButton actionListener="#{cabeceraFacturacHelper.gardarFactura}" value="Guardar" update="display,growl">
                     </p:commandButton>
-                    <p:commandButton value="Cancelar" onclick="PF('CabeceraFacturacCreateDialog').hide()"/>
                 </h:panelGroup>
             </h:form>
         </ui:define>

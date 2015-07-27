@@ -5,7 +5,7 @@ import edu.uc.modulocontable.facade.CabeceraFacturavFacade;
 import edu.uc.modulocontable.facade.ClienteFacade;
 import edu.uc.modulocontable.facade.DetalleFacturavFacade;
 import edu.uc.modulocontable.facade.ProductoFacade;
-import edu.uc.modulocontable.general.GenerarFacturaVentas;
+import edu.uc.modulocontable.general.GenerarFacturaVentasPDF;
 import edu.uc.modulocontable.modelo2.Autorizaciones;
 import edu.uc.modulocontable.modelo2.CabeceraFacturav;
 import edu.uc.modulocontable.modelo2.Cliente;
@@ -79,7 +79,7 @@ public class CabeceraFacturavController extends AbstractController<CabeceraFactu
             getSelected().setNumeroFactura(Integer.parseInt(getAutorizacion().getNumeroActual()) + 1);
             getSelected().setPtoEmision(getAutorizacion().getPtoEmision());
             getSelected().setEstablecimiento(getAutorizacion().getEstablecimiento());
-            getSelected().setAutorizacionSri(getAutorizacion().getNumeroAutorizacion());
+            getSelected().setAutorizacionSri(new Autorizaciones());
             getSelected().setFecha(new Date());
 
         }
@@ -475,7 +475,7 @@ public class CabeceraFacturavController extends AbstractController<CabeceraFactu
         ruta = ec.getRealPath("/" + nombre);
         System.out.println("ruta: " + ruta);
         this.setRuta(ruta);
-        GenerarFacturaVentas generarPdf = new GenerarFacturaVentas();
+        GenerarFacturaVentasPDF generarPdf = new GenerarFacturaVentasPDF();
         generarPdf.generarFactura(c, ruta);
 
     }

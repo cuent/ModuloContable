@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <p:panel>
+            <h:form id="formlistaImpuestos">
+                <p:growl id="msgs" showDetail="true"/>
+                <p:dataTable id="datalistImpuesto"  value="#{impuestoHelper.items}"
+                             var="item"
+                             rowKey="#{item.codigoImpuesto}"
+                             style="width: 100%; font-size: 0.9em;"
+                             editable="true"
+                             selection="#{impuestoHelper.selected}"
+                             paginatorPosition="bottom"
+                             paginator="true"
+                             rows="10">
+                    <f:facet name="header">Lista de Impuestos</f:facet>
+                    <p:ajax event="rowEdit" listener="#{impuestoHelper.onRowEdit}" update=":formlistaImpuestos:msgs"/>
+                    <p:ajax event="rowEditCancel" listener="#{impuestoHelper.onRowCancel}" update=":formlistaImpuestos:msgs"/>
+
+                    <p:column headerText="Código" sortBy="#{item.codigoImpuesto}" filterBy="#{item.codigoImpuesto}">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.codigoImpuesto}" /></f:facet>
+                            <f:facet name="input"><p:inputText id="Input1" value="#{item.codigoImpuesto}" style="width:100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Descripción" sortBy="#{item.descripcion}" filterBy="#{item.descripcion}">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.descripcion}" /></f:facet>
+                            <f:facet name="input"><p:inputText id="Input2" value="#{item.descripcion}" style="width:100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Valor">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.valor}" /></f:facet>
+                            <f:facet name="input"><p:inputText id="Input21" value="#{item.valor}" style="width:100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column style="width:32px">
+                        <p:rowEditor />
+                    </p:column>
+
+                    <p:column width="8%">
+                        <f:facet name="header">
+                            <h:outputText value=""/>
+                        </f:facet>
+                        <p:commandButton actionListener="#{impuestoHelper.eliminar(item)}" 
+                                         process="@this"
+                                         update=":#{p:component('datalistImpuesto')}"
+                                         icon="fa fa-times" title="Eliminar fila"/>
+                    </p:column>
+
+
+                </p:dataTable>
+            </h:form>
+        </p:panel>
+    </h:body>
+</html>
+

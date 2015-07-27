@@ -8,7 +8,12 @@
     <ui:composition template="../WEB-INF/templates/plantila.xhtml">
         <ui:define name="content">
             <h:form>
-                <p:dataTable var="asiento" value="#{beanTransaccion.asientos}">
+                <p:commandButton value="Descargar" id="descargar" actionListener="#{beanTransaccion.descargarFactura}" icon="ui-icon-arrowthick-1-s" />
+                <br/>
+                <p:dataTable var="asiento" value="#{beanTransaccion.asientos}"
+                             paginatorPosition="bottom"
+                             paginator="true"
+                             rows="10">
                     <f:facet name="header">
                         #{msj['asientoTitulo']}
                     </f:facet>
@@ -77,7 +82,7 @@
                     </p:rowExpansion>
                 </p:dataTable>
                 <br/>
-                <p:commandLink value="Exportar PDF" actionListener="#{libroMayorHelper.descargarLibroDiario()}"/>
+                <p:commandButton value="Exportar PDF" actionListener="#{libroMayorHelper.descargarLibroDiario()}" icon="ui-icon-arrowthick-1-s"/>
             </h:form>
         </ui:define>
     </ui:composition>

@@ -7,13 +7,16 @@ package edu.uc.modulocontable.beans.modelo;
 
 import edu.uc.modulocontable.domain.entity.AsientoFacade;
 import edu.uc.modulocontable.domain.entity.CuentaFacade;
+import edu.uc.modulocontable.general.GenerarLibroDiarioPDF;
 import edu.uc.modulocontable.services.ejb.Asiento;
 import edu.uc.modulocontable.services.ejb.Cuenta;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.event.ActionEvent;
 
 /**
  *
@@ -26,7 +29,7 @@ public class BeanTransacciones {
     private String referencia;
     private BigDecimal totalDebe = new BigDecimal(0);
     private BigDecimal totalHaber = new BigDecimal(0);
-    
+
     @EJB
     private AsientoFacade asientoFacade;
     private List<Asiento> asientos;
@@ -52,7 +55,7 @@ public class BeanTransacciones {
     public void setAsientos(List<Asiento> asientos) {
         this.asientos = asientos;
     }
-    
+
     public List<Cuenta> getCuentas() {
         cuentas = cuentaFacade.findAll();
 
@@ -79,7 +82,15 @@ public class BeanTransacciones {
     public void setTotalHaber(BigDecimal totalHaber) {
         this.totalHaber = totalHaber;
     }
-    
-    
+
+    public void descargarFactura(ActionEvent actionEvent) {
+        if (!asientos.isEmpty()) {
+            String nombre = "Libro_Diario_" + new Date().toString() + ".pdf";
+            String ruta = "/Users/cuent/Downloads/" + nombre;
+
+            GenerarLibroDiarioPDF generarPdf = new GenerarLibroDiarioPDF();
+            generarPdf.generarFactura(asientos, ruta);
+        }
+    }
 
 }

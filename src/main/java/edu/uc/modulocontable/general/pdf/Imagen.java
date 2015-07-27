@@ -8,7 +8,8 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**Objeto para ingresar una imagen en el pdf.
+/**
+ * Objeto para ingresar una imagen en el pdf.
  *
  * @author juan Pablo Japa juan.japal@hotmail.com
  *
@@ -19,7 +20,8 @@ public class Imagen extends Elemento {
     private String dir;
     private Image image;
 
-    /**Metodo que permite ingrtesar una imagen al documento pdf.
+    /**
+     * Metodo que permite ingrtesar una imagen al documento pdf.
      *
      * @param dir
      * @param posicion
@@ -35,14 +37,18 @@ public class Imagen extends Elemento {
         super();
     }
 
-    /**Metodo que permite retornar la posicion de la imagen.
+    /**
+     * Metodo que permite retornar la posicion de la imagen.
+     *
      * @return posicion
      */
     public int getPosicion() {
         return posicion;
     }
 
-    /**Metodo permite ingresar la posicion de la imagen.
+    /**
+     * Metodo permite ingresar la posicion de la imagen.
+     *
      * @param posicion
      * @pdesaram posicion
      */
@@ -50,7 +56,8 @@ public class Imagen extends Elemento {
         this.posicion = posicion;
     }
 
-    /**Metodo para retorna la imagen ya contruida.
+    /**
+     * Metodo para retorna la imagen ya contruida.
      *
      * @return imagen
      */
@@ -60,7 +67,10 @@ public class Imagen extends Elemento {
         return image;
     }
 
-    /**Metodo que permite ingresar una imagen.
+
+    /**
+     * Metodo que permite ingresar una imagen.
+     *
      * @param image
      */
     public void setImage(Image image) {
@@ -68,7 +78,8 @@ public class Imagen extends Elemento {
         this.image = image;
     }
 
-    /** Metodo que permite generar imagen con los parametros establacidos.
+    /**
+     * Metodo que permite generar imagen con los parametros establacidos.
      *
      */
     public void generarImagen() {
@@ -96,17 +107,20 @@ public class Imagen extends Elemento {
         this.dir = dir;
     }
 
-    /**Metodo Permite definir la pocion de la imagen en la cordenada Y.
+    /**
+     * Metodo Permite definir la pocion de la imagen en la cordenada Y.
+     *
      * @param PosX
      * @param PosY
      */
-
     public void setPosicion(int PosX, int PosY) {
         getImage().setAbsolutePosition(PosX, PosY);
 
     }
 
-    /**Metodo que permite definir el tamano de la imagen.
+    /**
+     * Metodo que permite definir el tamano de la imagen.
+     *
      * @param TamX
      * @param TamY
      */

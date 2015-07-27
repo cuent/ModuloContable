@@ -20,6 +20,8 @@ import edu.uc.modulocontable.general.pdf.Titulo1;
 import edu.uc.modulocontable.general.pdf.Titulo2;
 import edu.uc.modulocontable.general.pdf.Titulo3;
 import edu.uc.modulocontable.general.pdf.Titulo4;
+import edu.uc.modulocontable.info.empresa.Archivo;
+import edu.uc.modulocontable.info.empresa.Empresa;
 import edu.uc.modulocontable.modelo2.CabeceraFacturav;
 import edu.uc.modulocontable.modelo2.DetalleFacturav;
 import java.text.NumberFormat;
@@ -32,13 +34,11 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
-
 /**
  *
  * @author Juan Pablo
  */
-public class GenerarFacturaVentas {
+public class GenerarFacturaVentasPDF {
 
     private String numeroAutorizacion = "8901234567891123456789212345678931234567894";
     private String fechaAutorizacion = "01/08/2014 21:11:01";
@@ -61,7 +61,7 @@ public class GenerarFacturaVentas {
     private EspacioBlanco espacioBlanco;
     private Documento documento;
 
-    public GenerarFacturaVentas() {
+    public GenerarFacturaVentasPDF() {
         encabezado = new Encabezado();
         imagen = new Imagen();
         espacioBlanco = new EspacioBlanco();
@@ -87,7 +87,7 @@ public class GenerarFacturaVentas {
         try {
             cabezera(cabezera);
         } catch (DocumentException ex) {
-            Logger.getLogger(GenerarFacturaVentas.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GenerarFacturaVentasPDF.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
             informaicionCliente(cabezera);
@@ -129,22 +129,34 @@ public class GenerarFacturaVentas {
         tablaVertical.limpiar(4);
         // System.out.println(getBus().getInfoFactura().getGuiaRemision());
 
-        tablaVertical.setTitulos("RUC/CI/Pasaporte:", "Teléfono:", "Razón Social:", "Fecha Emisión:", "Direción:",
-                "");
-        Object[] datos = {
-            cabezera.getCodigoCliente().getIdentificacion(), cabezera.getCodigoCliente().getTelefono(),
-            cabezera.getCodigoCliente().getNombre() + " " + cabezera.getCodigoCliente().getApellido(), cabezera.getFecha().toString(),
-            cabezera.getCodigoCliente().getDireccion(), ""
-        };
-        tablaVertical.setContenidos(datos);
+        if (cabezera.getCodigoCliente().getTipoIdentificacion().equalsIgnoreCase("CONSUMIDOR FINAL")) {
+            tablaVertical.setTitulos("Razón Social:", "Fecha Emisión:");
+            Object[] datos = {cabezera.getCodigoCliente().getTipoIdentificacion(), cabezera.getFecha().toString()};
+            tablaVertical.setContenidos(datos);
+            tablaVertical.setAlineamientos(new int[]{0, 0});
+            tablaVertical.llenarTabla(false);
+            tablaVertical.setTamanos(new int[]{16, 40, 14, 35});
+            tablaVertical.setPosicion(2);
+            tablaVertical.setAnchoTabla(100);
+            documento.add(tablaVertical.getTabla());
+        } else {
 
-        tablaVertical.setAlineamientos(new int[]{0, 0, 0, 0, 0,});
-        tablaVertical.llenarTabla(false);
-        tablaVertical.setTamanos(new int[]{16, 40, 14, 35});
-        tablaVertical.setPosicion(2);
-        tablaVertical.setAnchoTabla(100);
-        documento.add(tablaVertical.getTabla());
+            tablaVertical.setTitulos("RUC/CI/Pasaporte:", "Teléfono:", "Razón Social:", "Fecha Emisión:", "Direción:",
+                    "");
+            Object[] datos = {
+                cabezera.getCodigoCliente().getIdentificacion(), cabezera.getCodigoCliente().getTelefono(),
+                cabezera.getCodigoCliente().getNombre() + " " + cabezera.getCodigoCliente().getApellido(), cabezera.getFecha().toString(),
+                cabezera.getCodigoCliente().getDireccion(), ""
+            };
+            tablaVertical.setContenidos(datos);
 
+            tablaVertical.setAlineamientos(new int[]{0, 0, 0, 0, 0,});
+            tablaVertical.llenarTabla(false);
+            tablaVertical.setTamanos(new int[]{16, 40, 14, 35});
+            tablaVertical.setPosicion(2);
+            tablaVertical.setAnchoTabla(100);
+            documento.add(tablaVertical.getTabla());
+        }
     }
 
     private void detalleDocumento(CabeceraFacturav bus) throws DocumentException {
@@ -247,7 +259,10 @@ public class GenerarFacturaVentas {
     }
 
     private void cabezera(CabeceraFacturav c) throws DocumentException {
-         PdfPTable tablePanelInicial = new PdfPTable(2);
+        Archivo a = new Archivo();
+        Empresa empresa = a.obtieneContenidoArchivo().get(0);
+
+        PdfPTable tablePanelInicial = new PdfPTable(2);
         tablePanelInicial.setWidthPercentage(100);
         tablePanelInicial.getDefaultCell().setBorder(0);
 
@@ -262,7 +277,7 @@ public class GenerarFacturaVentas {
         imagen.setDir("/Users/cuent/Downloads/abc-logo.jpg");
         tablePanelIzquierdo.addCell(imagen.getImage());
 
-        titulo1.setTexto("Empresa ABC");
+        titulo1.setTexto(empresa.getNombre());
         tablePanelIzquierdo.addCell(titulo1.getElemento());
 
 //        tablaVertical.limpiar();
@@ -275,7 +290,6 @@ public class GenerarFacturaVentas {
 //        tablaVertical.setTamanos(new int[] { 25, 75 });
 //        tablaVertical.setAnchoTabla(100);
 //        tablePanelIzquierdo.addCell(tablaVertical.getTabla());
-
 //        tablaVertical.limpiar();
 //        tablaVertical.setTitulos("Contribuyente Especial Nro.:", "Obligado a llever contabilidad:");
 //        Object[] datos2 = {
@@ -289,28 +303,28 @@ public class GenerarFacturaVentas {
 //        tablePanelIzquierdo.addCell(tablaVertical.getTabla());
         tablePanelInicial.addCell(tablePanelIzquierdo);
 
-        titulo2.setTexto("RUC: " + "010855512271");
+        titulo2.setTexto("RUC: " + empresa.getRuc());
         tablePanelDerecho.addCell(titulo2.getElemento());
 
         tablePanelDerecho.addCell(espacioBlanco.getElemento());
-        
+
         titulo2.setTexto("FACTURA");
         titulo2.getElementoRojo();
         tablePanelDerecho.addCell(titulo2.getElemento());
 
-        titulo2.setTexto("No.: " + c.getEstablecimiento() + "-" + c.getPtoEmision() +
-                         "-" + c.getNumeroFactura());
+        titulo2.setTexto("No.: " + c.getEstablecimiento() + "-" + c.getPtoEmision()
+                + "-" + c.getNumeroFactura());
         titulo2.getElementoRojo();
         tablePanelDerecho.addCell(titulo2.getElemento());
 
         tablePanelDerecho.addCell(espacioBlanco.getElemento());
-        
+
         tablaVertical.limpiar(1);
-        int[] tamanos2 = { 50 };
-        int[] alineamientos = { 0, 0 };
+        int[] tamanos2 = {50};
+        int[] alineamientos = {0, 0};
         tablaVertical.setTamanos(tamanos2);
         tablaVertical.setTitulos("Número de Autorización:");
-        Object[] datos10 = {c.getAutorizacionSri() };
+        Object[] datos10 = {c.getAutorizacionSri().getNumeroAutorizacion()};
         tablaVertical.setContenidos(datos10);
         tablaVertical.setAlineamientos(alineamientos);
         tablaVertical.llenarTabla(false);
@@ -321,8 +335,8 @@ public class GenerarFacturaVentas {
         tablePanelDerecho.addCell(espacioBlanco.getElemento());
 
         tablaVertical.limpiar();
-        Object[] datos3 = {c.getFecha().toString(), ambiente, emision };
-        tablaVertical.setTitulos("Fecha y Hora de Autorización: ", "Ambiente:", "Emision:");
+        Object[] datos3 = {empresa.getDireccion(), empresa.getTelefono(), c.getFecha().toString(), ambiente, emision};
+        tablaVertical.setTitulos("Dirección:", "Télefono:", "Fecha y Hora de Autorización:", "Ambiente:", "Emision:");
         tablaVertical.setContenidos(datos3);
         tablaVertical.llenarTabla(false);
         tablaVertical.setPosicion(0);
@@ -335,12 +349,10 @@ public class GenerarFacturaVentas {
 //        titulo3.setTexto("Clave de Acceso:");
 //        titulo3.getElementoNegro();
 //        tablePanelDerecho.addCell(titulo3.getElemento());
-
         tablePanelDerecho.addCell(espacioBlanco.getElemento());
 
 //        codigoBarra.setTexto(getClaveAcceso());
 //        tablePanelDerecho.addCell(codigoBarra.getCodigoBarra(documento.getContentbyte()));
-
         tablePanelInicial.addCell(tablePanelDerecho);
         documento.add(tablePanelInicial);
     }

@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="../WEB-INF/templates/plantila.xhtml">
+        <ui:define name="content">
+            <h:form id="AutorizacionesCreateForm">
+                #{autorizacionesHelper.iniciarNuevo()}
+                <h:panelGroup id="display" rendered="#{autorizacionesHelper.selected != null}">
+                    <p:panelGrid columns="4" columnClasses="column">
+
+                        <p:outputLabel value="Tipo Documento:" for="tipo_doc" />
+                        <p:selectOneMenu id="tipo_doc" value="#{autorizacionesHelper.selected.tipoDocumento}" required="true" requiredMessage="#{myBundle.CreateAutorizacionesRequiredMessage_tipoDocumento}" converter="documentoConverter">
+                            <f:selectItem itemLabel="Selecione..."/>
+                            <f:selectItems value="#{documentHelper.items}"
+                                           var="documentItems"
+                                           itemValue="#{documentItems}"
+                                           itemLabel="#{documentItems.docuemnto.toString()}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="#{myBundle.CreateAutorizacionesLabel_numeroAutorizacion}" for="num_autorizacion" />
+                        <p:inputText id="num_autorizacion" value="#{autorizacionesHelper.selected.numeroAutorizacion}" title="#{myBundle.CreateAutorizacionesTitle_numeroAutorizacion}" required="true" requiredMessage="#{myBundle.CreateAutorizacionesRequiredMessage_numeroAutorizacion}"/>
+
+                        <p:outputLabel value="#{myBundle.CreateAutorizacionesLabel_establecimiento}" for="establecimiento" />
+                        <p:inputText id="establecimiento" value="#{autorizacionesHelper.selected.establecimiento}" title="#{myBundle.CreateAutorizacionesTitle_establecimiento}" required="true" requiredMessage="#{myBundle.CreateAutorizacionesRequiredMessage_establecimiento}"/>
+
+                        <p:outputLabel value="#{myBundle.CreateAutorizacionesLabel_ptoEmision}" for="ptmEmision" />
+                        <p:inputText id="ptmEmision" value="#{autorizacionesHelper.selected.ptoEmision}" title="#{myBundle.CreateAutorizacionesTitle_ptoEmision}" required="true" requiredMessage="#{myBundle.CreateAutorizacionesRequiredMessage_ptoEmision}"/>
+
+                        <p:outputLabel value="#{myBundle.CreateAutorizacionesLabel_numeroInicialDocumento}" for="numInicial" />
+                        <p:inputText id="numInicial" value="#{autorizacionesHelper.selected.numeroInicialDocumento}" title="#{myBundle.CreateAutorizacionesTitle_numeroInicialDocumento}" required="true" requiredMessage="#{myBundle.CreateAutorizacionesRequiredMessage_numeroInicialDocumento}"/>
+
+                        <p:outputLabel value="#{myBundle.CreateAutorizacionesLabel_numeroFinalDocumento}" for="numFinal" />
+                        <p:inputText id="numFinal" value="#{autorizacionesHelper.selected.numeroFinalDocumento}" title="#{myBundle.CreateAutorizacionesTitle_numeroFinalDocumento}" required="true" requiredMessage="#{myBundle.CreateAutorizacionesRequiredMessage_numeroFinalDocumento}"/>
+
+                        <p:outputLabel value="#{myBundle.CreateAutorizacionesLabel_numeroActual}" for="numActual" />
+                        <p:inputText id="numActual" value="#{autorizacionesHelper.selected.numeroActual}" title="#{myBundle.CreateAutorizacionesTitle_numeroActual}" required="true" requiredMessage="#{myBundle.CreateAutorizacionesRequiredMessage_numeroActual}"/>
+
+                        <p:outputLabel for="fechaCaducidad" value="#{myBundle.CreateAutorizacionesLabel_fechaCaducidad}" />
+                        <p:calendar id="fechaCaducidad" value="#{autorizacionesHelper.selected.fechaCaducidad}" mindate="#{now}" required="true"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{autorizacionesHelper.guardarNuevo(event)}" value="Guardar" 
+                                     update="display,
+                                     :#{p:component('num_autorizacion')},
+                                     :#{p:component('tipo_doc')},
+                                     :#{p:component('establecimiento')},
+                                     :#{p:component('ptmEmision')},
+                                     :#{p:component('numInicial')},
+                                     :#{p:component('numFinal')},
+                                     :#{p:component('numActual')},
+                                     :#{p:component('fechaCaducidad')},
+                                     :#{p:component('datalistAutorizaciones')}," >
+                    </p:commandButton>
+                </h:panelGroup>
+
+            </h:form>
+            <ui:include src="lista_autorizaciones.xhtml"/>
+        </ui:define>
+    </ui:composition>
+</html>

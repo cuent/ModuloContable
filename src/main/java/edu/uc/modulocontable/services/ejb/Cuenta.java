@@ -5,6 +5,9 @@
  */
 package edu.uc.modulocontable.services.ejb;
 
+import edu.uc.modulocontable.modelo2.Cliente;
+import edu.uc.modulocontable.modelo2.FormasPago;
+import edu.uc.modulocontable.modelo2.Proveedores;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -32,7 +35,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author cuent
  */
 @Entity
-@Table(name = "cuenta", catalog = "mod_contable", schema = "")
+@Table(name = "cuenta", catalog = "contables", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Cuenta.findAll", query = "SELECT c FROM Cuenta c"),
@@ -41,9 +44,25 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Cuenta.findByDescripcion", query = "SELECT c FROM Cuenta c WHERE c.descripcion = :descripcion"),
     @NamedQuery(name = "Cuenta.findByCategoria", query = "SELECT c FROM Cuenta c WHERE c.categoria = :categoria"),
     @NamedQuery(name = "Cuenta.findBySaldoinicial", query = "SELECT c FROM Cuenta c WHERE c.saldoinicial = :saldoinicial"),
+    @NamedQuery(name = "Cuentas.findByNumeroCategoria", query = "SELECT c FROM Cuenta c WHERE c.numcuenta like :numcuenta AND c.categoria = :categoria"),
     @NamedQuery(name = "Cuenta.findBySaldofinal", query = "SELECT c FROM Cuenta c WHERE c.saldofinal = :saldofinal")})
 public class Cuenta implements Serializable {
+    @OneToMany(mappedBy = "idcuentaxcobrar")
+    private List<Cliente> clienteList;
+    @OneToMany(mappedBy = "iddocxcobrar")
+    private List<Cliente> clienteList1;
+    @OneToMany(mappedBy = "idcuentaxpagar")
+    private List<Proveedores> proveedoresList;
+    @OneToMany(mappedBy = "iddocxpagar")
+    private List<Proveedores> proveedoresList1;
+    @OneToMany(mappedBy = "idcodcuenta")
+    private List<FormasPago> formasPagoList;
+
+    public static String findByNumcuenta = "Cuenta.findByNumcuenta";
+    public static String findByNumeroCategoria = "Cuentas.findByNumeroCategoria";
+
     private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -79,7 +98,7 @@ public class Cuenta implements Serializable {
     @JoinColumn(name = "idtipo", referencedColumnName = "idtipo")
     @ManyToOne(optional = false)
     private Tipo idtipo;
-    
+
     public Cuenta() {
     }
 
@@ -146,77 +165,72 @@ public class Cuenta implements Serializable {
     public List<Transaccion> getTransaccionList() {
         return transaccionList;
     }
-    
-    
+
     public void setTransaccionList(List<Transaccion> transaccionList) {
         this.transaccionList = transaccionList;
     }
-    
+
     public BigDecimal getTotalDebe() {
         BigDecimal totalDebe = new BigDecimal(BigInteger.ZERO);
-        for(int i=0; i<getTransaccionList().size();i++){
+        for (int i = 0; i < getTransaccionList().size(); i++) {
             totalDebe = totalDebe.add(getTransaccionList().get(i).getDebe());
         }
         return totalDebe;
     }
-    
+
     public BigDecimal getTotalHaber() {
         BigDecimal totalHaber = new BigDecimal(BigInteger.ZERO);
-        for(int i=0; i<getTransaccionList().size();i++){
+        for (int i = 0; i < getTransaccionList().size(); i++) {
             totalHaber = totalHaber.add(getTransaccionList().get(i).getHaber());
         }
         return totalHaber;
     }
-    
-    public String getTipo(){
+
+    public String getTipo() {
         BigDecimal total = new BigDecimal(BigInteger.ZERO);
         total = getTotalDebe().subtract(getTotalHaber());
-        if(total.doubleValue() < 0){
+        if (total.doubleValue() < 0) {
             System.out.println("Haber");
             return "Acreedor";
-        }
-        else{
+        } else {
             System.out.println("Debe");
             return "Deudor";
         }
     }
-    
-    public BigDecimal getAcreedor(){
+
+    public BigDecimal getAcreedor() {
         BigDecimal total = new BigDecimal(BigInteger.ZERO);
         BigDecimal cero = new BigDecimal(BigInteger.ZERO);
         total = getTotalDebe().subtract(getTotalHaber());
-        if(total.doubleValue() < 0){
+        if (total.doubleValue() < 0) {
             System.out.println("Haber");
             return total.negate();
-        }
-        else{
+        } else {
             System.out.println("Debe");
             return cero;
         }
     }
-    
-    public BigDecimal getDeudor(){
+
+    public BigDecimal getDeudor() {
         BigDecimal total = new BigDecimal(BigInteger.ZERO);
-        BigDecimal cero = new BigDecimal(BigInteger.ZERO);        
+        BigDecimal cero = new BigDecimal(BigInteger.ZERO);
         total = getTotalDebe().subtract(getTotalHaber());
-        if(total.doubleValue() < 0){
+        if (total.doubleValue() < 0) {
             System.out.println("Haber");
             return cero;
-        }
-        else{
+        } else {
             System.out.println("Debe");
-            return total;            
+            return total;
         }
     }
-    
-    public BigDecimal getDiferencia(){
+
+    public BigDecimal getDiferencia() {
         BigDecimal total = new BigDecimal(BigInteger.ZERO);
         total = getTotalDebe().subtract(getTotalHaber());
-        if(total.doubleValue() < 0){
+        if (total.doubleValue() < 0) {
             System.out.println("Haber");
             return total.negate();
-        }
-        else{
+        } else {
             System.out.println("Debe");
             return total;
         }
@@ -271,5 +285,50 @@ public class Cuenta implements Serializable {
     public String toString() {
         return "edu.uc.modulocontable.services.ejb.Cuenta[ idcodcuenta=" + idcodcuenta + " ]";
     }
-    
+
+    @XmlTransient
+    public List<Cliente> getClienteList() {
+        return clienteList;
+    }
+
+    public void setClienteList(List<Cliente> clienteList) {
+        this.clienteList = clienteList;
+    }
+
+    @XmlTransient
+    public List<Cliente> getClienteList1() {
+        return clienteList1;
+    }
+
+    public void setClienteList1(List<Cliente> clienteList1) {
+        this.clienteList1 = clienteList1;
+    }
+
+    @XmlTransient
+    public List<Proveedores> getProveedoresList() {
+        return proveedoresList;
+    }
+
+    public void setProveedoresList(List<Proveedores> proveedoresList) {
+        this.proveedoresList = proveedoresList;
+    }
+
+    @XmlTransient
+    public List<Proveedores> getProveedoresList1() {
+        return proveedoresList1;
+    }
+
+    public void setProveedoresList1(List<Proveedores> proveedoresList1) {
+        this.proveedoresList1 = proveedoresList1;
+    }
+
+    @XmlTransient
+    public List<FormasPago> getFormasPagoList() {
+        return formasPagoList;
+    }
+
+    public void setFormasPagoList(List<FormasPago> formasPagoList) {
+        this.formasPagoList = formasPagoList;
+    }
+
 }

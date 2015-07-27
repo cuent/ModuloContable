@@ -1,18 +1,27 @@
 package edu.uc.modulocontable.factura.compra;
 
+import edu.uc.modulocontable.bean.util.JsfUtil;
 import edu.uc.modulocontable.bean.util.Sesion;
+import edu.uc.modulocontable.domain.entity.AsientoFacade;
+import edu.uc.modulocontable.domain.entity.CuentaFacade;
 import edu.uc.modulocontable.facade.CabeceraFacturacFacade;
 import edu.uc.modulocontable.facade.DetalleFacturacFacade;
 import edu.uc.modulocontable.facade.FormasPagoFacade;
 import edu.uc.modulocontable.facade.ImpuestoFacade;
 import edu.uc.modulocontable.facade.ProductoFacade;
 import edu.uc.modulocontable.facade.ProveedoresFacade;
+import edu.uc.modulocontable.general.GenerarFacturaComprasPDF;
 import edu.uc.modulocontable.modelo2.CabeceraFacturac;
 import edu.uc.modulocontable.modelo2.DetalleFacturac;
 import edu.uc.modulocontable.modelo2.DetalleFacturacPK;
 import edu.uc.modulocontable.modelo2.Producto;
 import edu.uc.modulocontable.modelo2.Proveedores;
+import edu.uc.modulocontable.services.ejb.Asiento;
+import edu.uc.modulocontable.services.ejb.Cuenta;
+import edu.uc.modulocontable.services.ejb.Transaccion;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -42,11 +51,14 @@ public class CabeceraFacturacHelper implements Serializable {
     private DetalleFacturacFacade detalleFCFacade;
     @EJB
     private ImpuestoFacade impuestoFacade;
-
+    @EJB
+    private AsientoFacade asientoFacade;
     @EJB
     private ProveedoresFacade codigoProveedorController;
     @EJB
     private FormasPagoFacade formaPagoController;
+    @EJB
+    private CuentaFacade ejbCuenta;
     private CabeceraFacturac selected;
     ArrayList<DetalleFacturac> detalles;
     List<Producto> productos;
@@ -69,6 +81,9 @@ public class CabeceraFacturacHelper implements Serializable {
 
     public void iniciarNuevo() {
         this.setSelected(new CabeceraFacturac());
+        getSelected().setFecha(new Date());
+        int numFactura = ejbFacade.findAll().size() + 1;
+        getSelected().setNumeroFactura(String.valueOf(numFactura));
         detalles = new ArrayList<DetalleFacturac>();
         selectedDetalle = new DetalleFacturac();
     }
@@ -211,44 +226,171 @@ public class CabeceraFacturacHelper implements Serializable {
     public void gardarFactura(ActionEvent event) {
 
         if (getSelected() != null) {
+            if (Integer.parseInt(getSelected().getNumeroFactura())
+                    >= Integer.parseInt(getSelected().getAutorizacionSri().getNumeroInicialDocumento())
+                    && Integer.parseInt(getSelected().getNumeroFactura())
+                    <= Integer.parseInt(getSelected().getAutorizacionSri().getNumeroFinalDocumento())) {
 
-            if (getSelected().getCodigoProveedor() != null) {
+                if (getSelected().getCodigoProveedor() != null) {
 
-                if (getSelected().getFormaPago() != null) {
-                    this.getSelected().setFecha(new Date());
-                    ejbFacade.create(this.getSelected());
-                    List< CabeceraFacturac> listac = ejbFacade.buscaxNumeroFac(getSelected().getNumeroFactura());
-                    if (listac != null && listac.size() > 0) {
-                        CabeceraFacturac c = listac.get(0);
-                        for (DetalleFacturac d : detalles) {
-                            productoFacade.edit(d.getProducto());
+                    if (getSelected().getFormaPago() != null) {
+                        this.getSelected().setFecha(new Date());
+                        ejbFacade.create(this.getSelected());
+                        List< CabeceraFacturac> listac = ejbFacade.buscaxNumeroFac(getSelected().getNumeroFactura());
+                        if (listac != null && listac.size() > 0) {
+                            CabeceraFacturac c = listac.get(0);
+                            for (DetalleFacturac d : detalles) {
+                                d.getProducto().setStock(d.getCantidad() + d.getProducto().getStock());
+                                productoFacade.edit(d.getProducto());
+                            }
+
+                            for (DetalleFacturac d : detalles) {
+                                System.out.println("codigo factura # " + c.getCodigoFactura());
+                                System.out.println("codigo producto: " + d.getProducto().getCodigoProducto());
+                                d.setDetalleFacturacPK(new DetalleFacturacPK(c.getCodigoFactura(), d.getProducto().getCodigoProducto()));
+                                detalleFCFacade.create(d);
+                            }
+                            //Sesion.redireccionaPagina(ResourceBundle.getBundle("/MyBundle").getString("listaFacturasc"));
+                            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ustede ha realizado una compra!", "Factura Generada");
+                            FacesContext.getCurrentInstance().addMessage(null, msg);
+
+                            //this.getSelected()
+                            this.getSelected().setDetalleFacturacList(detalles);
+
+                            descargarFactura();
+                            generarAsientos(c, detalles);
+                            iniciarNuevo();
                         }
 
-                        for (DetalleFacturac d : detalles) {
-                            System.out.println("codigo fac" + c.getCodigoFactura());
-                            System.out.println("codigo pro" + d.getProducto().getCodigoProducto());
-                            d.setDetalleFacturacPK(new DetalleFacturacPK(c.getCodigoFactura(), d.getProducto().getCodigoProducto()));
-                            detalleFCFacade.create(d);
-                        }
-                        Sesion.redireccionaPagina(ResourceBundle.getBundle("/MyBundle").getString("listaFacturasc"));
-
+                    } else {
+                        msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Informacion", "Carge forma Pago");
+                        FacesContext.getCurrentInstance().addMessage(null, msg);
                     }
 
                 } else {
-                    msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Informacion", "Carge forma Pago");
+                    msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Informacion", "Carge un Proveedor");
                     FacesContext.getCurrentInstance().addMessage(null, msg);
                 }
-
             } else {
-                msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Informacion", "Carge un Proveedor");
+                msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "ADVERTENCIA", "Revise el rango de facturas ["
+                        + getSelected().getAutorizacionSri().getNumeroInicialDocumento() + ","
+                        + getSelected().getAutorizacionSri().getNumeroFinalDocumento() + "]");
                 FacesContext.getCurrentInstance().addMessage(null, msg);
             }
-
         } else {
 
             msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Informacion", "select en null");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
+
+    }
+
+    private Cuenta getCuenta(String nombre) {
+        List<Cuenta> cuentas = ejbCuenta.getCuentaxNumbreCuentaYCategoria(nombre.trim(), "DETALLE");
+        if (cuentas != null && cuentas.size() > 0) { // cuendo la cuenta existe
+            return cuentas.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    public int obtenerAnio(Date date) {
+        if (null == date) {
+
+            return 0;
+        } else {
+            String formato = "yyyy";
+            SimpleDateFormat dateFormat = new SimpleDateFormat(formato);
+            return Integer.parseInt(dateFormat.format(date));
+        }
+
+    }
+
+    private void generarAsientos(CabeceraFacturac cabecera, ArrayList<DetalleFacturac> detalles) {
+        BigDecimal totalDebe = new BigDecimal(cabecera.getTotal());
+        BigDecimal totalHaber = new BigDecimal(cabecera.getTotal());
+        //Redondear 2 decimales
+        totalDebe = totalDebe.setScale(2, BigDecimal.ROUND_HALF_UP);
+        totalHaber = totalHaber.setScale(2, BigDecimal.ROUND_HALF_UP);
+        Cuenta cuenta;
+        if (totalDebe.equals(totalHaber) && totalDebe.compareTo(BigDecimal.ZERO) > 0
+                && totalHaber.compareTo(BigDecimal.ZERO) > 0) {
+            List<Transaccion> tSalida = new ArrayList<>();
+
+            //Transaccion Mercaderias
+            Transaccion tMercaderias = new Transaccion();
+            tMercaderias.setDebe(new BigDecimal(cabecera.getSubtotal()).setScale(2, BigDecimal.ROUND_HALF_UP));
+            tMercaderias.setHaber(BigDecimal.ZERO);
+            tMercaderias.setReferencia("Ingresa $" + cabecera.getSubtotal() + " en Mercaderia");
+            cuenta = getCuenta("1.1.5.1.01");
+            tMercaderias.setIdcodcuenta(cuenta);
+            tSalida.add(tMercaderias);
+            if (cabecera.getSubtotalBaseIva() != 0.0) {
+                //Transaccion IVA
+                Transaccion tIva = new Transaccion();
+                tIva.setDebe(new BigDecimal(cabecera.getIva()).setScale(2, BigDecimal.ROUND_HALF_UP));
+                tIva.setHaber(BigDecimal.ZERO);
+                tIva.setReferencia("$" + cabecera.getIva() + " de Iva por Compras");
+                cuenta = getCuenta("1.1.3.1.01");
+                tIva.setIdcodcuenta(cuenta);
+                tSalida.add(tIva);
+            }
+
+            //Forma de Pago
+            if (cabecera.getFormaPago().getIdcodcuenta() != null) {//No es DxP o CxP
+                Transaccion tPago = new Transaccion();
+                tPago.setDebe(BigDecimal.ZERO);
+                tPago.setHaber(new BigDecimal(cabecera.getTotal()).setScale(2, BigDecimal.ROUND_HALF_UP));
+                tPago.setReferencia("Se pagó $" + cabecera.getTotal() + " por la compra de Mercaderias");
+                tPago.setIdcodcuenta(cabecera.getFormaPago().getIdcodcuenta());
+                tSalida.add(tPago);
+            }
+
+            //Validar que Debe==Haber
+            BigDecimal tdebe = BigDecimal.ZERO;
+            BigDecimal thaber = BigDecimal.ZERO;
+            for (Transaccion tSalida1 : tSalida) {
+                tdebe = tdebe.add(tSalida1.getDebe());
+                thaber = thaber.add(tSalida1.getHaber());
+            }
+
+            //Ingresar Transacciones y Asiento
+            if (thaber.equals(tdebe)) {
+                List<Asiento> asientosAux = asientoFacade.findAll();
+                int numAsiento = asientosAux.size() + 1;
+
+                Asiento asientoAux = new Asiento();
+                asientoAux.setIdcodasiento(numAsiento);
+                asientoAux.setNumasiento(numAsiento);
+                asientoAux.setNumdiario(1);
+                asientoAux.setPeriodo(obtenerAnio(cabecera.getFecha()));
+                asientoAux.setFecha(cabecera.getFecha());
+                asientoAux.setDebe(tdebe);
+                asientoAux.setHaber(thaber);
+                asientoAux.setConcepto("Compra de Mercaderia - Factura #" + cabecera.getNumeroFactura());
+                asientoAux.setDocumento(cabecera.getCodigoFactura());
+
+                for (Transaccion t : tSalida) {
+                    t.setIdcodasiento(asientoAux);
+                }
+                asientoAux.setTransaccionList(tSalida);
+                asientoFacade.create(asientoAux);
+            } else {
+                JsfUtil.addErrorMessage("Verifique los valores ERROR: Debe!=Haber en comprobación");
+            }
+        } else {
+            JsfUtil.addErrorMessage("Verifique los valores ERROR: Debe!=Haber");
+        }
+    }
+
+    private void descargarFactura() {
+        //String ruta = "/Users/cuent/" + nombre + ".pdf";
+        CabeceraFacturac c = this.getSelected();
+        String nombre = c.getPtoEmision() + "-" + c.getEstablecimiento() + "-" + c.getNumeroFactura() + ".pdf";
+        String ruta = "/Users/cuent/Downloads/" + nombre;
+
+        GenerarFacturaComprasPDF generarPdf = new GenerarFacturaComprasPDF();
+        generarPdf.generarFactura(c, ruta);
 
     }
 
@@ -283,42 +425,32 @@ public class CabeceraFacturacHelper implements Serializable {
     }
 
     public void actualizarFactura() {
-
         double subtotal = 0;
         double baseCero = 0;
         double baseIva = 0;
         double total = 0;
         double iva = 0;
-        boolean isTarifaCero = false;
 
         for (DetalleFacturac detalle : detalles) {
-            detalle.getProducto().setStock(detalle.getCantidad());
-            detalle.setPrecioUnitario(detalle.getProducto().getPrecio());
-            detalle.setTotal(detalle.getCantidad() * detalle.getProducto().getPrecio());
+            //detalle.getProducto().setStock(detalle.getCantidad());
+            detalle.setPrecioUnitario(detalle.getProducto().getCosto());
+            detalle.setTotal(detalle.getCantidad() * detalle.getProducto().getCosto());
 
-            if (detalle.getProducto().getImpuesto().getValor() == 12) {
-                isTarifaCero = false;
-            } else if (detalle.getProducto().getImpuesto().getValor() == 0) {
-                isTarifaCero = true;
+            if (detalle.getProducto().getImpuesto().getValor() != 0) {
+                baseIva = baseIva + (detalle.getCantidad() * (detalle.getProducto().getCosto()));
+                iva += 0.12 * detalle.getCantidad() * detalle.getProducto().getCosto();
             } else {
-
-            }
-
-            if (isTarifaCero) {
-                baseCero = baseCero + detalle.getCantidad() * detalle.getProducto().getPrecio();
-            } else {
-                baseIva = baseIva + (detalle.getCantidad() * (detalle.getProducto().getPrecio()));
+                baseCero = baseCero + detalle.getCantidad() * detalle.getProducto().getCosto();
             }
 
             subtotal = subtotal + detalle.getTotal();
-
         }
 
         this.getSelected().setSubtotal(subtotal);
         this.getSelected().setSubtotalBase0(baseCero);
         this.getSelected().setSubtotalBaseIva(baseIva);
-        this.getSelected().setIva(subtotal * 0.12);
-        this.getSelected().setTotal(subtotal + (subtotal * 0.12));
+        this.getSelected().setIva(iva);
+        this.getSelected().setTotal(subtotal + iva);
 
     }
 

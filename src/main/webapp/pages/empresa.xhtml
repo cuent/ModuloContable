@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="../WEB-INF/templates/plantila.xhtml">
+        <ui:define name="content">
+            <p:panel>
+                <h:form id="formlistaEmpresa">
+                    <p:growl id="msgs" showDetail="true"/>
+                    <p:dataTable id="datalistEmpresa"  value="#{empresaHelper.items}"
+                                 var="item"
+                                 rowKey="#{item.nombre}"
+                                 style="width: 100%; font-size: 0.9em;"
+                                 editable="true"
+                                 selection="#{empresaHelper.selected}"
+                                 paginatorPosition="bottom"
+                                 paginator="true"
+                                 rows="10">
+                        <f:facet name="header">Empresa</f:facet>
+                        <p:ajax event="rowEdit" listener="#{empresaHelper.onRowEdit}" update=":formlistaEmpresa:msgs"/>
+                        <p:ajax event="rowEditCancel" listener="#{empresaHelper.onRowCancel}" update=":formlistaEmpresa:msgs"/>
+
+                        <p:column headerText="Código">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{item.nombre}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="Input1" value="#{item.nombre}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="Documento">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{item.direccion}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="Input2" value="#{item.direccion}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="RUC">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{item.ruc}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="Input3" value="#{item.ruc}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="Télefono">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{item.telefono}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="Input4" value="#{item.telefono}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column style="width:32px">
+                            <p:rowEditor />
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </p:panel>
+        </ui:define>
+    </ui:composition>
+</html>
+

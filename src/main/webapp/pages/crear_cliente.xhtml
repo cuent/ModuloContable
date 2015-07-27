@@ -20,6 +20,7 @@
                             <f:selectItem itemLabel="CEDULA" itemValue="Cedula" />
                             <f:selectItem itemLabel="PASAPORTE" itemValue="Pasaporte" />
                             <f:selectItem itemLabel="CONSUMIDOR FINAL" itemValue="Consumidor Final" />
+                            <p:ajax update="@this"/>
                         </p:selectOneMenu>
 
                         <p:outputLabel value="Identificacion:" for="identificacion" />
@@ -39,7 +40,7 @@
                         <p:outputLabel value="Direccion:" for="direccion" />
                         <p:inputText id="direccion" value="#{clienteHelper.selected.direccion}" title="#{myBundle.CreateClienteTitle_direccion}" size="100" maxlength="100"/>
                     </p:panelGrid>
-                   <p:commandButton actionListener="#{clienteHelper.guardarNuevo}" value="Guardar" 
+                    <p:commandButton actionListener="#{clienteHelper.guardarNuevo}" value="Guardar" 
                                  update="display,
                                  :#{p:component('console')},
                                  :#{p:component('identificacion')},

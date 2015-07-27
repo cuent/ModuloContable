@@ -1,6 +1,8 @@
 package edu.uc.modulocontable.factura.compra;
 
+import edu.uc.modulocontable.facade.AutorizacionesFacade;
 import edu.uc.modulocontable.facade.ProveedoresFacade;
+import edu.uc.modulocontable.modelo2.Autorizaciones;
 import edu.uc.modulocontable.modelo2.Proveedores;
 import java.io.Serializable;
 import java.util.List;
@@ -19,11 +21,23 @@ public class ProveedoresHelper implements Serializable {
 
     @EJB
     private ProveedoresFacade ejbFacade;
+    @EJB
+    private AutorizacionesFacade ejbAutorizaciones;
     private boolean validaciones;
     private String seleccionTipoIdentificacion;
     FacesMessage msg;
     private Proveedores selected;
     private List<Proveedores> items;
+    private List<Autorizaciones> autorizaciones;
+    private Autorizaciones auxAutorizacion;
+
+    public List<Autorizaciones> getAutorizaciones() {
+        return autorizaciones = ejbAutorizaciones.findAll();
+    }
+
+    public void setAutorizaciones(List<Autorizaciones> autorizaciones) {
+        this.autorizaciones = autorizaciones;
+    }
 
     public boolean isValidaciones() {
         return validaciones;
@@ -42,7 +56,7 @@ public class ProveedoresHelper implements Serializable {
     }
 
     public List<Proveedores> getItems() {
-        return items=ejbFacade.findAll();
+        return items = ejbFacade.findAll();
     }
 
     public void setItems(List<Proveedores> items) {
@@ -51,6 +65,14 @@ public class ProveedoresHelper implements Serializable {
 
     public void iniciarnuevo() {
         this.setSelected(new Proveedores());
+    }
+
+    public Autorizaciones getAuxAutorizacion() {
+        return auxAutorizacion;
+    }
+
+    public void setAuxAutorizacion(Autorizaciones auxAutorizacion) {
+        this.auxAutorizacion = auxAutorizacion;
     }
 
     /**
@@ -109,6 +131,8 @@ public class ProveedoresHelper implements Serializable {
 
     public void guadar(ActionEvent event) {
         if (this.getSelected() != null) {
+            getSelected().setAutorizacion(auxAutorizacion);
+            getSelected().setFechaCaducidadAutorizacion(auxAutorizacion.getFechaCaducidad());
             ejbFacade.create(this.getSelected());
             this.setItems(ejbFacade.findAll());
             iniciarnuevo();
@@ -228,6 +252,10 @@ public class ProveedoresHelper implements Serializable {
             FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("CabeceraFacturac_items", this.getSelected().getCabeceraFacturacList());
         }
         return "/generado/nuevo/cabeceraFacturac/index";
+    }
+
+    public void actualizarFecha() {
+        getSelected().setFechaCaducidadAutorizacion(getSelected().getAutorizacion().getFechaCaducidad());
     }
 
 }

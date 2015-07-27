@@ -5,6 +5,7 @@
  */
 package edu.uc.modulocontable.modelo2;
 
+import edu.uc.modulocontable.services.ejb.Cuenta;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +16,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -41,9 +44,14 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Proveedores.findByNombre", query = "SELECT p FROM Proveedores p WHERE p.nombre = :nombre"),
     @NamedQuery(name = "Proveedores.findByDireccion", query = "SELECT p FROM Proveedores p WHERE p.direccion = :direccion"),
     @NamedQuery(name = "Proveedores.findByTelefono", query = "SELECT p FROM Proveedores p WHERE p.telefono = :telefono"),
-    @NamedQuery(name = "Proveedores.findByAutorizacion", query = "SELECT p FROM Proveedores p WHERE p.autorizacion = :autorizacion"),
     @NamedQuery(name = "Proveedores.findByFechaCaducidadAutorizacion", query = "SELECT p FROM Proveedores p WHERE p.fechaCaducidadAutorizacion = :fechaCaducidadAutorizacion")})
 public class Proveedores implements Serializable {
+    @JoinColumn(name = "idcuentaxpagar", referencedColumnName = "idcodcuenta")
+    @ManyToOne
+    private Cuenta idcuentaxpagar;
+    @JoinColumn(name = "iddocxpagar", referencedColumnName = "idcodcuenta")
+    @ManyToOne
+    private Cuenta iddocxpagar;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -67,12 +75,12 @@ public class Proveedores implements Serializable {
     @Size(max = 45)
     @Column(name = "telefono", length = 45)
     private String telefono;
-    @Size(max = 120)
-    @Column(name = "autorizacion", length = 120)
-    private String autorizacion;
     @Column(name = "fecha_caducidad_autorizacion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCaducidadAutorizacion;
+    @JoinColumn(name = "autorizacion", referencedColumnName = "id_autorizacion", nullable = false)
+    @ManyToOne(optional = false)
+    private Autorizaciones autorizacion;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoProveedor")
     private List<CabeceraFacturac> cabeceraFacturacList;
 
@@ -136,20 +144,20 @@ public class Proveedores implements Serializable {
         this.telefono = telefono;
     }
 
-    public String getAutorizacion() {
-        return autorizacion;
-    }
-
-    public void setAutorizacion(String autorizacion) {
-        this.autorizacion = autorizacion;
-    }
-
     public Date getFechaCaducidadAutorizacion() {
         return fechaCaducidadAutorizacion;
     }
 
     public void setFechaCaducidadAutorizacion(Date fechaCaducidadAutorizacion) {
         this.fechaCaducidadAutorizacion = fechaCaducidadAutorizacion;
+    }
+
+    public Autorizaciones getAutorizacion() {
+        return autorizacion;
+    }
+
+    public void setAutorizacion(Autorizaciones autorizacion) {
+        this.autorizacion = autorizacion;
     }
 
     @XmlTransient
@@ -183,7 +191,23 @@ public class Proveedores implements Serializable {
 
     @Override
     public String toString() {
-        return "edu.uc.modulocontable.modelo2.Proveedores[ codigoProveedores=" + codigoProveedores + " ]";
+        return "nuevo.paquete.modeloNuevo.Proveedores[ codigoProveedores=" + codigoProveedores + " ]";
+    }
+
+    public Cuenta getIdcuentaxpagar() {
+        return idcuentaxpagar;
+    }
+
+    public void setIdcuentaxpagar(Cuenta idcuentaxpagar) {
+        this.idcuentaxpagar = idcuentaxpagar;
+    }
+
+    public Cuenta getIddocxpagar() {
+        return iddocxpagar;
+    }
+
+    public void setIddocxpagar(Cuenta iddocxpagar) {
+        this.iddocxpagar = iddocxpagar;
     }
     
 }

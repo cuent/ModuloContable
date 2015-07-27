@@ -45,7 +45,7 @@
                             <p:submenu label="Reportes">
                                 <p:menuitem value="#{msj['libroDiario']}" outcome="/pages/asiento" icon="ui-icon-star"/>
                                 <p:menuitem value="#{msj['libroMayor']}" outcome="/pages/libroMayor" icon="ui-icon-star"/>
-                                <p:menuitem value="Balance de Comprobación" outcome="/pages/comprobacion" icon="ui-icon-star"/>
+                                <p:menuitem value="Balanc de Comprobación" outcome="/pages/comprobacion" icon="ui-icon-star"/>
                                 <p:menuitem value="Estado de Resultados" outcome="/pages/estadoResultados" icon="ui-icon-star"/>
                                 <p:menuitem value="Balance General" outcome="/pages/balanceGeneral" icon="ui-icon-star"/>
                             </p:submenu>
@@ -55,6 +55,14 @@
                             <p:submenu label="Facturacion">
                                 <p:menuitem value="#{msj['ventas']}" outcome="/pages/crear_factura" icon="ui-icon-star"/>
                                 <p:menuitem value="#{msj['compras']}" outcome="/pages/factura_compra" icon="ui-icon-star"/>
+                            </p:submenu>
+                            <p:submenu label="Administración">
+                                <p:menuitem value="#{msj['empresa']}" outcome="/pages/empresa" icon="ui-icon-star"/>
+                                <p:menuitem value="#{msj['impuesto']}" outcome="/pages/impuesto" icon="ui-icon-star"/>
+                                <p:menuitem value="#{msj['documento']}" outcome="/pages/documento" icon="ui-icon-star"/>
+                                <p:menuitem value="#{msj['formaPago']}" outcome="/pages/forma_pago" icon="ui-icon-star"/>
+                                <p:menuitem value="#{msj['autorizaciones']}" outcome="/pages/autorizaciones" icon="ui-icon-star"/>
+
                             </p:submenu>
                         </p:menu>
                     </h:form>

@@ -3,6 +3,7 @@ package edu.uc.modulocontable.converter;
 import edu.uc.modulocontable.modelo2.Autorizaciones;
 import edu.uc.modulocontable.facade.AutorizacionesFacade;
 import edu.uc.modulocontable.bean.util.JsfUtil;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.convert.FacesConverter;
@@ -22,7 +23,14 @@ public class AutorizacionesConverter implements Converter {
         if (value == null || value.length() == 0 || JsfUtil.isDummySelectItem(component, value)) {
             return null;
         }
-        return this.ejbFacade.find(getKey(value));
+        String nuevoValue = "";
+        List<Autorizaciones> autorizaciones = ejbFacade.findAll();
+        for (Autorizaciones autorizacione : autorizaciones) {
+            if (autorizacione.getNumeroAutorizacion().equals(value)) {
+                nuevoValue = autorizacione.getIdAutorizacion() + "";
+            }
+        }
+        return this.ejbFacade.find(Integer.valueOf(nuevoValue));
     }
 
     java.lang.String getKey(String value) {
