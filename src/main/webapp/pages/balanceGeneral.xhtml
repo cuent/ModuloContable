@@ -9,7 +9,7 @@
                 <p:dataTable var="cuentas" value="#{libroMayorHelper.listaCuentasCorrientes}">
                     <p:columnGroup type="header">
                         <p:row>                            
-                            <p:column colspan="5" headerText="Balance de Resultados" />
+                            <p:column colspan="5" headerText="Balance General" />
                         </p:row>
                         <p:row>
                             <p:column headerText="ACTIVO" />
@@ -140,6 +140,8 @@
                         </p:row>
                     </p:columnGroup>
                 </p:dataTable>
+                <br/>
+                <p:commandLink value="Exportar PDF" actionListener="#{libroMayorHelper.descargarGeneral()}"/>
             </h:form>
         </ui:define>
     </ui:composition>

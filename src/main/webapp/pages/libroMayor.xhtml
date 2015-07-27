@@ -7,7 +7,7 @@
         <ui:define name="content">
             <h:form>
                 <p:dataTable var="cuentas" value="#{libroMayorHelper.listaCuentas}">
-                    <f:facet name="header">
+                    <f:facet name="header" >
                         Libro Mayor
                     </f:facet>
 
@@ -44,9 +44,10 @@
                                 </p:row>
                             </p:columnGroup>
                         </p:dataTable>
-
                     </p:rowExpansion>
                 </p:dataTable>
+                <br/>
+                <p:commandLink value="Exportar PDF" actionListener="#{libroMayorHelper.descargarLibroMayor()}"/>
             </h:form>
         </ui:define>
     </ui:composition>
