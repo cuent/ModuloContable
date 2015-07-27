@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package edu.uc.modulocontable.transaccion;
 
 import edu.uc.modulocontable.domain.entity.AsientoFacade;
