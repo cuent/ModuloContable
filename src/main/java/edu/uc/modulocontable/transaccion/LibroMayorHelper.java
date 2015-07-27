@@ -6,12 +6,15 @@
 
 package edu.uc.modulocontable.transaccion;
 
+import edu.uc.modulocontable.domain.entity.AsientoFacade;
 import edu.uc.modulocontable.domain.entity.CuentaFacade;
 import edu.uc.modulocontable.domain.entity.TransaccionFacade;
+import edu.uc.modulocontable.services.ejb.Asiento;
 import edu.uc.modulocontable.services.ejb.Cuenta;
 import edu.uc.modulocontable.services.ejb.Transaccion;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -30,16 +33,27 @@ public class LibroMayorHelper {
     private BeanLibroMayor beanLibroMayor;
     private List<Cuenta> cuentas;
     private List<Transaccion> transacciones;
+    private List<Asiento> asientos;
     private Cuenta cuenta;
 
     @EJB
     private CuentaFacade cuentaFacade;
     @EJB
     private TransaccionFacade transaccionFacade;
+    @EJB
+    private AsientoFacade asientoFacade;
     private BigDecimal totalDebe = BigDecimal.ZERO;
     private BigDecimal totalHaber = BigDecimal.ZERO;
     private BigDecimal totalDeudor = BigDecimal.ZERO;
     private BigDecimal totalAcreedor = BigDecimal.ZERO;
+    private Date hoy = new Date();
+    
+    public List<Asiento> getAsientos() {
+        asientos = asientoFacade.findAll();
+
+        //asientoFacade.test();
+        return asientos;
+    }
 
     public Cuenta getCuenta() {
         return cuenta;
@@ -57,6 +71,21 @@ public class LibroMayorHelper {
         this.transacciones = transacciones;
     }
 
+    public List<Cuenta> getListaCuentasComprobacion() {
+        cuentas = cuentaFacade.findAll();
+        transacciones = transaccionFacade.getCuentas();
+        List<Cuenta> cuentasAux = new ArrayList<>();
+        for (Transaccion t : transacciones) {
+            for (Cuenta cuenta : cuentas) {
+                if (cuenta.getIdcodcuenta().equals(t.getIdcodcuenta().getIdcodcuenta())) {
+                    cuentasAux.add(cuenta);
+                }
+            }
+        }
+        cuentas = cuentasAux;
+        return cuentas;
+    }
+    
     public List<Cuenta> getListaCuentas() {
         cuentas = cuentaFacade.findAll();
         transacciones = transaccionFacade.getCuentas();
@@ -113,7 +142,7 @@ public class LibroMayorHelper {
         for (Transaccion t : transacciones) {
             for (Cuenta cuenta : cuentas) {
                 if (cuenta.getIdcodcuenta().equals(t.getIdcodcuenta().getIdcodcuenta())) {
-                    if (cuenta.getNumcuenta().startsWith("2.1.")) {
+                    if (cuenta.getNumcuenta().startsWith("2.")) {
                         cuentasAux.add(cuenta);
                     }
                 }
@@ -147,7 +176,7 @@ public class LibroMayorHelper {
         for (Transaccion t : transacciones) {
             for (Cuenta cuenta : cuentas) {
                 if (cuenta.getIdcodcuenta().equals(t.getIdcodcuenta().getIdcodcuenta())) {
-                    if (cuenta.getNumcuenta().startsWith("4.1.")) {
+                    if (cuenta.getNumcuenta().startsWith("4.1.") || cuenta.getNumcuenta().startsWith("5.1.")) {
                         cuentasAux.add(cuenta);
                     }
                 }
@@ -164,7 +193,7 @@ public class LibroMayorHelper {
         for (Transaccion t : transacciones) {
             for (Cuenta cuenta : cuentas) {
                 if (cuenta.getIdcodcuenta().equals(t.getIdcodcuenta().getIdcodcuenta())) {
-                    if (cuenta.getNumcuenta().startsWith("5.1.")) {
+                    if (cuenta.getNumcuenta().startsWith("6.1.")) {
                         cuentasAux.add(cuenta);
                     }
                 }
@@ -181,7 +210,7 @@ public class LibroMayorHelper {
         for (Transaccion t : transacciones) {
             for (Cuenta cuenta : cuentas) {
                 if (cuenta.getIdcodcuenta().equals(t.getIdcodcuenta().getIdcodcuenta())) {
-                    if (cuenta.getNumcuenta().startsWith("5.2.")) {
+                    if (cuenta.getNumcuenta().startsWith("6.2.")) {
                         cuentasAux.add(cuenta);
                     }
                 }
@@ -246,7 +275,7 @@ public class LibroMayorHelper {
 
     public BigDecimal getTotalPasivoPatrimonio() {
         BigDecimal total = BigDecimal.ZERO;
-        total = getTotalPasivo().add(getTotalPatrimonio());
+        total = getTotalPasivo().add(getTotalPatrimonio());        
         return total;
     }
 
@@ -255,8 +284,15 @@ public class LibroMayorHelper {
         BigDecimal total = BigDecimal.ZERO;
 
         for (Cuenta c : getListaCuentasIngresosOperacionales()) {
-            diferencia = c.getDiferencia();
-            total = total.add(diferencia);
+            if (c.getNumcuenta().startsWith("4.1.")) {
+                diferencia = c.getDiferencia();
+                total = total.add(diferencia);
+            }
+            if(c.getNumcuenta().startsWith("5.1.")){
+                diferencia = c.getDiferencia();
+                total = total.subtract(diferencia);
+            }
+            
         }
         return total;
     }
@@ -291,7 +327,7 @@ public class LibroMayorHelper {
 
     public BigDecimal getTotalUtilidadEjercicio() {
         BigDecimal total = BigDecimal.ZERO;
-        total = getTotalUtilidadOperacional().subtract(getTotalGastosNoOperacionales());
+        total = getTotalUtilidadOperacional().subtract(getTotalGastosNoOperacionales());    
         return total;
     }
     
@@ -342,7 +378,7 @@ public class LibroMayorHelper {
     }
 
     public BigDecimal getTotalAcreedor() {
-        getSumasTipo();
+        getSumasTipo();               
         return totalAcreedor;
     }
 
@@ -400,5 +436,64 @@ public class LibroMayorHelper {
     public void setBeanLibroMayor(BeanLibroMayor beanLibroMayor) {
         this.beanLibroMayor = beanLibroMayor;
     }
+    
+    public void descargarComprobacion() {
+        //String ruta = "/Users/cuent/" + nombre + ".pdf";
+        String nombre = "balanceComprobacion"+(hoy.getYear()+1900)+""+(hoy.getMonth()+1)+""+hoy.getDate()+".pdf";
+        String ruta = "C:\\Users\\Jorge\\Downloads\\" + nombre;
 
+        //ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        //ruta = ec.getRealPath("/" + nombre);
+        System.out.println("ruta: " + ruta);
+        GenerarComprobacion generarPdf = new GenerarComprobacion();
+        generarPdf.generarFactura(getListaCuentas(), ruta);
+    }
+    
+    public void descargarResultados() {
+        //String ruta = "/Users/cuent/" + nombre + ".pdf";
+        String nombre = "estadoResultados"+(hoy.getYear()+1900)+""+(hoy.getMonth()+1)+""+hoy.getDate()+".pdf";
+        String ruta = "C:\\Users\\Jorge\\Downloads\\" + nombre;
+
+        //ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        //ruta = ec.getRealPath("/" + nombre);
+        System.out.println("ruta: " + ruta);
+        GenerarResultados generarPdf = new GenerarResultados();
+        generarPdf.generarFactura(getListaCuentasIngresosOperacionales(),getListaCuentasGastosOperacionales(),getListaCuentasGastosNoOperacionales(), ruta);
+    }
+    
+    public void descargarGeneral() {
+        //String ruta = "/Users/cuent/" + nombre + ".pdf";
+        String nombre = "balanceGeneral"+(hoy.getYear()+1900)+""+(hoy.getMonth()+1)+""+hoy.getDate()+".pdf";
+        String ruta = "C:\\Users\\Jorge\\Downloads\\" + nombre;
+
+        //ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        //ruta = ec.getRealPath("/" + nombre);
+        System.out.println("ruta: " + ruta);
+        GenerarGeneral generarPdf = new GenerarGeneral();
+        generarPdf.generarFactura(getListaCuentasCorrientes(),getListaCuentasNoCorrientes(),getListaCuentasPasivo(),getListaCuentasPatrimonio(),getListaCuentasIngresosOperacionales(),getListaCuentasGastosOperacionales(),getListaCuentasGastosNoOperacionales(), ruta);
+    }
+    
+    public void descargarLibroMayor() {
+        //String ruta = "/Users/cuent/" + nombre + ".pdf";
+        String nombre = "libroMayor"+(hoy.getYear()+1900)+""+(hoy.getMonth()+1)+""+hoy.getDate()+".pdf";
+        String ruta = "C:\\Users\\Jorge\\Downloads\\" + nombre;
+
+        //ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        //ruta = ec.getRealPath("/" + nombre);
+        System.out.println("ruta: " + ruta);
+        GenerarLibroMayor generarPdf = new GenerarLibroMayor();
+        generarPdf.generarFactura(getListaCuentas(), ruta);
+    }
+    
+    public void descargarLibroDiario() {
+        //String ruta = "/Users/cuent/" + nombre + ".pdf";
+        String nombre = "libroDiario"+(hoy.getYear()+1900)+""+(hoy.getMonth()+1)+""+hoy.getDate()+".pdf";
+        String ruta = "C:\\Users\\Jorge\\Downloads\\" + nombre;
+
+        //ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        //ruta = ec.getRealPath("/" + nombre);
+        System.out.println("ruta: " + ruta);
+        GenerarLibroDiario generarPdf = new GenerarLibroDiario();
+        generarPdf.generarFactura(getAsientos(), ruta);
+    }
 }   
