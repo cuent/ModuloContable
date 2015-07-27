@@ -5,6 +5,7 @@
  */
 package edu.uc.modulocontable.modelo2;
 
+import edu.uc.modulocontable.services.ejb.Cuenta;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -14,6 +15,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -35,6 +38,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "FormasPago.findByCodigoFormap", query = "SELECT f FROM FormasPago f WHERE f.codigoFormap = :codigoFormap"),
     @NamedQuery(name = "FormasPago.findByDescripcion", query = "SELECT f FROM FormasPago f WHERE f.descripcion = :descripcion")})
 public class FormasPago implements Serializable {
+    @JoinColumn(name = "idcodcuenta", referencedColumnName = "idcodcuenta")
+    @ManyToOne
+    private Cuenta idcodcuenta;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -120,6 +126,14 @@ public class FormasPago implements Serializable {
     @Override
     public String toString() {
         return "edu.uc.modulocontable.modelo2.FormasPago[ codigoFormap=" + codigoFormap + " ]";
+    }
+
+    public Cuenta getIdcodcuenta() {
+        return idcodcuenta;
+    }
+
+    public void setIdcodcuenta(Cuenta idcodcuenta) {
+        this.idcodcuenta = idcodcuenta;
     }
     
 }

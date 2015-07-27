@@ -10,7 +10,10 @@
             <h:form>
                 <p:messages autoUpdate="true" />
 
-                <p:dataTable var="inventario" value="#{kardexBeen.inventario}" resizableColumns="true">
+                <p:dataTable var="inventario" value="#{kardexBeen.inventario}" resizableColumns="true"
+                             paginatorPosition="bottom"
+                             paginator="true"
+                             rows="8">
                     <f:facet name="header">
                         Metodo LIFO
                     </f:facet>

@@ -25,11 +25,14 @@ import edu.uc.modulocontable.general.pdf.Titulo1;
 import edu.uc.modulocontable.general.pdf.Titulo2;
 import edu.uc.modulocontable.general.pdf.Titulo3;
 import edu.uc.modulocontable.general.pdf.Titulo4;
+import edu.uc.modulocontable.info.empresa.Archivo;
+import edu.uc.modulocontable.info.empresa.Empresa;
 import edu.uc.modulocontable.modelo2.CabeceraFacturav;
 import edu.uc.modulocontable.modelo2.Producto;
 import edu.uc.modulocontable.negocio.kardex.Inventario;
 import edu.uc.modulocontable.negocio.kardex.KardexLIFO;
 import edu.uc.modulocontable.negocio.kardex.SalidaKardex;
+import edu.uc.modulocontable.services.ejb.Asiento;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,7 +46,7 @@ import java.util.Vector;
  *
  * @author cuent
  */
-public class GenerarFacturaKardex {
+public class GenerarLibroDiarioPDF {
 
     private Documento documento;
     private Encabezado encabezado;
@@ -60,7 +63,7 @@ public class GenerarFacturaKardex {
     private int saldoCantidad = 0;
     private double saldoTotal = 0;
 
-    public GenerarFacturaKardex() {
+    public GenerarLibroDiarioPDF() {
         encabezado = new Encabezado();
         imagen = new Imagen();
         espacioBlanco = new EspacioBlanco();
@@ -75,22 +78,22 @@ public class GenerarFacturaKardex {
         titulo4 = new Titulo4();
     }
 
-    public void generarFactura(List<KardexLIFO> inventario, Producto producto, String ruta) {
+    public void generarFactura(List<Asiento> asientos, String ruta) {
         documento = new Documento(ruta);
-        documento.setPageSize(PageSize.A4.rotate());
+        documento.setPageSize(PageSize.A4);
         PdfWriter writer = documento.getWriter();
         writer.setPageEvent(encabezado);
         documento.setMargins(40, 30, 30, 40);
         informacionpiePaguina();
         documento.open();
         try {
-            cabecera(producto);
+            cabecera();
             cabeceraTabla();
-            detalleDocumento(inventario);
+            //detalleDocumento(inventario);
             totalDetalleDocumento();
             comprobarLIFO();
         } catch (DocumentException ex) {
-            Logger.getLogger(GenerarFacturaVentas.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GenerarFacturaVentasPDF.class.getName()).log(Level.SEVERE, null, ex);
         }
         documento.close();
 
@@ -105,7 +108,10 @@ public class GenerarFacturaKardex {
         documento.getWriter().setPageEvent(encabezado);
     }
 
-    private void cabecera(Producto producto) throws DocumentException {
+    private void cabecera() throws DocumentException {
+        Archivo a = new Archivo();
+        Empresa empresa = a.obtieneContenidoArchivo().get(0);
+
         PdfPTable tablePanelInicial = new PdfPTable(2);
         tablePanelInicial.setWidthPercentage(100);
         tablePanelInicial.getDefaultCell().setBorder(0);
@@ -118,26 +124,26 @@ public class GenerarFacturaKardex {
         tablePanelDerecho.setWidthPercentage(100);
         tablePanelDerecho.getDefaultCell().setBorder(0);
 
-        titulo1.setTexto("Empresa ABC");
+        titulo1.setTexto(empresa.getNombre());
         tablePanelIzquierdo.addCell(titulo1.getElemento());
 
-        imagen.setDir("/Users/cuent/Downloads/abc-log.jpg");
+        imagen.setDir("/Users/cuent/Downloads/abc-logo.jpg");
         tablePanelIzquierdo.addCell(imagen.getImage());
 
         tablePanelInicial.addCell(tablePanelIzquierdo);
 
         tablePanelDerecho.addCell(espacioBlanco.getElemento());
 
-        titulo2.setTexto("KARDEX LIFO");
+        titulo2.setTexto("Libro Diario");
         titulo2.getElementoRojo();
         tablePanelDerecho.addCell(titulo2.getElemento());
 
         tablePanelDerecho.addCell(espacioBlanco.getElemento());
 
         tablaVertical.limpiar();
-        int[] alineamientos = {0, 0, 0};
-        Object[] datos = {producto.getCodigoProducto(), producto.getNombre(), producto.getStock()};
-        tablaVertical.setTitulos("Codigo", "Producto:", "Stock:");
+        int[] alineamientos = {0, 0, 0, 0};
+        Object[] datos = {empresa.getRuc(), empresa.getDireccion(), empresa.getTelefono(), "2005", "1"};
+        tablaVertical.setTitulos("RUC:", "Dirección:", "Télefono:", "Periodo", "# Diario");
         tablaVertical.setContenidos(datos);
         tablaVertical.setAlineamientos(alineamientos);
         tablaVertical.llenarTabla(false);

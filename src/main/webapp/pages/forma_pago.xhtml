@@ -11,14 +11,25 @@
                 #{formasPagoHelper.iniciarNuevo()}
                 <h:panelGroup id="display" rendered="#{formasPagoHelper.selected != null}">
                     <p:panelGrid columns="2" columnClasses="column">
-                        
+
                         <p:outputLabel value="#{myBundle.CreateFormasPagoLabel_descripcion}" for="descripcion" />
                         <p:inputText id="descripcion" value="#{formasPagoHelper.selected.descripcion}" title="#{myBundle.CreateFormasPagoTitle_descripcion}" required="true" requiredMessage="#{myBundle.CreateFormasPagoRequiredMessage_descripcion}"/>
 
+                        <p:outputLabel value="Cuenta:" for="cuenta" />
+                        <p:selectOneMenu id="cuenta" value="#{formasPagoHelper.selected.idcodcuenta}" converter="cConverter">
+                            <f:selectItem itemLabel="Selecione..."/>
+                            <f:selectItems value="#{formasPagoHelper.cuentas}"
+                                           var="cuenta"
+                                           itemValue="#{cuenta}"
+                                           itemLabel="#{cuenta.descripcion}"
+                                           />
+
+                        </p:selectOneMenu>
                     </p:panelGrid>
                     <p:commandButton actionListener="#{formasPagoHelper.guardarNuevo(event)}" value="Guardar" 
                                      update="display,
                                      :#{p:component('descripcion')},
+                                     :#{p:component('cuenta')},
                                      :#{p:component('datalistFormaPago')}" >
 
                     </p:commandButton>

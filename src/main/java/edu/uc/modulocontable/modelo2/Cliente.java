@@ -5,6 +5,7 @@
  */
 package edu.uc.modulocontable.modelo2;
 
+import edu.uc.modulocontable.services.ejb.Cuenta;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -14,6 +15,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -40,6 +43,12 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Cliente.findByTelefono", query = "SELECT c FROM Cliente c WHERE c.telefono = :telefono"),
     @NamedQuery(name = "Cliente.findByDireccion", query = "SELECT c FROM Cliente c WHERE c.direccion = :direccion")})
 public class Cliente implements Serializable {
+    @JoinColumn(name = "idcuentaxcobrar", referencedColumnName = "idcodcuenta")
+    @ManyToOne
+    private Cuenta idcuentaxcobrar;
+    @JoinColumn(name = "iddocxcobrar", referencedColumnName = "idcodcuenta")
+    @ManyToOne
+    private Cuenta iddocxcobrar;
     public static String findByIdentificacion = "Cliente.findByIdentificacion";
      public static String findByTipoIdentificacion = "Cliente.findByTipoIdentificacion";
    
@@ -172,6 +181,22 @@ public class Cliente implements Serializable {
     @Override
     public String toString() {
         return "edu.uc.modulocontable.modelo2.Cliente[ codigoCliente=" + codigoCliente + " ]";
+    }
+
+    public Cuenta getIdcuentaxcobrar() {
+        return idcuentaxcobrar;
+    }
+
+    public void setIdcuentaxcobrar(Cuenta idcuentaxcobrar) {
+        this.idcuentaxcobrar = idcuentaxcobrar;
+    }
+
+    public Cuenta getIddocxcobrar() {
+        return iddocxcobrar;
+    }
+
+    public void setIddocxcobrar(Cuenta iddocxcobrar) {
+        this.iddocxcobrar = iddocxcobrar;
     }
     
 }

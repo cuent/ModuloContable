@@ -5,6 +5,9 @@
  */
 package edu.uc.modulocontable.services.ejb;
 
+import edu.uc.modulocontable.modelo2.Cliente;
+import edu.uc.modulocontable.modelo2.FormasPago;
+import edu.uc.modulocontable.modelo2.Proveedores;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -44,6 +47,16 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Cuentas.findByNumeroCategoria", query = "SELECT c FROM Cuenta c WHERE c.numcuenta like :numcuenta AND c.categoria = :categoria"),
     @NamedQuery(name = "Cuenta.findBySaldofinal", query = "SELECT c FROM Cuenta c WHERE c.saldofinal = :saldofinal")})
 public class Cuenta implements Serializable {
+    @OneToMany(mappedBy = "idcuentaxcobrar")
+    private List<Cliente> clienteList;
+    @OneToMany(mappedBy = "iddocxcobrar")
+    private List<Cliente> clienteList1;
+    @OneToMany(mappedBy = "idcuentaxpagar")
+    private List<Proveedores> proveedoresList;
+    @OneToMany(mappedBy = "iddocxpagar")
+    private List<Proveedores> proveedoresList1;
+    @OneToMany(mappedBy = "idcodcuenta")
+    private List<FormasPago> formasPagoList;
 
     public static String findByNumcuenta = "Cuenta.findByNumcuenta";
     public static String findByNumeroCategoria = "Cuentas.findByNumeroCategoria";
@@ -271,6 +284,51 @@ public class Cuenta implements Serializable {
     @Override
     public String toString() {
         return "edu.uc.modulocontable.services.ejb.Cuenta[ idcodcuenta=" + idcodcuenta + " ]";
+    }
+
+    @XmlTransient
+    public List<Cliente> getClienteList() {
+        return clienteList;
+    }
+
+    public void setClienteList(List<Cliente> clienteList) {
+        this.clienteList = clienteList;
+    }
+
+    @XmlTransient
+    public List<Cliente> getClienteList1() {
+        return clienteList1;
+    }
+
+    public void setClienteList1(List<Cliente> clienteList1) {
+        this.clienteList1 = clienteList1;
+    }
+
+    @XmlTransient
+    public List<Proveedores> getProveedoresList() {
+        return proveedoresList;
+    }
+
+    public void setProveedoresList(List<Proveedores> proveedoresList) {
+        this.proveedoresList = proveedoresList;
+    }
+
+    @XmlTransient
+    public List<Proveedores> getProveedoresList1() {
+        return proveedoresList1;
+    }
+
+    public void setProveedoresList1(List<Proveedores> proveedoresList1) {
+        this.proveedoresList1 = proveedoresList1;
+    }
+
+    @XmlTransient
+    public List<FormasPago> getFormasPagoList() {
+        return formasPagoList;
+    }
+
+    public void setFormasPagoList(List<FormasPago> formasPagoList) {
+        this.formasPagoList = formasPagoList;
     }
 
 }

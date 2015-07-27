@@ -20,6 +20,8 @@ import edu.uc.modulocontable.general.pdf.Titulo1;
 import edu.uc.modulocontable.general.pdf.Titulo2;
 import edu.uc.modulocontable.general.pdf.Titulo3;
 import edu.uc.modulocontable.general.pdf.Titulo4;
+import edu.uc.modulocontable.info.empresa.Archivo;
+import edu.uc.modulocontable.info.empresa.Empresa;
 import edu.uc.modulocontable.modelo2.CabeceraFacturac;
 import edu.uc.modulocontable.modelo2.DetalleFacturac;
 import java.text.NumberFormat;
@@ -36,7 +38,7 @@ import java.util.logging.Logger;
  *
  * @author cuent
  */
-public class GenerarFacturaCompras {
+public class GenerarFacturaComprasPDF {
 
     private String numeroAutorizacion = "8901234567891123456789212345678931234567894";
     private String fechaAutorizacion = "01/08/2014 21:11:01";
@@ -59,7 +61,7 @@ public class GenerarFacturaCompras {
     private EspacioBlanco espacioBlanco;
     private Documento documento;
 
-    public GenerarFacturaCompras() {
+    public GenerarFacturaComprasPDF() {
         encabezado = new Encabezado();
         imagen = new Imagen();
         espacioBlanco = new EspacioBlanco();
@@ -85,7 +87,7 @@ public class GenerarFacturaCompras {
         try {
             cabezera(cabezera);
         } catch (DocumentException ex) {
-            Logger.getLogger(GenerarFacturaVentas.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GenerarFacturaVentasPDF.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
             informaicionCliente(cabezera);
@@ -174,6 +176,9 @@ public class GenerarFacturaCompras {
     }
 
     private void informaicionCliente(CabeceraFacturac cabezera) throws DocumentException {
+        Archivo a = new Archivo();
+        Empresa empresa = a.obtieneContenidoArchivo().get(0);
+
         titulo2.getElementoNegro();
         titulo2.setTexto("INFORMACION CONTRIBUYENTE");
         titulo2.CambiarPosicion((float) 9.5);
@@ -187,9 +192,9 @@ public class GenerarFacturaCompras {
         tablaVertical.setTitulos("RUC/CI/Pasaporte:", "Teléfono:", "Razón Social:", "Fecha Emisión:", "Direción:",
                 "");
         Object[] datos = {
-            cabezera.getCodigoProveedor().getIdentificacion(), cabezera.getCodigoProveedor().getTelefono(),
-            cabezera.getCodigoProveedor().getNombre(), cabezera.getFecha().toString(),
-            cabezera.getCodigoProveedor().getDireccion(), ""
+            empresa.getRuc(), empresa.getTelefono(),
+            empresa.getNombre(), cabezera.getFecha().toString(),
+            empresa.getDireccion(), ""
         };
         tablaVertical.setContenidos(datos);
 
@@ -227,12 +232,12 @@ public class GenerarFacturaCompras {
         imagen.setDir("/Users/cuent/Downloads/abc-logo.jpg");
         tablePanelIzquierdo.addCell(imagen.getImage());
 
-        titulo1.setTexto("Ventas SA");
+        titulo1.setTexto(c.getEstablecimiento());
         tablePanelIzquierdo.addCell(titulo1.getElemento());
 
         tablePanelInicial.addCell(tablePanelIzquierdo);
 
-        titulo2.setTexto("RUC: " + "0103199865001");
+        titulo2.setTexto("RUC: " + c.getCodigoProveedor().getIdentificacion());
         tablePanelDerecho.addCell(titulo2.getElemento());
 
         tablePanelDerecho.addCell(espacioBlanco.getElemento());
@@ -241,7 +246,7 @@ public class GenerarFacturaCompras {
         titulo2.getElementoRojo();
         tablePanelDerecho.addCell(titulo2.getElemento());
 
-        titulo2.setTexto("No.: " + c.getEstablecimiento() + "-" + c.getPtoEmision()
+        titulo2.setTexto("No.: " + c.getAutorizacionSri().getEstablecimiento() + "-" + c.getAutorizacionSri().getPtoEmision()
                 + "-" + c.getNumeroFactura());
         titulo2.getElementoRojo();
         tablePanelDerecho.addCell(titulo2.getElemento());

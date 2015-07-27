@@ -5,7 +5,7 @@
  */
 package edu.uc.modulocontable.negocio.kardex;
 
-import edu.uc.modulocontable.general.GenerarFacturaKardex;
+import edu.uc.modulocontable.general.GenerarKardexPDF;
 import edu.uc.modulocontable.modelo2.Kardex;
 import edu.uc.modulocontable.modelo2.Producto;
 import java.util.ArrayList;
@@ -153,7 +153,7 @@ public class GenerarKardex {
             String nombre = "Kardex_Inventario_LIFO_" + new Date().toString() + ".pdf";
             String ruta = "/Users/cuent/Downloads/" + nombre;
 
-            GenerarFacturaKardex generarPdf = new GenerarFacturaKardex();
+            GenerarKardexPDF generarPdf = new GenerarKardexPDF();
             generarPdf.generarFactura(getInventarioTotalLIFO(), getProducto(), ruta);
         }
     }

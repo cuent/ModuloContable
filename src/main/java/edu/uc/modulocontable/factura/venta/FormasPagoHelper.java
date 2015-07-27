@@ -5,8 +5,10 @@
  */
 package edu.uc.modulocontable.factura.venta;
 
+import edu.uc.modulocontable.domain.entity.CuentaFacade;
 import edu.uc.modulocontable.facade.FormasPagoFacade;
 import edu.uc.modulocontable.modelo2.FormasPago;
+import edu.uc.modulocontable.services.ejb.Cuenta;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -28,13 +30,25 @@ public class FormasPagoHelper implements Serializable {
 
     @EJB
     private FormasPagoFacade ejbFacade;
+    @EJB
+    private CuentaFacade ejbCuenta;
     private List<FormasPago> items;
+    private List<Cuenta> cuentas;
     private FormasPago selected;
     FacesMessage msg;
 
     @PostConstruct
     public void init() {
         items = ejbFacade.findAll();
+        cuentas = ejbCuenta.getCuentasActivosPasivosDetalle();
+    }
+
+    public List<Cuenta> getCuentas() {
+        return cuentas;
+    }
+
+    public void setCuentas(List<Cuenta> cuentas) {
+        this.cuentas = cuentas;
     }
 
     public List<FormasPago> getItems() {
@@ -56,12 +70,14 @@ public class FormasPagoHelper implements Serializable {
     public void iniciarNuevo() {
         this.setSelected(new FormasPago());
         this.setItems(ejbFacade.findAll());
+        this.setCuentas(ejbCuenta.getCuentasActivosPasivosDetalle());
     }
 
     public void guardarNuevo(ActionEvent event) {
         if (this.getSelected() != null) {
             ejbFacade.create(this.getSelected());
             this.setItems(ejbFacade.findAll());
+            this.setCuentas(ejbCuenta.getCuentasActivosPasivosDetalle());
             iniciarNuevo();
         }
     }

@@ -5,6 +5,7 @@
  */
 package edu.uc.modulocontable.modelo2;
 
+import edu.uc.modulocontable.services.ejb.Cuenta;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -45,6 +46,12 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Proveedores.findByTelefono", query = "SELECT p FROM Proveedores p WHERE p.telefono = :telefono"),
     @NamedQuery(name = "Proveedores.findByFechaCaducidadAutorizacion", query = "SELECT p FROM Proveedores p WHERE p.fechaCaducidadAutorizacion = :fechaCaducidadAutorizacion")})
 public class Proveedores implements Serializable {
+    @JoinColumn(name = "idcuentaxpagar", referencedColumnName = "idcodcuenta")
+    @ManyToOne
+    private Cuenta idcuentaxpagar;
+    @JoinColumn(name = "iddocxpagar", referencedColumnName = "idcodcuenta")
+    @ManyToOne
+    private Cuenta iddocxpagar;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -185,6 +192,22 @@ public class Proveedores implements Serializable {
     @Override
     public String toString() {
         return "nuevo.paquete.modeloNuevo.Proveedores[ codigoProveedores=" + codigoProveedores + " ]";
+    }
+
+    public Cuenta getIdcuentaxpagar() {
+        return idcuentaxpagar;
+    }
+
+    public void setIdcuentaxpagar(Cuenta idcuentaxpagar) {
+        this.idcuentaxpagar = idcuentaxpagar;
+    }
+
+    public Cuenta getIddocxpagar() {
+        return iddocxpagar;
+    }
+
+    public void setIddocxpagar(Cuenta iddocxpagar) {
+        this.iddocxpagar = iddocxpagar;
     }
     
 }

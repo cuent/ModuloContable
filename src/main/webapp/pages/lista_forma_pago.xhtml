@@ -38,6 +38,17 @@
                         </p:cellEditor>
                     </p:column>
 
+                    <p:column headerText="Cuenta">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{item.idcodcuenta.descripcion}" /></f:facet>
+                            <f:facet name="input">
+                                <h:selectOneMenu value="#{item.idcodcuenta}" style="width:100%" converter="#{cuentaConverter}">
+                                    <f:selectItems value="#{formasPagoHelper.cuentas}" var="cuenta" itemLabel="#{cuenta.descripcion}" itemValue="#{cuenta}" />
+                                </h:selectOneMenu>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
                     <p:column style="width:32px">
                         <p:rowEditor />
                     </p:column>
