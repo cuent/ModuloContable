@@ -25,6 +25,8 @@ import edu.uc.modulocontable.general.pdf.Titulo1;
 import edu.uc.modulocontable.general.pdf.Titulo2;
 import edu.uc.modulocontable.general.pdf.Titulo3;
 import edu.uc.modulocontable.general.pdf.Titulo4;
+import edu.uc.modulocontable.info.empresa.Archivo;
+import edu.uc.modulocontable.info.empresa.Empresa;
 import edu.uc.modulocontable.services.ejb.Cuenta;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -107,6 +109,9 @@ public class GenerarResultados {
     }
 
     private void cabecera() throws DocumentException {
+        Archivo a = new Archivo();
+        Empresa empresa = a.obtieneContenidoArchivo().get(0);
+
         PdfPTable tablePanelInicial = new PdfPTable(2);
         tablePanelInicial.setWidthPercentage(100);
         tablePanelInicial.getDefaultCell().setBorder(0);
@@ -119,7 +124,7 @@ public class GenerarResultados {
         tablePanelDerecho.setWidthPercentage(100);
         tablePanelDerecho.getDefaultCell().setBorder(0);
 
-        titulo1.setTexto("Empresa ABC");
+        titulo1.setTexto(empresa.getNombre());
         tablePanelIzquierdo.addCell(titulo1.getElemento());
 
         imagen.setDir("/Users/cuent/Downloads/abc-log.jpg");
@@ -156,12 +161,12 @@ public class GenerarResultados {
                 datos.add("");
                 datos.add(inv.getDescripcion());
                 datos.add("$" + String.valueOf(inv.getDiferencia()));
-                if (inv.getNumcuenta().startsWith("4.1.")) {
+                if (inv.getNumcuenta().startsWith("5.1.")) {
                     setIngOperacionales(getIngOperacionales().add(inv.getDiferencia()));
                 }
-                if (inv.getNumcuenta().startsWith("5.1.")) {
+                if (inv.getNumcuenta().startsWith("4.1.")) {
                     setIngOperacionales(getIngOperacionales().subtract(inv.getDiferencia()));
-                }                
+                }
                 datos.add("");
                 datos.add("");
 

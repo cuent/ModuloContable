@@ -14,6 +14,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
+import org.primefaces.event.RowEditEvent;
 
 @ManagedBean(name = "proveedoresHelper")
 @SessionScoped
@@ -65,6 +66,7 @@ public class ProveedoresHelper implements Serializable {
 
     public void iniciarnuevo() {
         this.setSelected(new Proveedores());
+        setValidaciones(false);
     }
 
     public Autorizaciones getAuxAutorizacion() {
@@ -106,6 +108,7 @@ public class ProveedoresHelper implements Serializable {
 
                     validaciones = validacionCedulaEcuatoriana(this.getSelected().getIdentificacion());
                     if (!validaciones) {
+                        setValidaciones(false);
                         FacesContext context = FacesContext.getCurrentInstance();
 
                         context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Cedula Incorrecta"));
@@ -115,13 +118,14 @@ public class ProveedoresHelper implements Serializable {
                 case "Ruc":
                     validaciones = validarRucEcuatoriano(this.getSelected().getIdentificacion());
                     if (!validaciones) {
+                        setValidaciones(false);
                         FacesContext context = FacesContext.getCurrentInstance();
-
                         context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Ruc Incorrecta"));
                         //context.addMessage(null, new FacesMessage("Second Message", "Additional Message Detail"));
                     }
                     break;
                 default:
+                    setValidaciones(true);
                     break;
 
             }
@@ -134,6 +138,7 @@ public class ProveedoresHelper implements Serializable {
             getSelected().setAutorizacion(auxAutorizacion);
             getSelected().setFechaCaducidadAutorizacion(auxAutorizacion.getFechaCaducidad());
             ejbFacade.create(this.getSelected());
+            setValidaciones(false);
             this.setItems(ejbFacade.findAll());
             iniciarnuevo();
         }
@@ -238,6 +243,23 @@ public class ProveedoresHelper implements Serializable {
      * Resets the "selected" attribute of any parent Entity controllers.
      */
     public void resetParents() {
+    }
+
+    public void onRowEdit(RowEditEvent event) {
+        if ((Proveedores) event.getObject() != null) {
+            ejbFacade.edit((Proveedores) event.getObject());
+            msg = new FacesMessage("Informacion", "Proveedor Modificado");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } else {
+            msg = new FacesMessage("Error", "Proveedor no pudo ser modificado");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+
+    }
+
+    public void onRowCancel(RowEditEvent event) {
+        msg = new FacesMessage("Informacion", "Modificacion Cancelada");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     /**

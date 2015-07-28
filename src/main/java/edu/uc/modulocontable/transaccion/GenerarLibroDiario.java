@@ -25,6 +25,8 @@ import edu.uc.modulocontable.general.pdf.Titulo1;
 import edu.uc.modulocontable.general.pdf.Titulo2;
 import edu.uc.modulocontable.general.pdf.Titulo3;
 import edu.uc.modulocontable.general.pdf.Titulo4;
+import edu.uc.modulocontable.info.empresa.Archivo;
+import edu.uc.modulocontable.info.empresa.Empresa;
 import edu.uc.modulocontable.services.ejb.Asiento;
 import edu.uc.modulocontable.services.ejb.Cuenta;
 import edu.uc.modulocontable.services.ejb.Transaccion;
@@ -100,6 +102,9 @@ public class GenerarLibroDiario {
     }
 
     private void cabecera() throws DocumentException {
+        Archivo a = new Archivo();
+        Empresa empresa = a.obtieneContenidoArchivo().get(0);
+
         PdfPTable tablePanelInicial = new PdfPTable(2);
         tablePanelInicial.setWidthPercentage(100);
         tablePanelInicial.getDefaultCell().setBorder(0);
@@ -112,7 +117,7 @@ public class GenerarLibroDiario {
         tablePanelDerecho.setWidthPercentage(100);
         tablePanelDerecho.getDefaultCell().setBorder(0);
 
-        titulo1.setTexto("Empresa ABC");
+        titulo1.setTexto(empresa.getNombre());
         tablePanelIzquierdo.addCell(titulo1.getElemento());
 
         imagen.setDir("/Users/cuent/Downloads/abc-log.jpg");
@@ -136,7 +141,7 @@ public class GenerarLibroDiario {
 
     private void detalleDocumento1(List<Asiento> asientos) throws DocumentException {
         SimpleDateFormat formateador = new SimpleDateFormat("yyyy-MM-dd");
-        
+
         for (Asiento inv : asientos) {
             documento.add(espacioBlanco.getElemento());
 
@@ -148,12 +153,12 @@ public class GenerarLibroDiario {
 
             datos2.add(formateador.format(inv.getFecha()));
             datos2.add(inv.getConcepto());
-            datos2.add("-"+inv.getNumasiento()+"-");
-            datos2.add(""+inv.getPeriodo());
-            datos2.add(""+inv.getNumdiario());
-            datos2.add(""+inv.getDocumento());
+            datos2.add("-" + inv.getNumasiento() + "-");
+            datos2.add("" + inv.getPeriodo());
+            datos2.add("" + inv.getNumdiario());
+            datos2.add("" + inv.getDocumento());
             vector.add(datos2);
-            
+
             List datos5 = new ArrayList();
 
             datos5.add("____________________");
@@ -163,7 +168,7 @@ public class GenerarLibroDiario {
             datos5.add("____________________");
             datos5.add("____________________");
             vector.add(datos5);
-            
+
             List datos4 = new ArrayList();
 
             datos4.add("");
@@ -173,7 +178,7 @@ public class GenerarLibroDiario {
             datos4.add("Haber");
             datos4.add("Referencia");
             vector.add(datos4);
-            
+
             for (Transaccion tran : inv.getTransaccionList()) {
                 List datos = new ArrayList();
 
@@ -181,11 +186,11 @@ public class GenerarLibroDiario {
                 datos.add(tran.getIdcodcuenta().getDescripcion());
                 datos.add("");
                 datos.add("$" + String.valueOf(tran.getDebe()));
-                datos.add("$" + String.valueOf(tran.getHaber()));                
-                datos.add(""+tran.getReferencia());                
+                datos.add("$" + String.valueOf(tran.getHaber()));
+                datos.add("" + tran.getReferencia());
                 vector.add(datos);
             }
-            
+
             List datos3 = new ArrayList();
 
             datos3.add("____________________");
@@ -195,27 +200,26 @@ public class GenerarLibroDiario {
             datos3.add("____________________");
             datos3.add("____________________");
             vector.add(datos3);
-            
+
             List datos1 = new ArrayList();
 
             datos1.add("");
             datos1.add("Totales:");
             datos1.add("");
             datos1.add("$" + String.valueOf(inv.getDebe()));
-            datos1.add("$" + String.valueOf(inv.getHaber()));            
+            datos1.add("$" + String.valueOf(inv.getHaber()));
             datos1.add("");
             vector.add(datos1);
-            
 
             Object[] datosV = new Object[vector.size()];
             for (int k = 0; k < vector.size(); k++) {
                 datosV[k] = vector.get(k);
             }
 
-            tablaHorizontal.setTitulos("Fecha","Concepto","Número Asiento","Periodo","Número Diario","Documento");
+            tablaHorizontal.setTitulos("Fecha", "Concepto", "Número Asiento", "Periodo", "Número Diario", "Documento");
             tablaHorizontal.setContenidos(datosV);
-            tablaHorizontal.setAlineamientos(new int[]{1,1,1,1,1,1});
-            tablaHorizontal.setTamanos(new int[]{3,5,1,3,3,3});
+            tablaHorizontal.setAlineamientos(new int[]{1, 1, 1, 1, 1, 1});
+            tablaHorizontal.setTamanos(new int[]{3, 5, 1, 3, 3, 3});
             tablaHorizontal.llenarTabla();
             tablaHorizontal.setPosicion(2);
             tablaHorizontal.setAnchoTabla(100);

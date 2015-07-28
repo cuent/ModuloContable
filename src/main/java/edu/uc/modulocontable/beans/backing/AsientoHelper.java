@@ -133,8 +133,8 @@ public class AsientoHelper {
             BigDecimal thaber = BigDecimal.ZERO;
 
             for (Transaccion tSalida1 : tSalida) {
-                tdebe = tdebe.add(tSalida1.getDebe());
-                thaber = thaber.add(tSalida1.getHaber());
+                tdebe = tdebe.add(tSalida1.getDebe().setScale(2, BigDecimal.ROUND_HALF_UP));
+                thaber = thaber.add(tSalida1.getHaber().setScale(2, BigDecimal.ROUND_HALF_UP));
             }
 //
             if (thaber.equals(tdebe)) {
@@ -181,8 +181,8 @@ public class AsientoHelper {
         BigDecimal auxFHaber = BigDecimal.ZERO;
 
         for (Transaccion t : transacciones) {
-            auxFDebe = auxFDebe.add(t.getDebe());
-            auxFHaber = auxFHaber.add(t.getHaber());
+            auxFDebe = auxFDebe.add(t.getDebe().setScale(2, BigDecimal.ROUND_HALF_UP));
+            auxFHaber = auxFHaber.add(t.getHaber().setScale(2, BigDecimal.ROUND_HALF_UP));
         }
         setTotalDebe(auxFDebe);
         setTotalHaber(auxFHaber);

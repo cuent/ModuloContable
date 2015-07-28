@@ -25,6 +25,8 @@ import edu.uc.modulocontable.general.pdf.Titulo1;
 import edu.uc.modulocontable.general.pdf.Titulo2;
 import edu.uc.modulocontable.general.pdf.Titulo3;
 import edu.uc.modulocontable.general.pdf.Titulo4;
+import edu.uc.modulocontable.info.empresa.Archivo;
+import edu.uc.modulocontable.info.empresa.Empresa;
 import edu.uc.modulocontable.services.ejb.Cuenta;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -104,6 +106,9 @@ public class GenerarComprobacion {
     }
 
     private void cabecera() throws DocumentException {
+        Archivo a = new Archivo();
+        Empresa empresa = a.obtieneContenidoArchivo().get(0);
+
         PdfPTable tablePanelInicial = new PdfPTable(2);
         tablePanelInicial.setWidthPercentage(100);
         tablePanelInicial.getDefaultCell().setBorder(0);
@@ -116,7 +121,7 @@ public class GenerarComprobacion {
         tablePanelDerecho.setWidthPercentage(100);
         tablePanelDerecho.getDefaultCell().setBorder(0);
 
-        titulo1.setTexto("Empresa ABC");
+        titulo1.setTexto(empresa.getNombre());
         tablePanelIzquierdo.addCell(titulo1.getElemento());
 
         imagen.setDir("/Users/cuent/Downloads/abc-log.jpg");
@@ -184,13 +189,13 @@ public class GenerarComprobacion {
 
     private void totalDetalleDocumento() throws DocumentException {
         tablaHorizontal.setColumnas(5);
-        
+
         Vector vector = new Vector();
 
         List datos = new ArrayList();
 
         datos.add("");
-        datos.add("");        
+        datos.add("");
         datos.add("");
         datos.add("");
         datos.add("");
@@ -202,7 +207,7 @@ public class GenerarComprobacion {
             datosV[k] = vector.get(k);
         }
 
-        tablaHorizontal.setTitulos("Totales","$"+getDebe(),"$"+getHaber(),"$"+getDeudor(),"$"+getAcreedor());
+        tablaHorizontal.setTitulos("Totales", "$" + getDebe(), "$" + getHaber(), "$" + getDeudor(), "$" + getAcreedor());
         tablaHorizontal.setContenidos(datosV);
         tablaHorizontal.setAlineamientos(new int[]{0, 0, 1, 1, 1});
         tablaHorizontal.setTamanos(new int[]{10, 5, 5, 5, 5});
@@ -210,7 +215,7 @@ public class GenerarComprobacion {
         tablaHorizontal.setPosicion(2);
         tablaHorizontal.setAnchoTabla(100);
         documento.add(tablaHorizontal.getTabla());
-        documento.add(espacioBlanco.getElemento());        
+        documento.add(espacioBlanco.getElemento());
         tablaHorizontal.limpiar();
     }
 

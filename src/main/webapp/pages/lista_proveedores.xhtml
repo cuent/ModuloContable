@@ -9,65 +9,62 @@
     <h:form id="ProveedoresListForm">
         Lista de Proveedores
         <p:panel>
-
+            <p:growl id="msgs" showDetail="true"/>
             <p:dataTable id="datalistProveedores"
                          value="#{proveedoresHelper.items}"
                          var="item"
                          rowKey="#{item.codigoProveedores}"
+                         editable="true"
                          paginator="true"
                          rows="10"
                          rowsPerPageTemplate="10,20,30,40,50"
                          selectionMode="single"
                          selection="#{proveedoresHelper.selected}">
 
+                <p:ajax event="rowEdit" listener="#{proveedoresHelper.onRowEdit}" update=":ProveedoresListForm:msgs"/>
+                <p:ajax event="rowEditCancel" listener="#{proveedoresHelper.onRowCancel}" update=":ProveedoresListForm:msgs"/>
 
-
-                <p:column sortBy="#{item.codigoProveedores}" filterBy="#{item.codigoProveedores}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle2.ListProveedoresTitle_codigoProveedores}"/>
-                    </f:facet>
-                    <h:outputText value="#{item.codigoProveedores}"/>
+                <p:column headerText="Tipo Identificación" sortBy="#{item.tipoIdentificacion}" filterBy="#{item.tipoIdentificacion}">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{item.tipoIdentificacion}"/></f:facet>
+                        <f:facet name="input"><p:inputText id="Input19" value="#{item.tipoIdentificacion}" style="width:100%" readonly="true"/></f:facet>
+                    </p:cellEditor>
                 </p:column>
 
 
-                <p:column sortBy="#{item.tipoIdentificacion}" filterBy="#{item.tipoIdentificacion}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle2.ListProveedoresTitle_tipoIdentificacion}"/>
-                    </f:facet>
-                    <h:outputText value="#{item.tipoIdentificacion}"/>
+                <p:column headerText="Identificación" sortBy="#{item.identificacion}" filterBy="#{item.identificacion}">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{item.identificacion}"/></f:facet>
+                        <f:facet name="input"><p:inputText id="Input20" value="#{item.identificacion}" style="width:100%" readonly="true"/></f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Nombre" sortBy="#{item.nombre}" filterBy="#{item.nombre}">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{item.nombre}"/></f:facet>
+                        <f:facet name="input"><p:inputText id="Input21" value="#{item.nombre}" style="width:100%"/></f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Dirección">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{item.direccion}"/></f:facet>
+                        <f:facet name="input"><p:inputText id="Input22" value="#{item.direccion}" style="width:100%"/></f:facet>
+                    </p:cellEditor>
                 </p:column>
 
 
-                <p:column sortBy="#{item.identificacion}" filterBy="#{item.identificacion}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle2.ListProveedoresTitle_identificacion}"/>
-                    </f:facet>
-                    <h:outputText value="#{item.identificacion}"/>
+                <p:column headerText="Télefono">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{item.telefono}"/></f:facet>
+                        <f:facet name="input"><p:inputText id="Input23" value="#{item.telefono}" style="width:100%"/></f:facet>
+                    </p:cellEditor>
                 </p:column>
 
-
-                <p:column sortBy="#{item.nombre}" filterBy="#{item.nombre}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle2.ListProveedoresTitle_nombre}"/>
-                    </f:facet>
-                    <h:outputText value="#{item.nombre}"/>
+                <p:column style="width:32px">
+                    <p:rowEditor />
                 </p:column>
 
-
-                <p:column sortBy="#{item.direccion}" filterBy="#{item.direccion}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle2.ListProveedoresTitle_direccion}"/>
-                    </f:facet>
-                    <h:outputText value="#{item.direccion}"/>
-                </p:column>
-
-
-                <p:column sortBy="#{item.telefono}" filterBy="#{item.telefono}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle2.ListProveedoresTitle_telefono}"/>
-                    </f:facet>
-                    <h:outputText value="#{item.telefono}"/>
-                </p:column>
                 <p:column style="width:20px">
                     <f:facet name="header">
                         <h:outputText value=""/>

@@ -15,9 +15,13 @@
                     <p:selectOneMenu id="producto" value="#{kardexBeen.producto}" converter="productoConverter">
                         <f:selectItems value="#{kardexBeen.productos}" var="product" itemLabel="#{product.nombre}" itemValue="#{product}"/>
                     </p:selectOneMenu>
+
+                    <p:outputLabel for="effect" value="Fecha:" />
+                    <p:calendar id="effect" value="#{kardexBeen.fecha}" effect="fold" />
                 </h:panelGrid>
 
-                <p:commandButton value="Generar" actionListener="#{kardexBeen.test}" icon="ui-icon-check" />
+                <p:commandButton value="GenerarTotal" actionListener="#{kardexBeen.test}" icon="ui-icon-check" />
+                <p:commandButton value="Generar por Fecha" actionListener="#{kardexBeen.testFecha()}" icon="ui-icon-check" />
 
 
             </h:form>

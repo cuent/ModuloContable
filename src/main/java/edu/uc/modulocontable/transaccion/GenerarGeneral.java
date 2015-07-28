@@ -25,6 +25,8 @@ import edu.uc.modulocontable.general.pdf.Titulo1;
 import edu.uc.modulocontable.general.pdf.Titulo2;
 import edu.uc.modulocontable.general.pdf.Titulo3;
 import edu.uc.modulocontable.general.pdf.Titulo4;
+import edu.uc.modulocontable.info.empresa.Archivo;
+import edu.uc.modulocontable.info.empresa.Empresa;
 import edu.uc.modulocontable.services.ejb.Cuenta;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -94,7 +96,7 @@ public class GenerarGeneral {
             detalleDocumento2(activosNoCorr);
             totalDocumento();
             detalleDocumento3(pasivos);
-            detalleDocumento4(patrimonio,cuentaIng,cuentaGas,cuentaOtro);
+            detalleDocumento4(patrimonio, cuentaIng, cuentaGas, cuentaOtro);
             totalDocumento1();
         } catch (DocumentException ex) {
 
@@ -113,6 +115,9 @@ public class GenerarGeneral {
     }
 
     private void cabecera() throws DocumentException {
+        Archivo a = new Archivo();
+        Empresa empresa = a.obtieneContenidoArchivo().get(0);
+
         PdfPTable tablePanelInicial = new PdfPTable(2);
         tablePanelInicial.setWidthPercentage(100);
         tablePanelInicial.getDefaultCell().setBorder(0);
@@ -125,7 +130,7 @@ public class GenerarGeneral {
         tablePanelDerecho.setWidthPercentage(100);
         tablePanelDerecho.getDefaultCell().setBorder(0);
 
-        titulo1.setTexto("Empresa ABC");
+        titulo1.setTexto(empresa.getNombre());
         tablePanelIzquierdo.addCell(titulo1.getElemento());
 
         imagen.setDir("/Users/cuent/Downloads/abc-log.jpg");
@@ -278,24 +283,24 @@ public class GenerarGeneral {
 
         Vector vector = new Vector();
 
-        if(pasivos.isEmpty()){
+        if (pasivos.isEmpty()) {
             List datos = new ArrayList();
 
             datos.add("");
             datos.add("");
             datos.add("");
-            datos.add("");            
+            datos.add("");
             datos.add("");
             vector.add(datos);
-        }        
-        
+        }
+
         for (Cuenta inv : pasivos) {
 
             List datos = new ArrayList();
 
             datos.add("");
             datos.add("");
-            datos.add(""+inv.getDescripcion());
+            datos.add("" + inv.getDescripcion());
             datos.add("$" + String.valueOf(inv.getDiferencia()));
             setTotalPasivos(getTotalPasivos().add(inv.getDiferencia()));
             datos.add("");
@@ -400,14 +405,14 @@ public class GenerarGeneral {
         tablaHorizontal.limpiar();
 
     }
-    
+
     private void ingresosOperacionales(List<Cuenta> ingOper) throws DocumentException {
         if (!ingOper.isEmpty()) {
             for (Cuenta inv : ingOper) {
-                if (inv.getNumcuenta().startsWith("4.1.")) {
+                if (inv.getNumcuenta().startsWith("5.1.")) {
                     setIngOperacionales(getIngOperacionales().add(inv.getDiferencia()));
                 }
-                if (inv.getNumcuenta().startsWith("5.1.")) {
+                if (inv.getNumcuenta().startsWith("4.1.")) {
                     setIngOperacionales(getIngOperacionales().subtract(inv.getDiferencia()));
                 }
             }

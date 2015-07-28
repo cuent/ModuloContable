@@ -48,7 +48,7 @@ public class LibroMayorHelper {
     private BigDecimal totalDeudor = BigDecimal.ZERO;
     private BigDecimal totalAcreedor = BigDecimal.ZERO;
     private Date hoy = new Date();
-    
+
     public List<Asiento> getAsientos() {
         asientos = asientoFacade.findAll();
 
@@ -75,22 +75,7 @@ public class LibroMayorHelper {
     public List<Cuenta> getListaCuentasComprobacion() {
         cuentas = cuentaFacade.findAll();
         transacciones = transaccionFacade.getCuentas();
-        List<Cuenta> cuentasAux = new ArrayList<>();
-        for (Transaccion t : transacciones) {
-            for (Cuenta cuenta : cuentas) {
-                if (cuenta.getIdcodcuenta().equals(t.getIdcodcuenta().getIdcodcuenta())) {
-                    cuentasAux.add(cuenta);
-                }
-            }
-        }
-        cuentas = cuentasAux;
-        return cuentas;
-    }
-    
-    public List<Cuenta> getListaCuentas() {
-        cuentas = cuentaFacade.findAll();
-        transacciones = transaccionFacade.getCuentas();
-        
+
         HashSet<Integer> set = new HashSet();
         List<Transaccion> tAux = new ArrayList<>();
         for (Transaccion t : transacciones) {
@@ -113,9 +98,46 @@ public class LibroMayorHelper {
         return cuentas;
     }
 
-    public List<Cuenta> getListaCuentasCorrientes() {
+    public List<Cuenta> getListaCuentas() {
         cuentas = cuentaFacade.findAll();
         transacciones = transaccionFacade.getCuentas();
+
+        HashSet<Integer> set = new HashSet();
+        List<Transaccion> tAux = new ArrayList<>();
+        for (Transaccion t : transacciones) {
+            if (!set.contains(t.getIdcodcuenta().getIdcodcuenta())) {
+                set.add(t.getIdcodcuenta().getIdcodcuenta());
+                tAux.add(t);
+            }
+        }
+        transacciones = tAux;
+
+        List<Cuenta> cuentasAux = new ArrayList<>();
+        for (Transaccion t : transacciones) {
+            for (Cuenta cuenta : cuentas) {
+                if (cuenta.getIdcodcuenta().equals(t.getIdcodcuenta().getIdcodcuenta())) {
+                    cuentasAux.add(cuenta);
+                }
+            }
+        }
+        cuentas = cuentasAux;
+        return cuentas;
+    }
+
+    public List<Cuenta> getListaCuentasCorrientes() {       
+        cuentas = cuentaFacade.findAll();
+        transacciones = transaccionFacade.getCuentas();
+
+        HashSet<Integer> set = new HashSet();
+        List<Transaccion> tAux = new ArrayList<>();
+        for (Transaccion t : transacciones) {
+            if (!set.contains(t.getIdcodcuenta().getIdcodcuenta())) {
+                set.add(t.getIdcodcuenta().getIdcodcuenta());
+                tAux.add(t);
+            }
+        }
+        transacciones = tAux;
+
         List<Cuenta> cuentasAux = new ArrayList<>();
         for (Transaccion t : transacciones) {
             for (Cuenta cuenta : cuentas) {
@@ -133,6 +155,17 @@ public class LibroMayorHelper {
     public List<Cuenta> getListaCuentasNoCorrientes() {
         cuentas = cuentaFacade.findAll();
         transacciones = transaccionFacade.getCuentas();
+
+        HashSet<Integer> set = new HashSet();
+        List<Transaccion> tAux = new ArrayList<>();
+        for (Transaccion t : transacciones) {
+            if (!set.contains(t.getIdcodcuenta().getIdcodcuenta())) {
+                set.add(t.getIdcodcuenta().getIdcodcuenta());
+                tAux.add(t);
+            }
+        }
+        transacciones = tAux;
+        
         List<Cuenta> cuentasAux = new ArrayList<>();
         for (Transaccion t : transacciones) {
             for (Cuenta cuenta : cuentas) {
@@ -150,6 +183,17 @@ public class LibroMayorHelper {
     public List<Cuenta> getListaCuentasPasivo() {
         cuentas = cuentaFacade.findAll();
         transacciones = transaccionFacade.getCuentas();
+
+        HashSet<Integer> set = new HashSet();
+        List<Transaccion> tAux = new ArrayList<>();
+        for (Transaccion t : transacciones) {
+            if (!set.contains(t.getIdcodcuenta().getIdcodcuenta())) {
+                set.add(t.getIdcodcuenta().getIdcodcuenta());
+                tAux.add(t);
+            }
+        }
+        transacciones = tAux;
+        
         List<Cuenta> cuentasAux = new ArrayList<>();
         for (Transaccion t : transacciones) {
             for (Cuenta cuenta : cuentas) {
@@ -167,6 +211,17 @@ public class LibroMayorHelper {
     public List<Cuenta> getListaCuentasPatrimonio() {
         cuentas = cuentaFacade.findAll();
         transacciones = transaccionFacade.getCuentas();
+
+        HashSet<Integer> set = new HashSet();
+        List<Transaccion> tAux = new ArrayList<>();
+        for (Transaccion t : transacciones) {
+            if (!set.contains(t.getIdcodcuenta().getIdcodcuenta())) {
+                set.add(t.getIdcodcuenta().getIdcodcuenta());
+                tAux.add(t);
+            }
+        }
+        transacciones = tAux;
+        
         List<Cuenta> cuentasAux = new ArrayList<>();
         for (Transaccion t : transacciones) {
             for (Cuenta cuenta : cuentas) {
@@ -184,6 +239,17 @@ public class LibroMayorHelper {
     public List<Cuenta> getListaCuentasIngresosOperacionales() {
         cuentas = cuentaFacade.findAll();
         transacciones = transaccionFacade.getCuentas();
+
+        HashSet<Integer> set = new HashSet();
+        List<Transaccion> tAux = new ArrayList<>();
+        for (Transaccion t : transacciones) {
+            if (!set.contains(t.getIdcodcuenta().getIdcodcuenta())) {
+                set.add(t.getIdcodcuenta().getIdcodcuenta());
+                tAux.add(t);
+            }
+        }
+        transacciones = tAux;
+        
         List<Cuenta> cuentasAux = new ArrayList<>();
         for (Transaccion t : transacciones) {
             for (Cuenta cuenta : cuentas) {
@@ -201,6 +267,17 @@ public class LibroMayorHelper {
     public List<Cuenta> getListaCuentasGastosOperacionales() {
         cuentas = cuentaFacade.findAll();
         transacciones = transaccionFacade.getCuentas();
+
+        HashSet<Integer> set = new HashSet();
+        List<Transaccion> tAux = new ArrayList<>();
+        for (Transaccion t : transacciones) {
+            if (!set.contains(t.getIdcodcuenta().getIdcodcuenta())) {
+                set.add(t.getIdcodcuenta().getIdcodcuenta());
+                tAux.add(t);
+            }
+        }
+        transacciones = tAux;
+        
         List<Cuenta> cuentasAux = new ArrayList<>();
         for (Transaccion t : transacciones) {
             for (Cuenta cuenta : cuentas) {
@@ -218,6 +295,17 @@ public class LibroMayorHelper {
     public List<Cuenta> getListaCuentasGastosNoOperacionales() {
         cuentas = cuentaFacade.findAll();
         transacciones = transaccionFacade.getCuentas();
+
+        HashSet<Integer> set = new HashSet();
+        List<Transaccion> tAux = new ArrayList<>();
+        for (Transaccion t : transacciones) {
+            if (!set.contains(t.getIdcodcuenta().getIdcodcuenta())) {
+                set.add(t.getIdcodcuenta().getIdcodcuenta());
+                tAux.add(t);
+            }
+        }
+        transacciones = tAux;
+        
         List<Cuenta> cuentasAux = new ArrayList<>();
         for (Transaccion t : transacciones) {
             for (Cuenta cuenta : cuentas) {
@@ -287,7 +375,7 @@ public class LibroMayorHelper {
 
     public BigDecimal getTotalPasivoPatrimonio() {
         BigDecimal total = BigDecimal.ZERO;
-        total = getTotalPasivo().add(getTotalPatrimonio());        
+        total = getTotalPasivo().add(getTotalPatrimonio());
         return total;
     }
 
@@ -296,15 +384,15 @@ public class LibroMayorHelper {
         BigDecimal total = BigDecimal.ZERO;
 
         for (Cuenta c : getListaCuentasIngresosOperacionales()) {
-            if (c.getNumcuenta().startsWith("4.1.")) {
+            if (c.getNumcuenta().startsWith("5.1.")) {
                 diferencia = c.getDiferencia();
                 total = total.add(diferencia);
             }
-            if(c.getNumcuenta().startsWith("5.1.")){
+            if (c.getNumcuenta().startsWith("4.1.")) {
                 diferencia = c.getDiferencia();
                 total = total.subtract(diferencia);
             }
-            
+
         }
         return total;
     }
@@ -339,7 +427,7 @@ public class LibroMayorHelper {
 
     public BigDecimal getTotalUtilidadEjercicio() {
         BigDecimal total = BigDecimal.ZERO;
-        total = getTotalUtilidadOperacional().subtract(getTotalGastosNoOperacionales());    
+        total = getTotalUtilidadOperacional().subtract(getTotalGastosNoOperacionales());
         return total;
     }
 
@@ -390,7 +478,7 @@ public class LibroMayorHelper {
     }
 
     public BigDecimal getTotalAcreedor() {
-        getSumasTipo();               
+        getSumasTipo();
         return totalAcreedor;
     }
 
@@ -447,11 +535,11 @@ public class LibroMayorHelper {
     public void setBeanLibroMayor(BeanLibroMayor beanLibroMayor) {
         this.beanLibroMayor = beanLibroMayor;
     }
-    
+
     public void descargarComprobacion() {
         //String ruta = "/Users/cuent/" + nombre + ".pdf";
-        String nombre = "balanceComprobacion"+(hoy.getYear()+1900)+""+(hoy.getMonth()+1)+""+hoy.getDate()+".pdf";
-        String ruta = "C:\\Users\\Jorge\\Downloads\\" + nombre;
+        String nombre = "balanceComprobacion" + (hoy.getYear() + 1900) + "" + (hoy.getMonth() + 1) + "" + hoy.getDate() + ".pdf";
+        String ruta = "/Users/cuent/Downloads/" + nombre;
 
         //ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         //ruta = ec.getRealPath("/" + nombre);
@@ -459,35 +547,35 @@ public class LibroMayorHelper {
         GenerarComprobacion generarPdf = new GenerarComprobacion();
         generarPdf.generarFactura(getListaCuentas(), ruta);
     }
-    
+
     public void descargarResultados() {
         //String ruta = "/Users/cuent/" + nombre + ".pdf";
-        String nombre = "estadoResultados"+(hoy.getYear()+1900)+""+(hoy.getMonth()+1)+""+hoy.getDate()+".pdf";
-        String ruta = "C:\\Users\\Jorge\\Downloads\\" + nombre;
+        String nombre = "estadoResultados" + (hoy.getYear() + 1900) + "" + (hoy.getMonth() + 1) + "" + hoy.getDate() + ".pdf";
+        String ruta = "/Users/cuent/Downloads/" + nombre;
 
         //ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         //ruta = ec.getRealPath("/" + nombre);
         System.out.println("ruta: " + ruta);
         GenerarResultados generarPdf = new GenerarResultados();
-        generarPdf.generarFactura(getListaCuentasIngresosOperacionales(),getListaCuentasGastosOperacionales(),getListaCuentasGastosNoOperacionales(), ruta);
+        generarPdf.generarFactura(getListaCuentasIngresosOperacionales(), getListaCuentasGastosOperacionales(), getListaCuentasGastosNoOperacionales(), ruta);
     }
-    
+
     public void descargarGeneral() {
         //String ruta = "/Users/cuent/" + nombre + ".pdf";
-        String nombre = "balanceGeneral"+(hoy.getYear()+1900)+""+(hoy.getMonth()+1)+""+hoy.getDate()+".pdf";
-        String ruta = "C:\\Users\\Jorge\\Downloads\\" + nombre;
+        String nombre = "balanceGeneral" + (hoy.getYear() + 1900) + "" + (hoy.getMonth() + 1) + "" + hoy.getDate() + ".pdf";
+        String ruta = "/Users/cuent/Downloads/" + nombre;
 
         //ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         //ruta = ec.getRealPath("/" + nombre);
         System.out.println("ruta: " + ruta);
         GenerarGeneral generarPdf = new GenerarGeneral();
-        generarPdf.generarFactura(getListaCuentasCorrientes(),getListaCuentasNoCorrientes(),getListaCuentasPasivo(),getListaCuentasPatrimonio(),getListaCuentasIngresosOperacionales(),getListaCuentasGastosOperacionales(),getListaCuentasGastosNoOperacionales(), ruta);
+        generarPdf.generarFactura(getListaCuentasCorrientes(), getListaCuentasNoCorrientes(), getListaCuentasPasivo(), getListaCuentasPatrimonio(), getListaCuentasIngresosOperacionales(), getListaCuentasGastosOperacionales(), getListaCuentasGastosNoOperacionales(), ruta);
     }
-    
+
     public void descargarLibroMayor() {
         //String ruta = "/Users/cuent/" + nombre + ".pdf";
-        String nombre = "libroMayor"+(hoy.getYear()+1900)+""+(hoy.getMonth()+1)+""+hoy.getDate()+".pdf";
-        String ruta = "C:\\Users\\Jorge\\Downloads\\" + nombre;
+        String nombre = "libroMayor" + (hoy.getYear() + 1900) + "" + (hoy.getMonth() + 1) + "" + hoy.getDate() + ".pdf";
+        String ruta = "/Users/cuent/Downloads/" + nombre;
 
         //ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         //ruta = ec.getRealPath("/" + nombre);
@@ -495,11 +583,11 @@ public class LibroMayorHelper {
         GenerarLibroMayor generarPdf = new GenerarLibroMayor();
         generarPdf.generarFactura(getListaCuentas(), ruta);
     }
-    
+
     public void descargarLibroDiario() {
         //String ruta = "/Users/cuent/" + nombre + ".pdf";
-        String nombre = "libroDiario"+(hoy.getYear()+1900)+""+(hoy.getMonth()+1)+""+hoy.getDate()+".pdf";
-        String ruta = "C:\\Users\\Jorge\\Downloads\\" + nombre;
+        String nombre = "libroDiario" + (hoy.getYear() + 1900) + "" + (hoy.getMonth() + 1) + "" + hoy.getDate() + ".pdf";
+        String ruta = "/Users/cuent/Downloads/" + nombre;
 
         //ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         //ruta = ec.getRealPath("/" + nombre);
@@ -507,4 +595,4 @@ public class LibroMayorHelper {
         GenerarLibroDiario generarPdf = new GenerarLibroDiario();
         generarPdf.generarFactura(getAsientos(), ruta);
     }
-}   
+}

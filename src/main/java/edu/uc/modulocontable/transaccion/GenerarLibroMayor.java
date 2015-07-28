@@ -25,6 +25,8 @@ import edu.uc.modulocontable.general.pdf.Titulo1;
 import edu.uc.modulocontable.general.pdf.Titulo2;
 import edu.uc.modulocontable.general.pdf.Titulo3;
 import edu.uc.modulocontable.general.pdf.Titulo4;
+import edu.uc.modulocontable.info.empresa.Archivo;
+import edu.uc.modulocontable.info.empresa.Empresa;
 import edu.uc.modulocontable.services.ejb.Cuenta;
 import edu.uc.modulocontable.services.ejb.Transaccion;
 import java.math.BigDecimal;
@@ -99,6 +101,9 @@ public class GenerarLibroMayor {
     }
 
     private void cabecera() throws DocumentException {
+        Archivo a = new Archivo();
+        Empresa empresa = a.obtieneContenidoArchivo().get(0);
+
         PdfPTable tablePanelInicial = new PdfPTable(2);
         tablePanelInicial.setWidthPercentage(100);
         tablePanelInicial.getDefaultCell().setBorder(0);
@@ -111,7 +116,7 @@ public class GenerarLibroMayor {
         tablePanelDerecho.setWidthPercentage(100);
         tablePanelDerecho.getDefaultCell().setBorder(0);
 
-        titulo1.setTexto("Empresa ABC");
+        titulo1.setTexto(empresa.getNombre());
         tablePanelIzquierdo.addCell(titulo1.getElemento());
 
         imagen.setDir("/Users/cuent/Downloads/abc-log.jpg");
@@ -146,7 +151,7 @@ public class GenerarLibroMayor {
             datos4.add("Debe");
             datos4.add("Haber");
             vector.add(datos4);
-            
+
             for (Transaccion tran : inv.getTransaccionList()) {
                 List datos = new ArrayList();
 
@@ -154,19 +159,19 @@ public class GenerarLibroMayor {
                 datos.add("$" + String.valueOf(tran.getHaber()));
                 vector.add(datos);
             }
-            
+
             List datos3 = new ArrayList();
 
             datos3.add("_________________________________________");
             datos3.add("_________________________________________");
             vector.add(datos3);
-            
+
             List datos1 = new ArrayList();
 
             datos1.add("$" + String.valueOf(inv.getTotalDebe()));
             datos1.add("$" + String.valueOf(inv.getTotalHaber()));
             vector.add(datos1);
-            
+
             List datos2 = new ArrayList();
 
             datos2.add(inv.getTipo());
@@ -181,7 +186,7 @@ public class GenerarLibroMayor {
             tablaHorizontal.setTitulos("Cuenta:", inv.getDescripcion());
             tablaHorizontal.setContenidos(datosV);
             tablaHorizontal.setAlineamientos(new int[]{1, 1});
-            tablaHorizontal.setTamanos(new int[]{5,5});
+            tablaHorizontal.setTamanos(new int[]{5, 5});
             tablaHorizontal.llenarTabla();
             tablaHorizontal.setPosicion(2);
             tablaHorizontal.setAnchoTabla(100);
