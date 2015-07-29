@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="../WEB-INF/templates/plantila.xhtml">
+        <ui:define name="content">
+            <p:panel>
+                <h:form id="formlistaFacturaCompras">
+                    <p:growl id="msgs" showDetail="true"/>
+                    <p:dataTable id="datalistFacturaCompras"  value="#{listarFacturaHelper.facturasCompras}"
+                                 var="item"
+                                 rowKey="#{item.codigoFactura}"
+                                 style="width: 100%; font-size: 0.9em;"
+                                 editable="false"
+                                 selection="#{listarFacturaHelper.selected}"
+                                 paginatorPosition="bottom"
+                                 paginator="true"
+                                 rows="10">
+                        <f:facet name="header">Lista de Facturas Compras</f:facet>
+
+                        <p:column headerText="Núm. Factura." sortBy="#{item.numeroFactura}" filterBy="#{item.numeroFactura}">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{item.numeroFactura}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="Input1" value="#{item.numeroFactura}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="Fecha" sortBy="#{item.fecha}" filterBy="#{item.fecha}">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{item.fecha}" /></f:facet>
+                                <f:facet name="input"><p:inputText id="Input2" value="#{item.fecha}" style="width:100%"/></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column width="12%">
+                            <f:facet name="header">
+                                <h:outputText value=""/>
+                            </f:facet>
+                            <p:commandButton actionListener="#{listarFacturaHelper.descargarFacturaCompras(item)}" 
+                                             process="@this"
+                                             update=":#{p:component('datalistFacturaCompras')}"
+                                             icon="ui-icon-arrowthick-1-s" title="Eliminar fila" value="Descargar"/>
+                        </p:column>
+
+
+                    </p:dataTable>
+                </h:form>
+            </p:panel>
+        </ui:define>
+    </ui:composition>
+</html>
+

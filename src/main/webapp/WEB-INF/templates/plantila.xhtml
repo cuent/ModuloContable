@@ -56,6 +56,10 @@
                                 <p:menuitem value="#{msj['ventas']}" outcome="/pages/crear_factura" icon="ui-icon-star"/>
                                 <p:menuitem value="#{msj['compras']}" outcome="/pages/factura_compra" icon="ui-icon-star"/>
                             </p:submenu>
+                            <p:submenu label="Listar Facturas">
+                                <p:menuitem value="#{msj['listVentas']}" outcome="/pages/lista_factura_ventas" icon="ui-icon-star"/>
+                                <p:menuitem value="#{msj['listCompras']}" outcome="/pages/lista_factura_compras" icon="ui-icon-star"/>
+                            </p:submenu>
                             <p:submenu label="Administración">
                                 <p:menuitem value="#{msj['empresa']}" outcome="/pages/empresa" icon="ui-icon-star"/>
                                 <p:menuitem value="#{msj['impuesto']}" outcome="/pages/impuesto" icon="ui-icon-star"/>
