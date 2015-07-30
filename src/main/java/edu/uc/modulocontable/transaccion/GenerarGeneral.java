@@ -409,10 +409,10 @@ public class GenerarGeneral {
     private void ingresosOperacionales(List<Cuenta> ingOper) throws DocumentException {
         if (!ingOper.isEmpty()) {
             for (Cuenta inv : ingOper) {
-                if (inv.getNumcuenta().startsWith("5.1.")) {
+                if (inv.getNumcuenta().startsWith("4.1.")) {
                     setIngOperacionales(getIngOperacionales().add(inv.getDiferencia()));
                 }
-                if (inv.getNumcuenta().startsWith("4.1.")) {
+                if (inv.getNumcuenta().startsWith("5.1.")) {
                     setIngOperacionales(getIngOperacionales().subtract(inv.getDiferencia()));
                 }
             }

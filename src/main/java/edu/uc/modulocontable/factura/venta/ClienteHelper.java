@@ -84,6 +84,8 @@ public class ClienteHelper implements Serializable {
                     isValid = true;
                 }
             }
+        } else {
+            isValid = true;
         }
     }
 

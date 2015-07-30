@@ -384,11 +384,11 @@ public class LibroMayorHelper {
         BigDecimal total = BigDecimal.ZERO;
 
         for (Cuenta c : getListaCuentasIngresosOperacionales()) {
-            if (c.getNumcuenta().startsWith("5.1.")) {
+            if (c.getNumcuenta().startsWith("4.1.")) {
                 diferencia = c.getDiferencia();
                 total = total.add(diferencia);
             }
-            if (c.getNumcuenta().startsWith("4.1.")) {
+            if (c.getNumcuenta().startsWith("5.1.")) {
                 diferencia = c.getDiferencia();
                 total = total.subtract(diferencia);
             }

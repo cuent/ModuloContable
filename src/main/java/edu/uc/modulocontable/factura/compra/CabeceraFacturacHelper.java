@@ -386,7 +386,8 @@ public class CabeceraFacturacHelper implements Serializable {
     private void descargarFactura() {
         //String ruta = "/Users/cuent/" + nombre + ".pdf";
         CabeceraFacturac c = this.getSelected();
-        String nombre = c.getPtoEmision() + "-" + c.getEstablecimiento() + "-" + c.getNumeroFactura() + ".pdf";
+        String nombre = "FACT_COMPRAS" + c.getAutorizacionSri().getPtoEmision() + "-" + c.getEstablecimiento() + "-" + 
+                c.getNumeroFactura() + new Date().toString() + ".pdf";
         String ruta = "/Users/cuent/Downloads/" + nombre;
 
         GenerarFacturaComprasPDF generarPdf = new GenerarFacturaComprasPDF();

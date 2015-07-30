@@ -161,10 +161,10 @@ public class GenerarResultados {
                 datos.add("");
                 datos.add(inv.getDescripcion());
                 datos.add("$" + String.valueOf(inv.getDiferencia()));
-                if (inv.getNumcuenta().startsWith("5.1.")) {
+                if (inv.getNumcuenta().startsWith("4.1.")) {
                     setIngOperacionales(getIngOperacionales().add(inv.getDiferencia()));
                 }
-                if (inv.getNumcuenta().startsWith("4.1.")) {
+                if (inv.getNumcuenta().startsWith("5.1.")) {
                     setIngOperacionales(getIngOperacionales().subtract(inv.getDiferencia()));
                 }
                 datos.add("");
