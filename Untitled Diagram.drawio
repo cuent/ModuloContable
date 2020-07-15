@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2020-07-15T14:07:17.864Z" agent="5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36" etag="x8bSj2-s2SZvPO2vfbVG" version="13.4.3" type="github" pages="5">
+<mxfile host="app.diagrams.net" modified="2020-07-15T14:09:30.038Z" agent="5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36" etag="UtNVnkNz6GF7IRbYxtBo" version="13.4.3" type="github" pages="5">
   <diagram name="diagraqmaGeneral_Ahorros" id="822b0af5-4adb-64df-f703-e8dfc1f81529">
     <mxGraphModel dx="868" dy="433" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="#ffffff" math="0" shadow="0">
       <root>
@@ -297,7 +297,7 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="vKQRPkdC_b0ZVz2tM-px-23" value="&lt;b&gt;Servidor Z&lt;/b&gt;&lt;br&gt;IP: 10.1.1.7" style="verticalLabelPosition=bottom;aspect=fixed;html=1;verticalAlign=top;strokeColor=none;align=center;outlineConnect=0;shape=mxgraph.citrix.command_center;fillColor=#00AAFF;fontSize=13;" parent="TTJFUgVjda8H5F1yxA_P-1" vertex="1">
-          <mxGeometry x="896.03" y="-20" width="75.5" height="96" as="geometry" />
+          <mxGeometry x="1050" y="-125" width="75.5" height="96" as="geometry" />
         </mxCell>
         <mxCell id="vKQRPkdC_b0ZVz2tM-px-31" value="Web Service Procesar" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=13;" parent="TTJFUgVjda8H5F1yxA_P-1" vertex="1">
           <mxGeometry x="688" y="-162.5" width="120" height="20" as="geometry" />
